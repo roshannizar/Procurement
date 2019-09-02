@@ -38,12 +38,13 @@ public class DashboardFragment extends Fragment {
         txtUserName = v.findViewById(R.id.txtUserName);
         txtMonthDate = v.findViewById(R.id.txtMonthData);
         setUserName();
+        SigninActivity.SignOutUserFirebase();
         setDate();
         return v;
     }
 
     private void setUserName() {
-        txtUserName.setText("Hello "+SigninActivity.email+"!");
+        txtUserName.setText("Hello "+SigninActivity.name+"!");
     }
 
     @SuppressLint("SetTextI18n")

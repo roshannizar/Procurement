@@ -61,6 +61,7 @@ public class SigninActivity extends AppCompatActivity {
                         if(task.isSuccessful()) {
                             Log.d(TAG,"signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            getCurrentUser();
                             updateUI(user);
                             Intent i = new Intent(SigninActivity.this,HomeActivity.class);
                             startActivity(i);
