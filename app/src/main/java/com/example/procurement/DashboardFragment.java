@@ -37,7 +37,7 @@ public class DashboardFragment extends Fragment {
 
         txtUserName = v.findViewById(R.id.txtUserName);
         txtMonthDate = v.findViewById(R.id.txtMonthData);
-        SigninActivity.getCurrentUser();
+        //SigninActivity.getCurrentUser();
         setUserName();
         setDate();
         return v;
