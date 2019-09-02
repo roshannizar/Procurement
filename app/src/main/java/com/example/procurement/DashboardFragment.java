@@ -43,6 +43,7 @@ public class DashboardFragment extends Fragment {
         return v;
     }
 
+    @SuppressLint("SetTextI18n")
     private void setUserName() {
         txtUserName.setText("Hello "+SigninActivity.name+"!");
     }
