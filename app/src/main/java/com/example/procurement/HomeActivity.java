@@ -29,6 +29,7 @@ public class HomeActivity extends AppCompatActivity {
                     HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new OrderFragment(),null).commit();
                     return true;
                 case R.id.navigation_notifications:
+                    HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new ProfileFragment(), null).commit();
                     return true;
             }
             return false;
