@@ -4,7 +4,22 @@
     <string name="title_home">Dashboard</string>
     <string name="title_dashboard">Orders</string>
     <string name="title_notifications">Profile</string>
+    <string name="order_status_search">Search</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!--Order Strings-->
+    <string name="order_main_name">Orders</string>
+    <string name="order_date_placeholder">DD/MM/YY</string>
+    <string name="order_name_placeholder">Order name</string>
+    <string name="order_status_placeholder">Order Status</string>
+    <string name="order_add_label">Add new order</string>
+
+    <!--Order Status-->
+    <string name="approved">Approved</string>
+    <string name="pending">Pending</string>
+    <string name="placed">Placed</string>
+    <string name="declined">Declined</string>
+    <string name="default_status">Default</string>
+    <string name="filter_status">Filter Status</string>
+    <string name="hold">Hold</string>
+
 </resources>

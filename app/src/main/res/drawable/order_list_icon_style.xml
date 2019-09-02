@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <!-- drawable/circle_card_icon.xml -->
+        <shape
+            android:width="@dimen/orderRowIconSize"
+            android:height="@dimen/orderRowIconSize">
+            <solid android:color="@color/orderIconBackground" />
+            <stroke
+                android:width="0.5dp"
+                android:color="@color/orderIconBorder" />
+            <corners android:radius="2dp" />
+            <padding
+                android:bottom="0dp"
+                android:left="0dp"
+                android:right="0dp"
+                android:top="0dp" />
+        </shape>
+    </item>
+    <item android:drawable="@drawable/order_list_icon"
+        android:top="@dimen/orderRowIconPadding"
+        android:bottom="@dimen/orderRowIconPadding"
+        android:left="@dimen/orderRowIconPadding"
+        android:right="@dimen/orderRowIconPadding"/>
+</layer-list>

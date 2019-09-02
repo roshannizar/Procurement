@@ -5,4 +5,25 @@
     <color name="colorAccent">#480048</color>
     <color name="colorWhiteSmoke">#F5F5F5</color>
     <color name="colorGreen">#1F4037</color>
+
+    <!--Order Status Colors-->
+    <color name="orderListDivider">#e0e0e0</color>
+    <color name="orderStatusDenied">#FC4441</color>
+    <color name="orderStatusPending">#f9a825</color>
+    <color name="orderStatusPlaced">#990288D1</color>
+    <color name="orderStatusHold">#9EA7004E</color>
+    <color name="orderStatusAccepted">#8bc34a</color>
+    <color name="orderIconForeground">#424242</color>
+    <color name="orderIconBorder">#e0e0e0</color>
+    <color name="orderIconBackground">#fff</color>
+
+    <!--Notification Colors-->
+    <color name="notificationStatusDenied">#ee7676</color>
+    <color name="notificationStatusPending">#f9a825</color>
+    <color name="notificationStatusPlaced">#85cbf6</color>
+    <color name="notificationStatusHold">#c8b8d8</color>
+    <color name="notificationStatusAccepted">#A8FCCF</color>
+
+    <color name="white">#FFFFFF</color>
+
 </resources>
