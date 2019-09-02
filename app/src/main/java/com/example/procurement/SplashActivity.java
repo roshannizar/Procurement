@@ -9,7 +9,7 @@ import android.view.WindowManager;
 
 public class SplashActivity extends AppCompatActivity {
 
-    private static int WELCOME_TIMEOUT = 3000;
+    private static int WELCOME_TIMEOUT = 2000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
