@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "566600474419",
+    "firebase_url": "https://procurement-b245e.firebaseio.com",
+    "project_id": "procurement-b245e",
+    "storage_bucket": "procurement-b245e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:566600474419:android:8bcd041e085d5a03",
+        "android_client_info": {
+          "package_name": "com.example.procurement"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "566600474419-2fv99holfgp9sjloumlp3770nuf8a7kc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.procurement",
+            "certificate_hash": "72541720aa5023c5eed6fd57bf37dc775123f303"
+          }
+        },
+        {
+          "client_id": "566600474419-97r8io5a4uv51uh4v1d2ledlh1bujq1q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLTbhvfWUJ7lKLg-CFMe8t1wSCVP4qsIg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "566600474419-97r8io5a4uv51uh4v1d2ledlh1bujq1q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
