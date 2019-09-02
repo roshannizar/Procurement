@@ -111,7 +111,7 @@ public class SigninActivity extends AppCompatActivity {
         );
     }
 
-    public static void getCurrentUser() {
+    public void getCurrentUser() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         if(user !=null) {
@@ -122,5 +122,9 @@ public class SigninActivity extends AppCompatActivity {
 
             String uid = user.getUid();
         }
+    }
+
+    public static void SignOutUserFirebase() {
+        FirebaseAuth.getInstance().signOut();
     }
 }
