@@ -50,6 +50,7 @@ public class SigninActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
+        name = currentUser.getEmail();
         updateUI(currentUser);
     }
 
