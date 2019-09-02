@@ -38,7 +38,7 @@ public class DashboardFragment extends Fragment {
         txtUserName = v.findViewById(R.id.txtUserName);
         txtMonthDate = v.findViewById(R.id.txtMonthData);
         setUserName();
-        SigninActivity.SignOutUserFirebase();
+        SigninActivity.getCurrentUser();
         setDate();
         return v;
     }

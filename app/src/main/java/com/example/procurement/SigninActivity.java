@@ -112,7 +112,7 @@ public class SigninActivity extends AppCompatActivity {
         );
     }
 
-    public void getCurrentUser() {
+    public static void getCurrentUser() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         if(user !=null) {
