@@ -12,8 +12,14 @@
         android:title="@string/title_dashboard" />
 
     <item
+        android:id="@+id/navigation_noti"
+        android:icon="@drawable/notifications_button"
+        android:title="Notification"
+        />
+
+    <item
         android:id="@+id/navigation_notifications"
-        android:icon="@drawable/avatar"
+        android:icon="@drawable/man_user"
         android:title="@string/title_notifications" />
 
 </menu>
