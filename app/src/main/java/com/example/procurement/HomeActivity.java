@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.procurement.notes.NotesFragment;
 import com.example.procurement.status.OrderStatusFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -31,7 +30,7 @@ public class HomeActivity extends AppCompatActivity {
                     HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new DashboardFragment(), null).commit();
                     return true;
                 case R.id.navigation_dashboard:
-                    HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new NotesFragment(), null).commit();
+                    HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new OrderStatusFragment(), null).commit();
                     return true;
                 case R.id.navigation_notifications:
                     HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new ProfileFragment(), null).commit();
