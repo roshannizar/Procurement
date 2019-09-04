@@ -18,12 +18,18 @@
     <color name="orderIconBackground">#fff</color>
 
     <!--Notification Colors-->
-    <color name="notificationStatusDenied">#ee7676</color>
-    <color name="notificationStatusPending">#f9a825</color>
-    <color name="notificationStatusPlaced">#85cbf6</color>
-    <color name="notificationStatusHold">#c8b8d8</color>
-    <color name="notificationStatusAccepted">#A8FCCF</color>
+    <color name="notificationStatusDenied">#FF8A80</color>
+    <color name="notificationStatusPending">#FFD180</color>
+    <color name="notificationStatusPlaced">#82B1FF</color>
+    <color name="notificationStatusHold">#B388FF</color>
+    <color name="notificationStatusAccepted">#CCFF90</color>
 
     <color name="white">#FFFFFF</color>
+    <color name="black">#3F3D3D</color>
 
+    <!--Notes Colors-->
+    <color name="msg_no_notes">#999</color>
+    <color name="hint_enter_note">#89c3c3c3</color>
+    <color name="timestamp">#858585</color>
+    <color name="note_list_text">#232323</color>
 </resources>
