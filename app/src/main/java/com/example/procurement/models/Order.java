@@ -1,4 +1,4 @@
-package com.example.procurement.status;
+package com.example.procurement.models;
 
 import com.example.procurement.utils.CommonConstants;
 import com.google.firebase.database.IgnoreExtraProperties;
