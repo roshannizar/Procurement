@@ -5,34 +5,58 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.procurement.R;
+import com.example.procurement.models.Note;
+import com.example.procurement.utils.RecyclerTouchListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class NotesFragment extends Fragment {
+    private static final String TAG = "NotesFragment";
 
     private NotesAdapter mAdapter;
-    private List<Note> notesList = new ArrayList<>();
+    private List<Note> notesList;
     private RecyclerView recyclerView;
     private Context mContext;
     private FloatingActionButton fab;
+    private DatabaseReference myRef;
+    private ProgressBar progressBar;
 
     public NotesFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        myRef = database.getReference("Notes");
+
     }
 
     @Override
@@ -42,31 +66,31 @@ public class NotesFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_notes, container, false);
         mContext = getContext();
         recyclerView = rootView.findViewById(R.id.rvNotes);
+        progressBar = rootView.findViewById(R.id.progressBar);
+
+        notesList = new ArrayList<>();
 
         mAdapter = new NotesAdapter(mContext, notesList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(mContext);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(mAdapter);
-
 
         /**
          * On long press on RecyclerView item, open alert dialog
          * with options to choose
          * Edit and Delete
          * */
-//        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(this,
-//                recyclerView, new RecyclerTouchListener.ClickListener() {
-//            @Override
-//            public void onClick(View view, final int position) {
-//            }
-//
-//            @Override
-//            public void onLongClick(View view, int position)
-//            {
-//                showActionsDialog(position);
-//            }
-//        }));
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(mContext,
+                recyclerView, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, final int position) {
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+                showActionsDialog(position);
+            }
+        }));
 
         fab = rootView.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -76,6 +100,7 @@ public class NotesFragment extends Fragment {
             }
         });
 
+        readNotesData();
         return rootView;
     }
 
@@ -85,11 +110,11 @@ public class NotesFragment extends Fragment {
      * Delete - 0
      */
     private void showActionsDialog(final int position) {
-        CharSequence colors[] = new CharSequence[]{"Edit", "Delete"};
+        CharSequence options[] = new CharSequence[]{"Edit", "Delete"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         builder.setTitle("Choose option");
-        builder.setItems(colors, new DialogInterface.OnClickListener() {
+        builder.setItems(options, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (which == 0) {
@@ -108,36 +133,18 @@ public class NotesFragment extends Fragment {
      */
     private void createNote(String note) {
         // inserting note in db and getting
-        // newly inserted note id
-//        long id = db.insertNote(note);
-//
-//        // get the newly inserted note from db
-//        Note n = db.getNote(id);
-//
-//        if (n != null) {
-//            // adding new note to array list at 0 position
-//            notesList.add(0, n);
-//
-//            // refreshing the list
-//            mAdapter.notifyDataSetChanged();
-//        }
+        DatabaseReference reference = myRef.push();
+        reference.setValue(new Note(reference.getKey(),note, DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date())));
     }
 
     /**
      * Updating note in db and updating
      * item in the list by its position
      */
-    private void updateNote(String note, int position) {
-//        Note n = notesList.get(position);
-//        // updating note text
-//        n.setNote(note);
-//
-//        // updating note in db
-//        db.updateNote(n);
-//
-//        // refreshing the list
-//        notesList.set(position, n);
-//        mAdapter.notifyItemChanged(position);
+    private void updateNote(String noteText, int position) {
+        // updating note text
+        String id = notesList.get(position).getNoteID();
+        myRef.child(id).setValue(new Note(id,noteText, DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date())));
     }
 
     /**
@@ -146,13 +153,39 @@ public class NotesFragment extends Fragment {
      */
     private void deleteNote(int position) {
         // deleting the note from db
-        //db.deleteNote(notesList.get(position));
-
-        // removing the note from the list
-        notesList.remove(position);
-        mAdapter.notifyItemRemoved(position);
+        String id = notesList.get(position).getNoteID();
+        myRef.child(id).removeValue();
     }
 
+
+    private void readNotesData() {
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                notesList.clear();
+
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                    Note note = data.getValue(Note.class);
+                    notesList.add(note);
+                    Log.d(TAG, "Value is: " + note.getTimestamp());
+                }
+
+                if (notesList != null) {
+                    mAdapter = new NotesAdapter(mContext, notesList);
+                    progressBar.setVisibility(View.GONE);
+                    recyclerView.setAdapter(mAdapter);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
+    }
 
     /**
      * Shows alert dialog with EditText options to enter / edit
@@ -174,6 +207,7 @@ public class NotesFragment extends Fragment {
         if (shouldUpdate && note != null) {
             inputNote.setText(note.getNote());
         }
+
         alertDialogBuilderUserInput
                 .setCancelable(false)
                 .setPositiveButton(shouldUpdate ? "update" : "save", new DialogInterface.OnClickListener() {

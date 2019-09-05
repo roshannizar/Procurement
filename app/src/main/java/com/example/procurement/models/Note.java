@@ -1,19 +1,25 @@
-package com.example.procurement.notes;
+package com.example.procurement.models;
 
 public class Note {
-
-    private int id;
+    private String noteID;
     private String note;
     private String timestamp;
 
-    public Note(int id, String note, String timestamp) {
-        this.id = id;
+    public Note() {
+    }
+
+    public Note(String noteID, String note, String timestamp) {
+        this.noteID = noteID;
         this.note = note;
         this.timestamp = timestamp;
     }
 
-    public int getId() {
-        return id;
+    public String getNoteID() {
+        return noteID;
+    }
+
+    public void setNoteID(String noteID) {
+        this.noteID = noteID;
     }
 
     public String getNote() {
@@ -26,10 +32,6 @@ public class Note {
 
     public String getTimestamp() {
         return timestamp;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public void setTimestamp(String timestamp) {

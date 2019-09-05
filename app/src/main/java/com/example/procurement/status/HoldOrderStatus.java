@@ -1,7 +1,6 @@
 package com.example.procurement.status;
 
-import com.example.procurement.status.Order;
-import com.example.procurement.status.OrderStatus;
+import com.example.procurement.models.Order;
 import com.example.procurement.utils.CommonConstants;
 
 import java.util.ArrayList;

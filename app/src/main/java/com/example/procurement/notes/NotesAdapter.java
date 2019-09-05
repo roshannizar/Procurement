@@ -7,9 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.procurement.R;
+import com.example.procurement.models.Note;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,6 +22,12 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyViewHolder
 
     private Context context;
     private List<Note> notesList;
+
+
+    public NotesAdapter(Context context, List<Note> notesList) {
+        this.context = context;
+        this.notesList = notesList;
+    }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView note;
@@ -34,14 +42,9 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyViewHolder
         }
     }
 
-
-    public NotesAdapter(Context context, List<Note> notesList) {
-        this.context = context;
-        this.notesList = notesList;
-    }
-
+    @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.layout_note_item, parent, false);
 
@@ -58,7 +61,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyViewHolder
         holder.dot.setText(Html.fromHtml("&#8226;"));
 
         // Formatting and displaying timestamp
-        holder.timestamp.setText(formatDate(note.getTimestamp()));
+        holder.timestamp.setText(note.getTimestamp());
     }
 
     @Override
