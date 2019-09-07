@@ -10,15 +10,14 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.procurement.status.OrderStatusFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.time.Year;
 import java.util.Calendar;
-import java.util.Date;
 
 
 /**
@@ -26,7 +25,8 @@ import java.util.Date;
  */
 public class DashboardFragment extends Fragment {
 
-    private TextView txtUserName,txtMonthDate;
+    private TextView txtUserName;
+    private TextView txtMonthDate;
     private FirebaseAuth mAuth;
 
     public DashboardFragment() {
@@ -34,6 +34,7 @@ public class DashboardFragment extends Fragment {
     }
 
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -41,6 +42,16 @@ public class DashboardFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         txtUserName = v.findViewById(R.id.txtUserName);
         txtMonthDate = v.findViewById(R.id.txtMonthData);
+        TextView txtApprovedCount = v.findViewById(R.id.txtApprovedCount);
+        TextView txtHoldCount = v.findViewById(R.id.txtHoldCount);
+        TextView txtPendingCount = v.findViewById(R.id.txtPendingCount);
+        TextView txtTotalOrder = v.findViewById(R.id.txtTotalOrders);
+        TextView txtPlacedCount = v.findViewById(R.id.txtPlacedCounts);
+        txtPendingCount.setText(String.valueOf(OrderStatusFragment.pendingStatus));
+        txtApprovedCount.setText(String.valueOf(OrderStatusFragment.approvedStatus));
+        txtHoldCount.setText(String.valueOf(OrderStatusFragment.holdStatus));
+        txtPlacedCount.setText(String.valueOf(OrderStatusFragment.placedStatus)+" Orders Placed");
+        txtTotalOrder.setText(String.valueOf(OrderStatusFragment.approvedStatus+OrderStatusFragment.holdStatus+OrderStatusFragment.pendingStatus+OrderStatusFragment.declinedStatus+OrderStatusFragment.placedStatus)+" Orders Totally");
         setDate();
         return v;
     }

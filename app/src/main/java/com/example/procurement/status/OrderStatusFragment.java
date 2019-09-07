@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.procurement.CreateOrderFragment;
+import com.example.procurement.DashboardFragment;
 import com.example.procurement.HomeActivity;
 import com.example.procurement.R;
 import com.example.procurement.models.Order;
@@ -48,6 +49,7 @@ public class OrderStatusFragment extends Fragment {
     private DatabaseReference myRef;
     private ProgressBar progressBar;
     private Context mContext;
+    public static int pendingStatus=0,approvedStatus=0,holdStatus=0,placedStatus=0,declinedStatus=0;
 
     public OrderStatusFragment() {
         // Required empty public constructor
@@ -57,6 +59,11 @@ public class OrderStatusFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        pendingStatus=0;
+        approvedStatus=0;
+        holdStatus=0;
+        placedStatus=0;
+        declinedStatus=0;
     }
 
     @Override
@@ -115,7 +122,7 @@ public class OrderStatusFragment extends Fragment {
         myRef.push().setValue(order8);
     }
 
-    private void readStatusData() {
+    public void readStatusData() {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -124,6 +131,7 @@ public class OrderStatusFragment extends Fragment {
 
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
                     Order order = data.getValue(Order.class);
+                    countStatus(order.getStatusText());
                     orders.add(order);
                     if (order != null) {
                         Log.d(TAG, "Value is: " + order.getOrderID());
@@ -234,6 +242,20 @@ public class OrderStatusFragment extends Fragment {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void countStatus(String status) {
+        if(status.equals("Pending")) {
+            pendingStatus++;
+        } else if(status.equals("Hold")) {
+            holdStatus++;
+        } else if(status.equals("Approved")) {
+            approvedStatus++;
+        } else if(status.equals("Placed")) {
+            placedStatus++;
+        } else if(status.equals("Declined")) {
+            declinedStatus++;
+        }
     }
 
 }

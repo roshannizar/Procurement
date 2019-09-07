@@ -88,7 +88,7 @@
                     android:layout_height="match_parent">
 
                     <TextView
-                        android:id="@+id/textView6"
+                        android:id="@+id/txtPendingCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="2"
@@ -117,7 +117,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:src="@drawable/email"
-                        app:layout_constraintBottom_toTopOf="@+id/textView6"
+                        app:layout_constraintBottom_toTopOf="@+id/txtPendingCount"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -145,7 +145,7 @@
                     android:layout_height="match_parent">
 
                     <TextView
-                        android:id="@+id/textView8"
+                        android:id="@+id/txtApprovedCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="8"
@@ -174,7 +174,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:src="@drawable/approve"
-                        app:layout_constraintBottom_toTopOf="@+id/textView8"
+                        app:layout_constraintBottom_toTopOf="@+id/txtApprovedCount"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -201,24 +201,24 @@
                     android:layout_height="match_parent">
 
                     <TextView
-                        android:id="@+id/textView10"
+                        android:id="@+id/txtHoldCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="5"
                         android:textColor="@color/colorWhiteSmoke"
                         android:textSize="36sp"
-                        app:layout_constraintBottom_toTopOf="@+id/textView11"
+                        app:layout_constraintBottom_toTopOf="@+id/txtHoldText"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.492"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/imageView6" />
 
                     <TextView
-                        android:id="@+id/textView11"
+                        android:id="@+id/txtHoldText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
-                        android:text="Completed"
+                        android:text="Hold"
                         android:textColor="@color/colorWhiteSmoke"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -230,7 +230,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:src="@drawable/completed"
-                        app:layout_constraintBottom_toTopOf="@+id/textView10"
+                        app:layout_constraintBottom_toTopOf="@+id/txtHoldCount"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -252,7 +252,7 @@
                     android:paddingRight="10dp">
 
                     <TextView
-                        android:id="@+id/textView14"
+                        android:id="@+id/txtTotalOrders"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
@@ -266,12 +266,12 @@
                         android:text="18 Orders Totally"
                         android:textColor="@color/colorGreen"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/textView15"
+                        app:layout_constraintEnd_toStartOf="@+id/txtPlacedCounts"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/textView15"
+                        android:id="@+id/txtPlacedCounts"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
@@ -285,7 +285,7 @@
                         android:text="3 Orders Placed"
                         android:textColor="@color/colorWhiteSmoke"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/textView14"
+                        app:layout_constraintStart_toEndOf="@+id/txtTotalOrders"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
@@ -302,7 +302,7 @@
                         android:paddingBottom="5dp"
                         android:text="2 Notifications"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/textView15"
+                        app:layout_constraintStart_toEndOf="@+id/txtPlacedCounts"
                         app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </HorizontalScrollView>
