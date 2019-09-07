@@ -22,6 +22,8 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.procurement.CreateOrderFragment;
+import com.example.procurement.HomeActivity;
 import com.example.procurement.R;
 import com.example.procurement.models.Order;
 import com.example.procurement.utils.CommonConstants;
@@ -46,7 +48,6 @@ public class OrderStatusFragment extends Fragment {
     private DatabaseReference myRef;
     private ProgressBar progressBar;
     private Context mContext;
-    private View rootView;
 
     public OrderStatusFragment() {
         // Required empty public constructor
@@ -59,10 +60,10 @@ public class OrderStatusFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        rootView = inflater.inflate(R.layout.fragment_order_status, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_order_status, container, false);
         mContext = rootView.getContext();
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -86,23 +87,23 @@ public class OrderStatusFragment extends Fragment {
         return rootView;
     }
 
-    public int getCheckedItem() {
+    private int getCheckedItem() {
         return checkedItem;
     }
 
-    public void setCheckedItem(int checkedItem) {
+    private void setCheckedItem(int checkedItem) {
         this.checkedItem = checkedItem;
     }
 
     public void writeStatusData() {
-        Order order1 = new Order("1", "praveen", CommonConstants.ORDER_STATUS_PENDING, "1-06-2019");
-        Order order2 = new Order("2", "kumar", CommonConstants.ORDER_STATUS_APPROVED, "2-06-2019");
-        Order order3 = new Order("3", "haresh", CommonConstants.ORDER_STATUS_PLACED, "3-06-2019");
-        Order order4 = new Order("4", "dhanush", CommonConstants.ORDER_STATUS_DECLINED, "4-06-2019");
-        Order order5 = new Order("5", "abishaan", CommonConstants.ORDER_STATUS_PENDING, "1-06-2019");
-        Order order6 = new Order("6", "roshan", CommonConstants.ORDER_STATUS_APPROVED, "2-06-2019");
-        Order order7 = new Order("7", "prashan", CommonConstants.ORDER_STATUS_PLACED, "3-06-2019");
-        Order order8 = new Order("8", "keerthigan", CommonConstants.ORDER_STATUS_HOLD, "4-06-2019");
+        Order order1 = new Order("1", "Praveen","", CommonConstants.ORDER_STATUS_PENDING, "1-06-2019");
+        Order order2 = new Order("2", "Kumar","", CommonConstants.ORDER_STATUS_APPROVED, "2-06-2019");
+        Order order3 = new Order("3", "Haresh","", CommonConstants.ORDER_STATUS_PLACED, "3-06-2019");
+        Order order4 = new Order("4", "Dhanush","", CommonConstants.ORDER_STATUS_DECLINED, "4-06-2019");
+        Order order5 = new Order("5", "Abishaan","", CommonConstants.ORDER_STATUS_PENDING, "1-06-2019");
+        Order order6 = new Order("6", "Roshan", "",CommonConstants.ORDER_STATUS_APPROVED, "2-06-2019");
+        Order order7 = new Order("7", "Prashan","", CommonConstants.ORDER_STATUS_PLACED, "3-06-2019");
+        Order order8 = new Order("8", "Keerthigan","", CommonConstants.ORDER_STATUS_HOLD, "4-06-2019");
 
         myRef.push().setValue(order1);
         myRef.push().setValue(order2);
@@ -114,17 +115,19 @@ public class OrderStatusFragment extends Fragment {
         myRef.push().setValue(order8);
     }
 
-    public void readStatusData() {
+    private void readStatusData() {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 orders.clear();
 
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
                     Order order = data.getValue(Order.class);
                     orders.add(order);
-                    Log.d(TAG, "Value is: " + order.getOrderID());
+                    if (order != null) {
+                        Log.d(TAG, "Value is: " + order.getOrderID());
+                    }
                 }
 
                 if (orders != null) {
@@ -136,7 +139,7 @@ public class OrderStatusFragment extends Fragment {
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
+            public void onCancelled(@NonNull DatabaseError error) {
                 // Failed to read value
                 Log.w(TAG, "Failed to read value.", error.toException());
             }
@@ -226,6 +229,8 @@ public class OrderStatusFragment extends Fragment {
             AlertDialog dialog = builder.create();
             dialog.show();
 
+        } else if(item.getItemId() == R.id.action_create) {
+            HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new CreateOrderFragment(), null).commit();
         }
 
         return super.onOptionsItemSelected(item);

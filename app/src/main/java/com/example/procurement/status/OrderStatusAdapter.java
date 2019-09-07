@@ -2,6 +2,7 @@ package com.example.procurement.status;
 
 import android.content.Context;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,26 +21,32 @@ import com.example.procurement.utils.CommonConstants;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import static com.example.procurement.R.*;
+import static com.example.procurement.R.drawable.badge_pending;
 
 public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.OrdersViewHolder> implements Filterable {
-
+    
     private ItemClickListener mClickListener;
     private final LayoutInflater mInflater;
     private List<Order> mOrders; // copy of orders
     private List<Order> mOrdersOriginal;
+    private View v1;
 
     // pass data into constructor
     OrderStatusAdapter(Context context, List<Order> orders) {
         this.mInflater = LayoutInflater.from(context);
         this.mOrders = orders;
         this.mOrdersOriginal = orders;
+
     }
 
     // inflate the row layout from xml when needed
     @NonNull
     @Override
     public OrdersViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.layout_order_status_item, parent, false);
+        View view = mInflater.inflate(layout.layout_order_status_item, parent, false);
         return new OrdersViewHolder(view);
     }
 
@@ -49,45 +56,53 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
         // check if any data is available
         if (mOrders != null) {
             Order order = mOrders.get(position);
-            String orderName, orderStatus, orderDate;
+            String orderName, orderStatus, orderDate, orderDescription,orderId;
             orderName = order.getName();
+            orderId = order.getOrderID();
+            orderDescription = order.getDescription();
             orderStatus = order.getStatusText();
 
-            int statusColor, statusIcon;
+            int statusColor,statusIcon,statusBackground;
 
             switch (order.getStatus()) {
                 case CommonConstants.ORDER_STATUS_APPROVED:
                     orderDate = order.getDate();
-                    statusColor = R.color.orderStatusAccepted;
-                    statusIcon = R.drawable.order_ic_status_accepted;
+                    statusColor = color.orderStatusAccepted;
+                    statusBackground = drawable.badge_approved;
+                    statusIcon = drawable.order_ic_status_accepted;
                     break;
                 case CommonConstants.ORDER_STATUS_PENDING:
                     orderDate = "--/--/--";
-                    statusColor = R.color.orderStatusPending;
-                    statusIcon = R.drawable.order_ic_status_pending;
+                    statusColor = color.orderStatusPending;
+                    statusBackground = drawable.badge_pending;
+                    statusIcon = drawable.order_ic_status_pending;
                     break;
                 case CommonConstants.ORDER_STATUS_PLACED:
                     orderDate = order.getDate();
-                    statusColor = R.color.orderStatusPlaced;
-                    statusIcon = R.drawable.order_ic_status_accepted;
+                    statusColor = color.orderStatusPlaced;
+                    statusBackground = drawable.badge_placed;
+                    statusIcon = drawable.order_ic_status_accepted;
                     break;
                 case CommonConstants.ORDER_STATUS_HOLD:
                     orderDate = order.getDate();
-                    statusColor = R.color.orderStatusHold;
-                    statusIcon = R.drawable.order_ic_status_pending;
+                    statusColor = color.orderStatusHold;
+                    statusBackground = drawable.badge_hold;
+                    statusIcon = drawable.order_ic_status_pending;
                     break;
                 default:
                     orderDate = "";
-                    statusColor = R.color.orderStatusDenied;
-                    statusIcon = R.drawable.order_ic_status_denied;
+                    statusColor = color.orderStatusDenied;
+                    statusBackground = drawable.badge_denied;
+                    statusIcon = drawable.order_ic_status_denied;
             }
 
             statusColor = ContextCompat.getColor(holder.itemView.getContext(), statusColor);
-
-            holder.name.setText(orderName);
+            
+            holder.name.setText(orderId+" - "+orderName);
             holder.date.setText(orderDate);
             holder.status.setText(orderStatus);
-            holder.status.setTextColor(statusColor);
+            //holder.description.setText(orderDescription);
+            holder.status.setBackgroundResource(statusBackground);
             holder.statusIcon.setImageResource(statusIcon);
             holder.statusIcon.setColorFilter(statusColor, PorterDuff.Mode.MULTIPLY);
             holder.orderIcon.setColorFilter(statusColor, PorterDuff.Mode.MULTIPLY);
@@ -114,14 +129,16 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
         final TextView date;
         final ImageView orderIcon;
         final ImageView statusIcon;
+        final TextView description;
 
         OrdersViewHolder(View view) {
             super(view);
-            name = view.findViewById(R.id.orderName);
-            status = view.findViewById(R.id.orderStatus);
-            date = view.findViewById(R.id.orderDate);
-            orderIcon = view.findViewById(R.id.orderIcon);
-            statusIcon = view.findViewById(R.id.orderStatusIcon);
+            name = view.findViewById(id.orderName);
+            status = view.findViewById(id.orderStatus);
+            date = view.findViewById(id.orderDate);
+            orderIcon = view.findViewById(id.orderIcon);
+            statusIcon = view.findViewById(id.orderStatusIcon);
+            description = view.findViewById(id.orderDescription);
             view.setOnClickListener(this);
         }
 

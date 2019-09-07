@@ -13,6 +13,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import java.time.Year;
 import java.util.Calendar;
 import java.util.Date;
@@ -24,6 +27,7 @@ import java.util.Date;
 public class DashboardFragment extends Fragment {
 
     private TextView txtUserName,txtMonthDate;
+    private FirebaseAuth mAuth;
 
     public DashboardFragment() {
 
@@ -34,18 +38,26 @@ public class DashboardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_dashboard, container, false);
-
+        mAuth = FirebaseAuth.getInstance();
         txtUserName = v.findViewById(R.id.txtUserName);
         txtMonthDate = v.findViewById(R.id.txtMonthData);
-        //SigninActivity.getCurrentUser();
-        setUserName();
         setDate();
         return v;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        updateUI(currentUser);
+    }
+
     @SuppressLint("SetTextI18n")
-    private void setUserName() {
-        txtUserName.setText("Hello "+SigninActivity.name+"!");
+    private void updateUI(FirebaseUser currentUser) {
+        if(currentUser!= null) {
+            txtUserName.setText("Hello " + currentUser.getUid() + "!");
+            //txtUserName.setText(currentUser.getEmail());
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -63,7 +75,7 @@ public class DashboardFragment extends Fragment {
     }
 
     private String getMonthString(int number) {
-        String month ="";
+        String month;
 
         switch (number) {
             case 0: month = "January";

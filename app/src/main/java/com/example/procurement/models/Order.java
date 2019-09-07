@@ -10,15 +10,25 @@ public class Order {
     private String name;
     private int status;
     private String date;
+    private String description;
 
     public Order() {
     }
 
-    public Order(String orderID, String name, int status, String date) {
+    public Order(String orderID, String name,String description, int status, String date) {
         this.orderID = orderID;
         this.name = name;
+        this.description = description;
         this.status = status;
         this.date = date;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getOrderID() {
