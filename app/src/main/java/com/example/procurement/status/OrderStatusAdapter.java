@@ -2,7 +2,6 @@ package com.example.procurement.status;
 
 import android.content.Context;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,23 +11,28 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.procurement.DashboardFragment;
+import com.example.procurement.HomeActivity;
+import com.example.procurement.NotificationFragment;
 import com.example.procurement.R;
 import com.example.procurement.models.Order;
+import com.example.procurement.notes.NotesFragment;
 import com.example.procurement.utils.CommonConstants;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-import static com.example.procurement.R.*;
-import static com.example.procurement.R.drawable.badge_pending;
+import static com.example.procurement.R.color;
+import static com.example.procurement.R.drawable;
+import static com.example.procurement.R.id;
+import static com.example.procurement.R.layout;
 
 public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.OrdersViewHolder> implements Filterable {
-    
-    private ItemClickListener mClickListener;
+
     private final LayoutInflater mInflater;
     private List<Order> mOrders; // copy of orders
     private List<Order> mOrdersOriginal;
@@ -56,13 +60,13 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
         // check if any data is available
         if (mOrders != null) {
             Order order = mOrders.get(position);
-            String orderName, orderStatus, orderDate, orderDescription,orderId;
+            String orderName, orderStatus, orderDate, orderDescription, orderId;
             orderName = order.getName();
             orderId = order.getOrderID();
             orderDescription = order.getDescription();
             orderStatus = order.getStatusText();
 
-            int statusColor,statusIcon,statusBackground;
+            int statusColor, statusIcon, statusBackground;
 
             switch (order.getStatus()) {
                 case CommonConstants.ORDER_STATUS_APPROVED:
@@ -97,8 +101,8 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
             }
 
             statusColor = ContextCompat.getColor(holder.itemView.getContext(), statusColor);
-            
-            holder.name.setText(orderId+" - "+orderName);
+
+            holder.name.setText(orderId + " - " + orderName);
             holder.date.setText(orderDate);
             holder.status.setText(orderStatus);
             //holder.description.setText(orderDescription);
@@ -106,6 +110,30 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
             holder.statusIcon.setImageResource(statusIcon);
             holder.statusIcon.setColorFilter(statusColor, PorterDuff.Mode.MULTIPLY);
             holder.orderIcon.setColorFilter(statusColor, PorterDuff.Mode.MULTIPLY);
+
+            if (orderStatus.equals("Placed")) {
+                holder.note.setVisibility(View.VISIBLE);
+                holder.note.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new NotesFragment(), null).commit();
+                    }
+                });
+            }
+
+            holder.enquire.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new NotificationFragment(), null).commit();
+                }
+            });
+
+            holder.cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new DashboardFragment(), null).commit();
+                }
+            });
         }
     }
 
@@ -122,14 +150,13 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
     }
 
     // Stores and recycles views as they are scrolled off screen
-    class OrdersViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class OrdersViewHolder extends RecyclerView.ViewHolder {
         // Hold views
-        final TextView name;
-        final TextView status;
-        final TextView date;
+        final TextView name, status, date, enquire, note;
         final ImageView orderIcon;
         final ImageView statusIcon;
         final TextView description;
+        CardView cardView;
 
         OrdersViewHolder(View view) {
             super(view);
@@ -139,31 +166,14 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
             orderIcon = view.findViewById(id.orderIcon);
             statusIcon = view.findViewById(id.orderStatusIcon);
             description = view.findViewById(id.orderDescription);
-            view.setOnClickListener(this);
+            note = view.findViewById(id.noteCRUD);
+            enquire = view.findViewById(id.enquireCRUD);
+            cardView = view.findViewById(id.cardOrder);
+
+            note.setVisibility(View.INVISIBLE);
+
         }
 
-        @Override
-        public void onClick(View view) {
-            if(mClickListener != null) {
-                mClickListener.onItemClick(view, getAdapterPosition());
-            }
-        }
-    }
-
-    Order getItem(int position) {
-        return mOrders.get(position);
-    }
-
-    interface ItemClickListener {
-        void onItemClick(View view, int position);
-    }
-
-    void setClickListener(ItemClickListener itemClickListener) {
-        this.mClickListener = itemClickListener;
-    }
-
-    public void resetSearch(List<Order> orders) {
-        this.mOrders = orders;
     }
 
     public Filter getFilter() {

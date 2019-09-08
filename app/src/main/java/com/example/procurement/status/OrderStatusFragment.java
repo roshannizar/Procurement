@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,11 +24,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.procurement.CreateOrderFragment;
-import com.example.procurement.DashboardFragment;
 import com.example.procurement.HomeActivity;
+import com.example.procurement.ProfileFragment;
 import com.example.procurement.R;
 import com.example.procurement.models.Order;
+import com.example.procurement.notes.NotesFragment;
 import com.example.procurement.utils.CommonConstants;
+import com.example.procurement.utils.RecyclerTouchListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -49,7 +52,7 @@ public class OrderStatusFragment extends Fragment {
     private DatabaseReference myRef;
     private ProgressBar progressBar;
     private Context mContext;
-    public static int pendingStatus=0,approvedStatus=0,holdStatus=0,placedStatus=0,declinedStatus=0;
+    public static int pendingStatus = 0, approvedStatus = 0, holdStatus = 0, placedStatus = 0, declinedStatus = 0;
 
     public OrderStatusFragment() {
         // Required empty public constructor
@@ -59,11 +62,11 @@ public class OrderStatusFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        pendingStatus=0;
-        approvedStatus=0;
-        holdStatus=0;
-        placedStatus=0;
-        declinedStatus=0;
+        pendingStatus = 0;
+        approvedStatus = 0;
+        holdStatus = 0;
+        placedStatus = 0;
+        declinedStatus = 0;
     }
 
     @Override
@@ -88,6 +91,7 @@ public class OrderStatusFragment extends Fragment {
         recyclerView = rootView.findViewById(R.id.rvOrderMain);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+
 //        writeStatusData();
         readStatusData();
 
@@ -102,15 +106,15 @@ public class OrderStatusFragment extends Fragment {
         this.checkedItem = checkedItem;
     }
 
-    public void writeStatusData() {
-        Order order1 = new Order("1", "Praveen","", CommonConstants.ORDER_STATUS_PENDING, "1-06-2019");
-        Order order2 = new Order("2", "Kumar","", CommonConstants.ORDER_STATUS_APPROVED, "2-06-2019");
-        Order order3 = new Order("3", "Haresh","", CommonConstants.ORDER_STATUS_PLACED, "3-06-2019");
-        Order order4 = new Order("4", "Dhanush","", CommonConstants.ORDER_STATUS_DECLINED, "4-06-2019");
-        Order order5 = new Order("5", "Abishaan","", CommonConstants.ORDER_STATUS_PENDING, "1-06-2019");
-        Order order6 = new Order("6", "Roshan", "",CommonConstants.ORDER_STATUS_APPROVED, "2-06-2019");
-        Order order7 = new Order("7", "Prashan","", CommonConstants.ORDER_STATUS_PLACED, "3-06-2019");
-        Order order8 = new Order("8", "Keerthigan","", CommonConstants.ORDER_STATUS_HOLD, "4-06-2019");
+    private void writeStatusData() {
+        Order order1 = new Order("1", "Praveen", "", CommonConstants.ORDER_STATUS_PENDING, "1-06-2019");
+        Order order2 = new Order("2", "Kumar", "", CommonConstants.ORDER_STATUS_APPROVED, "2-06-2019");
+        Order order3 = new Order("3", "Haresh", "", CommonConstants.ORDER_STATUS_PLACED, "3-06-2019");
+        Order order4 = new Order("4", "Dhanush", "", CommonConstants.ORDER_STATUS_DECLINED, "4-06-2019");
+        Order order5 = new Order("5", "Abishaan", "", CommonConstants.ORDER_STATUS_PENDING, "1-06-2019");
+        Order order6 = new Order("6", "Roshan", "", CommonConstants.ORDER_STATUS_APPROVED, "2-06-2019");
+        Order order7 = new Order("7", "Prashan", "", CommonConstants.ORDER_STATUS_PLACED, "3-06-2019");
+        Order order8 = new Order("8", "Keerthigan", "", CommonConstants.ORDER_STATUS_HOLD, "4-06-2019");
 
         myRef.push().setValue(order1);
         myRef.push().setValue(order2);
@@ -122,7 +126,7 @@ public class OrderStatusFragment extends Fragment {
         myRef.push().setValue(order8);
     }
 
-    public void readStatusData() {
+    private void readStatusData() {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -131,18 +135,17 @@ public class OrderStatusFragment extends Fragment {
 
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
                     Order order = data.getValue(Order.class);
-                    countStatus(order.getStatusText());
-                    orders.add(order);
+
                     if (order != null) {
+                        countStatus(order.getStatusText());
+                        orders.add(order);
                         Log.d(TAG, "Value is: " + order.getOrderID());
                     }
                 }
 
-                if (orders != null) {
-                    adapter = new OrderStatusAdapter(mContext, orders);
-                    progressBar.setVisibility(View.GONE);
-                    recyclerView.setAdapter(adapter);
-                }
+                adapter = new OrderStatusAdapter(mContext, orders);
+                progressBar.setVisibility(View.GONE);
+                recyclerView.setAdapter(adapter);
 
             }
 
@@ -153,13 +156,6 @@ public class OrderStatusFragment extends Fragment {
             }
         });
     }
-
-//    private void clickItem(final int position) {
-//        Intent intent = new Intent(OrderStatusViewActivity.this, OrderViewActivity.class);
-//        intent.putExtra(CommonConstants.VIEW_STATUS_ORDER_EXTRA, adapter.getItem(position).getOrderID());
-//        intent.putExtra(CommonConstants.VIEW_STATUS_ORDER_POSITION, position);
-//        startActivityForResult(intent);
-//    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -237,7 +233,7 @@ public class OrderStatusFragment extends Fragment {
             AlertDialog dialog = builder.create();
             dialog.show();
 
-        } else if(item.getItemId() == R.id.action_create) {
+        } else if (item.getItemId() == R.id.action_create) {
             HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new CreateOrderFragment(), null).commit();
         }
 
@@ -245,15 +241,16 @@ public class OrderStatusFragment extends Fragment {
     }
 
     private void countStatus(String status) {
-        if(status.equals("Pending")) {
+
+        if (status.equals("Pending")) {
             pendingStatus++;
-        } else if(status.equals("Hold")) {
+        } else if (status.equals("Hold")) {
             holdStatus++;
-        } else if(status.equals("Approved")) {
+        } else if (status.equals("Approved")) {
             approvedStatus++;
-        } else if(status.equals("Placed")) {
+        } else if (status.equals("Placed")) {
             placedStatus++;
-        } else if(status.equals("Declined")) {
+        } else if (status.equals("Declined")) {
             declinedStatus++;
         }
     }

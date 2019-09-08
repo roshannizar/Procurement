@@ -13,9 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.procurement.R;
 import com.example.procurement.models.Note;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyViewHolder> {
@@ -23,18 +20,15 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyViewHolder
     private Context context;
     private List<Note> notesList;
 
-
-    public NotesAdapter(Context context, List<Note> notesList) {
+    NotesAdapter(Context context, List<Note> notesList) {
         this.context = context;
         this.notesList = notesList;
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView note;
-        public TextView dot;
-        public TextView timestamp;
+    class MyViewHolder extends RecyclerView.ViewHolder {
+        final TextView note, dot, timestamp;
 
-        public MyViewHolder(View view) {
+        MyViewHolder(View view) {
             super(view);
             note = view.findViewById(R.id.note);
             dot = view.findViewById(R.id.dot);
@@ -69,21 +63,4 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyViewHolder
         return notesList.size();
     }
 
-    /**
-     * Formatting timestamp to `MMM d` format
-     * Input: 2018-02-21 00:15:42
-     * Output: Feb 21
-     */
-    private String formatDate(String dateStr) {
-        try {
-            SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Date date = fmt.parse(dateStr);
-            SimpleDateFormat fmtOut = new SimpleDateFormat("MMM d");
-            return fmtOut.format(date);
-        } catch (ParseException e) {
-
-        }
-
-        return "";
-    }
 }
