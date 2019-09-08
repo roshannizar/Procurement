@@ -7,7 +7,7 @@
     android:background="@color/white">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardView6"
+        android:id="@+id/cardOrder"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -136,7 +136,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/orderIcon" />
 
             <TextView
-                android:id="@+id/textView5"
+                android:id="@+id/enquireCRUD"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -152,12 +152,12 @@
                 android:textColor="@color/colorPrimary"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/textView12"
+                app:layout_constraintEnd_toStartOf="@+id/noteCRUD"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
             <TextView
-                android:id="@+id/textView12"
+                android:id="@+id/noteCRUD"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -172,7 +172,7 @@
                 android:textColor="@color/colorGreen"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/textView5"
+                app:layout_constraintStart_toEndOf="@+id/enquireCRUD"
                 app:layout_constraintTop_toBottomOf="@+id/divider2" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

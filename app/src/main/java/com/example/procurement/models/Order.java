@@ -3,7 +3,6 @@ package com.example.procurement.models;
 import com.example.procurement.utils.CommonConstants;
 import com.google.firebase.database.IgnoreExtraProperties;
 
-
 @IgnoreExtraProperties
 public class Order {
     private String orderID;
@@ -15,7 +14,7 @@ public class Order {
     public Order() {
     }
 
-    public Order(String orderID, String name,String description, int status, String date) {
+    public Order(String orderID, String name, String description, int status, String date) {
         this.orderID = orderID;
         this.name = name;
         this.description = description;
