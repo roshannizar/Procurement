@@ -13,13 +13,13 @@
 
     <item
         android:id="@+id/navigation_noti"
-        android:icon="@drawable/notifications_button"
-        android:title="Notification"
+        android:icon="@drawable/ic_notificaion_white"
+        android:title="@string/title_notification"
         />
 
     <item
         android:id="@+id/navigation_notifications"
-        android:icon="@drawable/man_user"
-        android:title="@string/title_notifications" />
+        android:icon="@drawable/ic_person"
+        android:title="@string/title_profile" />
 
 </menu>

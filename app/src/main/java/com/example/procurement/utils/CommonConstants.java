@@ -11,13 +11,13 @@ public class CommonConstants {
     public static final String VIEW_STATUS_ORDER_EXTRA = "VIEW_STATUS_ORDER_EXTRA";
     public static final String VIEW_STATUS_ORDER_POSITION = "VIEW_STATUS_ORDER_POSITION";
 
-    public static final String TABLE_NAME = "orders";
-    public static final String COLUMN_ID = "id";
-    public static final String COLUMN_NAME = "name";
-    public static final String COLUMN_STATUS = "status";
-    public static final String COLUMN_DATE = "created_date";
-    public static final String COLUMN_ACCEPTED = "delivery_date";
-    public static final String COLUMN_SHOP = "shop";
+    private static final String TABLE_NAME = "orders";
+    private static final String COLUMN_ID = "id";
+    private static final String COLUMN_NAME = "name";
+    private static final String COLUMN_STATUS = "status";
+    private static final String COLUMN_DATE = "created_date";
+    private static final String COLUMN_ACCEPTED = "delivery_date";
+    private static final String COLUMN_SHOP = "shop";
 
     public static final String CREATE_TABLE =
             "CREATE TABLE " + TABLE_NAME + " ("
