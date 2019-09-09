@@ -2,43 +2,31 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="@dimen/dimen_10"
+    android:background="@drawable/shape_bubble"
     android:clickable="true"
     android:focusable="true"
-    android:foreground="?attr/selectableItemBackground"
-    android:paddingBottom="@dimen/dimen_10"
-    android:paddingLeft="@dimen/activity_margin"
-    android:paddingRight="@dimen/activity_margin"
-    android:paddingTop="@dimen/dimen_10">
-
-    <TextView
-        android:id="@+id/dot"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/dot_height"
-        android:layout_marginEnd="@dimen/dot_margin_right"
-        android:layout_marginRight="@dimen/dot_margin_right"
-        android:layout_marginTop="@dimen/dimen_10"
-        android:includeFontPadding="false"
-        android:textColor="@color/colorAccent"
-        android:lineSpacingExtra="0dp"
-        android:textSize="@dimen/dot_text_size" />
-
-    <TextView
-        android:id="@+id/timestamp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/dot"
-        android:layout_toRightOf="@id/dot"
-        android:textColor="@color/timestamp"
-        android:textSize="@dimen/timestamp" />
+    android:paddingTop="@dimen/dimen_10"
+    android:paddingBottom="@dimen/dimen_10">
 
     <TextView
         android:id="@+id/note"
-        android:layout_width="match_parent"
+        android:layout_width="357dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/timestamp"
-        android:layout_toEndOf="@id/dot"
-        android:layout_toRightOf="@id/dot"
-        android:textColor="@color/note_list_text"
+        android:layout_marginLeft="@dimen/dimen_10"
+        android:layout_marginTop="1dp"
+        android:textColor="@color/white"
         android:textSize="@dimen/note_list_text" />
+
+    <TextView
+        android:id="@+id/timestamp"
+        android:layout_width="357dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/note"
+        android:layout_marginLeft="@dimen/dimen_10"
+        android:layout_marginTop="0dp"
+        android:gravity="bottom|right"
+        android:textColor="@color/timestamp"
+        android:textSize="@dimen/timestamp" />
 
 </RelativeLayout>
