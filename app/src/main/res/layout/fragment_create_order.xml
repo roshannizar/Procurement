@@ -28,6 +28,7 @@
                 android:text="Create New Order"
                 android:textAlignment="center"
                 android:textSize="24sp"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -40,13 +41,13 @@
                 android:layout_marginTop="24dp"
                 android:text="Order ID"
                 android:textSize="14sp"
-                app:layout_constraintBottom_toTopOf="@+id/editText"
+                app:layout_constraintBottom_toTopOf="@+id/txtOrderID"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
             <EditText
-                android:id="@+id/editText"
+                android:id="@+id/txtOrderID"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -67,13 +68,12 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="16dp"
                 android:text="Order Name"
-                app:layout_constraintBottom_toTopOf="@+id/editText2"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/txtOrderName"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editText" />
+                app:layout_constraintTop_toBottomOf="@+id/txtOrderID" />
 
             <EditText
-                android:id="@+id/editText2"
+                android:id="@+id/txtOrderName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -94,12 +94,15 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/button_generate"
+                android:duplicateParentState="false"
+                android:editable="false"
+                android:enabled="false"
                 android:text="Generate"
                 android:textAllCaps="false"
                 android:textColor="@color/colorWhiteSmoke"
                 app:layout_constraintBottom_toTopOf="@+id/textView19"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/editText"
+                app:layout_constraintStart_toEndOf="@+id/txtOrderID"
                 app:layout_constraintTop_toBottomOf="@+id/textView17" />
 
             <TextView
@@ -112,10 +115,10 @@
                 android:text="Description"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editText2" />
+                app:layout_constraintTop_toBottomOf="@+id/txtOrderName" />
 
             <EditText
-                android:id="@+id/editText3"
+                android:id="@+id/txtDescription"
                 android:layout_width="0dp"
                 android:layout_height="100dp"
                 android:layout_marginStart="16dp"
@@ -136,13 +139,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="16dp"
-                android:text="Place Order Date"
+                android:text="Arrival Order Date"
                 app:layout_constraintEnd_toStartOf="@+id/textView22"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editText3" />
+                app:layout_constraintTop_toBottomOf="@+id/txtDescription" />
 
             <EditText
-                android:id="@+id/editText4"
+                android:id="@+id/dtpArrivalDate"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
@@ -164,7 +167,7 @@
                 android:text="Current Date"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textView21"
-                app:layout_constraintTop_toBottomOf="@+id/editText3" />
+                app:layout_constraintTop_toBottomOf="@+id/txtDescription" />
 
             <EditText
                 android:id="@+id/txtCurrentDate"
@@ -179,7 +182,7 @@
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/editText4"
+                app:layout_constraintStart_toEndOf="@+id/dtpArrivalDate"
                 app:layout_constraintTop_toBottomOf="@+id/textView22" />
 
             <TextView
@@ -187,22 +190,21 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:text="Order Status"
-                app:layout_constraintBottom_toTopOf="@+id/textView24"
+                app:layout_constraintBottom_toTopOf="@+id/txtStatus"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editText4" />
+                app:layout_constraintTop_toBottomOf="@+id/dtpArrivalDate" />
 
             <TextView
-                android:id="@+id/textView24"
+                android:id="@+id/txtStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="18dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp"
                 android:background="@drawable/badge_pending"
                 android:paddingLeft="10dp"
                 android:paddingTop="5dp"
@@ -211,26 +213,51 @@
                 android:text="@string/pending"
                 android:textAlignment="center"
                 android:textColor="@color/colorWhiteSmoke"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView23" />
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/btnPlaceOrder"
                 android:layout_width="0dp"
                 android:layout_height="32dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
                 android:background="@drawable/button_generate"
                 android:text="Place Order"
                 android:textAllCaps="false"
                 android:textColor="@color/colorWhiteSmoke"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/textView24"
+                app:layout_constraintStart_toEndOf="@+id/txtStatus"
                 app:layout_constraintTop_toBottomOf="@+id/textView23" />
+
+            <Spinner
+                android:id="@+id/spinnerstock"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:entries="@array/stock_array"
+                app:layout_constraintBottom_toTopOf="@+id/textView20"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView19" />
+
+            <Switch
+                android:id="@+id/stockSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="16dp"
+                android:text="New Stock  "
+                android:textColor="@android:color/tertiary_text_dark"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/textView19"
+                app:layout_constraintTop_toBottomOf="@+id/txtOrderID" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

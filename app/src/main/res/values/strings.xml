@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Procurement</string>
     <string name="title_activity_home">Procurement</string>
-    <string name="title_home">Dashboard</string>
+    <string name="title_home">Home</string>
     <string name="title_dashboard">Orders</string>
     <string name="title_profile">Profile</string>
     <string name="title_notification">Notification</string>
@@ -29,5 +29,15 @@
     <string name="lbl_new_note_title">New Note</string>
     <string name="lbl_edit_note_title">Edit Note</string>
     <string name="hint_enter_note">Enter your note!</string>
-
+    <string-array name="stock_array">
+        <item>-- Please select a order --</item>
+        <item>Bricks</item>
+        <item>Stones</item>
+        <item>Cement</item>
+        <item>Sand</item>
+        <item>Paint</item>
+        <item>Putty Wall</item>
+        <item>Wires</item>
+        <item>Cement Mixer</item>
+    </string-array>
 </resources>
