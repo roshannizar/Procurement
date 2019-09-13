@@ -1,7 +1,6 @@
-package com.example.procurement.notes;
+package com.example.procurement.adapters;
 
 import android.content.Context;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyViewHolder
     private Context context;
     private List<Note> notesList;
 
-    NotesAdapter(Context context, List<Note> notesList) {
+    public NotesAdapter(Context context, List<Note> notesList) {
         this.context = context;
         this.notesList = notesList;
     }

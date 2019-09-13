@@ -1,4 +1,4 @@
-package com.example.procurement;
+package com.example.procurement.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -13,7 +13,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.procurement.status.OrderStatusFragment;
+import com.example.procurement.R;
+import com.example.procurement.fragments.DashboardFragment;
+import com.example.procurement.fragments.NotificationsFragment;
+import com.example.procurement.fragments.OrderStatusFragment;
+import com.example.procurement.fragments.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class HomeActivity extends AppCompatActivity {
@@ -36,7 +40,7 @@ public class HomeActivity extends AppCompatActivity {
                     HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new ProfileFragment(), null).commit();
                     return true;
                 case R.id.navigation_noti:
-                    HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new NotificationFragment(), null).commit();
+                    HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new NotificationsFragment(), null).commit();
                     return true;
             }
             return false;

@@ -1,4 +1,4 @@
-package com.example.procurement;
+package com.example.procurement.fragments;
 
 
 import android.annotation.SuppressLint;
@@ -12,7 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.procurement.status.OrderStatusFragment;
+import com.example.procurement.R;
+import com.example.procurement.fragments.OrderStatusFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 

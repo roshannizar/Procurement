@@ -1,4 +1,4 @@
-package com.example.procurement.notes;
+package com.example.procurement.fragments;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -21,7 +21,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.procurement.R;
+import com.example.procurement.adapters.NotesAdapter;
 import com.example.procurement.models.Note;
+import com.example.procurement.utils.CommonConstants;
 import com.example.procurement.utils.RecyclerTouchListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
@@ -55,7 +57,7 @@ public class NotesFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        myRef = database.getReference("Notes");
+        myRef = database.getReference(CommonConstants.FIREBASE_NOTES_DB);
 
     }
 
