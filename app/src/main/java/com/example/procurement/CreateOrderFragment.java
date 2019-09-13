@@ -180,15 +180,11 @@ public class CreateOrderFragment extends Fragment implements AdapterView.OnItemS
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
-        txtSpinnerStock = "-- Please select a order";
+        txtSpinnerStock = "-- Please select a order --";
     }
 
     private boolean validationOrders() {
-        if(txtOrderID.getText().toString().equals("") || txtOrderName.getText().toString().equals("") || txtSpinnerStock == null || txtSpinnerStock.equals("") || txtDescription.getText().toString().equals("") || dtpArrivalDate.getText().toString().equals("")) {
-            return false;
-        } else {
-            return true;
-        }
+        return !txtOrderID.getText().toString().equals("") && !txtOrderName.getText().toString().equals("") && txtSpinnerStock != null && !txtSpinnerStock.equals("") && !txtDescription.getText().toString().equals("") && !dtpArrivalDate.getText().toString().equals("");
     }
 
     private void generateID() {
