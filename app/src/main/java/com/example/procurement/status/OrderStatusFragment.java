@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,12 +24,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.procurement.CreateOrderFragment;
 import com.example.procurement.HomeActivity;
-import com.example.procurement.ProfileFragment;
 import com.example.procurement.R;
 import com.example.procurement.models.Order;
-import com.example.procurement.notes.NotesFragment;
 import com.example.procurement.utils.CommonConstants;
-import com.example.procurement.utils.RecyclerTouchListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -139,7 +135,6 @@ public class OrderStatusFragment extends Fragment {
                     if (order != null) {
                         countStatus(order.getStatusText());
                         orders.add(order);
-                        Log.d(TAG, "Value is: " + order.getOrderID());
                     }
                 }
 
@@ -174,7 +169,9 @@ public class OrderStatusFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                adapter.getFilter().filter(newText);
+                if (!newText.equals("")) {
+                    adapter.getFilter().filter(newText);
+                }
                 return true;
             }
         });
