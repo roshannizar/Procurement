@@ -4,7 +4,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <!--Order margins-->
-    <dimen name="orderRowTitleSize">24sp</dimen>
+    <dimen name="orderRowTitleSize">20sp</dimen>
     <dimen name="orderRowMarginLarge">16dp</dimen>
     <dimen name="orderRowMarginSmall">8dp</dimen>
     <dimen name="orderRowIconSize">64dp</dimen>
