@@ -1,5 +1,6 @@
 package com.example.procurement.status;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -55,6 +57,7 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
     }
 
     // bind the data to the TextView in each row
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull OrdersViewHolder holder, int position) {
         // check if any data is available

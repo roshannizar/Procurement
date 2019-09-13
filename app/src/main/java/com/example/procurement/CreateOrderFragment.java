@@ -2,10 +2,12 @@ package com.example.procurement;
 
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import android.text.Editable;
@@ -91,14 +93,27 @@ public class CreateOrderFragment extends Fragment implements AdapterView.OnItemS
                     @Override
                     public void onClick(View view) {
 
-                        if(switchPlacement) {
-                            Order o = new Order(txtOrderID.getText().toString(), txtOrderName.getText().toString(), txtDescription.getText().toString(), CommonConstants.ORDER_STATUS_PENDING, dtpArrivalDate.getText().toString());
-                            myRef.push().setValue(o);
-                            Toast.makeText(getActivity(),"Order has been placed successfully",Toast.LENGTH_LONG).show();
+                        if (validationOrders()) {
+                            if (switchPlacement) {
+                                Order o = new Order("PO" + txtOrderID.getText().toString(), txtOrderName.getText().toString(), txtDescription.getText().toString(), CommonConstants.ORDER_STATUS_PENDING, dtpArrivalDate.getText().toString());
+                                myRef.push().setValue(o);
+                                Toast.makeText(getActivity(), "Order has been placed successfully", Toast.LENGTH_LONG).show();
+                            } else {
+                                Order o = new Order("PO" + txtOrderID.getText().toString(), txtSpinnerStock, txtDescription.getText().toString(), CommonConstants.ORDER_STATUS_PENDING, dtpArrivalDate.getText().toString());
+                                myRef.push().setValue(o);
+                                Toast.makeText(getActivity(), "Order has been placed successfully", Toast.LENGTH_LONG).show();
+                            }
                         } else {
-                            Order o = new Order(txtOrderID.getText().toString(), txtSpinnerStock, txtDescription.getText().toString(), CommonConstants.ORDER_STATUS_PENDING, dtpArrivalDate.getText().toString());
-                            myRef.push().setValue(o);
-                            Toast.makeText(getActivity(),"Order has been placed successfully",Toast.LENGTH_LONG).show();
+                            new AlertDialog.Builder(getActivity())
+                                    .setTitle("ALERT")
+                                    .setMessage("Fill the required fields!")
+                                    .setCancelable(false)
+                                    .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // Whatever...
+                                        }
+                                    }).show();
                         }
                     }
                 }
@@ -166,5 +181,17 @@ public class CreateOrderFragment extends Fragment implements AdapterView.OnItemS
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
         txtSpinnerStock = "-- Please select a order";
+    }
+
+    private boolean validationOrders() {
+        if(txtOrderID.getText().toString().equals("") || txtOrderName.getText().toString().equals("") || txtSpinnerStock == null || txtSpinnerStock.equals("") || txtDescription.getText().toString().equals("") || dtpArrivalDate.getText().toString().equals("")) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private void generateID() {
+
     }
 }
