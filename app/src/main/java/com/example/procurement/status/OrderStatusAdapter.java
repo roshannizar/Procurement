@@ -108,7 +108,7 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
             holder.name.setText(orderId + " - " + orderName);
             holder.date.setText(orderDate);
             holder.status.setText(orderStatus);
-            //holder.description.setText(orderDescription);
+            holder.description.setText(orderDescription);
             holder.status.setBackgroundResource(statusBackground);
             holder.statusIcon.setImageResource(statusIcon);
             holder.statusIcon.setColorFilter(statusColor, PorterDuff.Mode.MULTIPLY);
