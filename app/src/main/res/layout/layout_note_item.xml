@@ -11,7 +11,7 @@
 
     <TextView
         android:id="@+id/note"
-        android:layout_width="357dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dimen_10"
         android:layout_marginTop="1dp"
@@ -20,7 +20,7 @@
 
     <TextView
         android:id="@+id/timestamp"
-        android:layout_width="357dp"
+        android:layout_width="310dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/note"
         android:layout_marginLeft="@dimen/dimen_10"
