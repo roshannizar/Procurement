@@ -1,4 +1,4 @@
-package com.example.procurement.status;
+package com.example.procurement.fragments;
 
 
 import android.app.AlertDialog;
@@ -22,10 +22,16 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.procurement.CreateOrderFragment;
-import com.example.procurement.HomeActivity;
+import com.example.procurement.activities.HomeActivity;
 import com.example.procurement.R;
+import com.example.procurement.adapters.OrderStatusAdapter;
 import com.example.procurement.models.Order;
+import com.example.procurement.status.ApprovedOrderStatus;
+import com.example.procurement.status.DeclinedOrderStatus;
+import com.example.procurement.status.HoldOrderStatus;
+import com.example.procurement.status.OrderStatus;
+import com.example.procurement.status.PendingOrderStatus;
+import com.example.procurement.status.PlacedOrderStatus;
 import com.example.procurement.utils.CommonConstants;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -38,7 +44,7 @@ import java.util.ArrayList;
 
 public class OrderStatusFragment extends Fragment {
 
-    private static final String TAG = "OrderStatusViewActivity";
+    private static final String TAG = "OrderStatusFragment";
 
     private ArrayList<Order> orders;
     private OrderStatusAdapter adapter;
@@ -73,7 +79,7 @@ public class OrderStatusFragment extends Fragment {
         mContext = rootView.getContext();
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        myRef = database.getReference("Orders");
+        myRef = database.getReference(CommonConstants.FIREBASE_ORDER_DB);
 
         orders = new ArrayList<>();
 

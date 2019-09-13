@@ -1,17 +1,10 @@
-package com.example.procurement;
+package com.example.procurement.fragments;
 
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
-
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +16,11 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+
+import com.example.procurement.R;
 import com.example.procurement.models.Order;
 import com.example.procurement.utils.CommonConstants;
 import com.google.firebase.database.DatabaseReference;
@@ -31,7 +29,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Objects;
 
 
 /**
@@ -39,7 +36,7 @@ import java.util.Objects;
  */
 public class CreateOrderFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
-    private EditText txtCurrentDate,txtOrderName,txtDescription,dtpArrivalDate,txtOrderID;
+    private EditText txtCurrentDate, txtOrderName, txtDescription, dtpArrivalDate, txtOrderID;
     private Spinner spinnerStock;
     private Switch stockSwitch;
     private ArrayList<Order> orders;
@@ -73,7 +70,7 @@ public class CreateOrderFragment extends Fragment implements AdapterView.OnItemS
         spinnerStock.setOnItemSelectedListener(this);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        myRef = database.getReference(CommonConstants.FIREBASE_DATABASE_NAME);
+        myRef = database.getReference(CommonConstants.FIREBASE_ORDER_DB);
         orders = new ArrayList<>();
 
         init();
@@ -125,7 +122,7 @@ public class CreateOrderFragment extends Fragment implements AdapterView.OnItemS
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if(stockSwitch.isChecked()) {
+                        if (stockSwitch.isChecked()) {
                             txtOrderName.setVisibility(View.VISIBLE);
                             spinnerStock.setVisibility(View.INVISIBLE);
                             switchPlacement = true;
@@ -141,7 +138,7 @@ public class CreateOrderFragment extends Fragment implements AdapterView.OnItemS
 
     @SuppressLint("SetTextI18n")
     private void setDate() {
-        int year,date,month;
+        int year, date, month;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             year = Year.now().getValue();
         } else {
@@ -150,31 +147,41 @@ public class CreateOrderFragment extends Fragment implements AdapterView.OnItemS
 
         date = Calendar.getInstance().get(Calendar.DATE);
         month = Calendar.getInstance().get(Calendar.MONTH);
-        txtCurrentDate.setText(month+"-"+date+"-"+year);
+        txtCurrentDate.setText(month + "-" + date + "-" + year);
     }
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         switch (i) {
-            case 0: txtSpinnerStock = "-- Please select a order";
-                    break;
-            case 1: txtSpinnerStock = "Bricks";
-                    break;
-            case 2: txtSpinnerStock = "Stones";
-                    break;
-            case 3: txtSpinnerStock = "Cement";
-                    break;
-            case 4: txtSpinnerStock = "Sand";
-                    break;
-            case 5: txtSpinnerStock = "Paint";
-                    break;
-            case 6: txtSpinnerStock = "Putty Wall";
-                    break;
-            case 7: txtSpinnerStock = "Wires";
-                    break;
-            case 8: txtSpinnerStock = "Cement Mixer";
-                    break;
-                    default: txtSpinnerStock = null;
+            case 0:
+                txtSpinnerStock = "-- Please select a order";
+                break;
+            case 1:
+                txtSpinnerStock = "Bricks";
+                break;
+            case 2:
+                txtSpinnerStock = "Stones";
+                break;
+            case 3:
+                txtSpinnerStock = "Cement";
+                break;
+            case 4:
+                txtSpinnerStock = "Sand";
+                break;
+            case 5:
+                txtSpinnerStock = "Paint";
+                break;
+            case 6:
+                txtSpinnerStock = "Putty Wall";
+                break;
+            case 7:
+                txtSpinnerStock = "Wires";
+                break;
+            case 8:
+                txtSpinnerStock = "Cement Mixer";
+                break;
+            default:
+                txtSpinnerStock = null;
         }
     }
 

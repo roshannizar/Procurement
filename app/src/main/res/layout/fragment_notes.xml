@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".notes.NotesFragment">
+    tools:context=".fragments.NotesFragment">
 
     <include
     layout="@layout/layout_notes"

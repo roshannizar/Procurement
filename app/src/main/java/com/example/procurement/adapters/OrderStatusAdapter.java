@@ -1,4 +1,4 @@
-package com.example.procurement.status;
+package com.example.procurement.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -10,19 +10,18 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.procurement.DashboardFragment;
-import com.example.procurement.HomeActivity;
-import com.example.procurement.NotificationFragment;
+import com.example.procurement.fragments.DashboardFragment;
+import com.example.procurement.activities.HomeActivity;
+import com.example.procurement.fragments.NotificationsFragment;
 import com.example.procurement.R;
 import com.example.procurement.models.Order;
-import com.example.procurement.notes.NotesFragment;
+import com.example.procurement.fragments.NotesFragment;
 import com.example.procurement.utils.CommonConstants;
 
 import java.util.ArrayList;
@@ -41,7 +40,7 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
     private View v1;
 
     // pass data into constructor
-    OrderStatusAdapter(Context context, List<Order> orders) {
+    public OrderStatusAdapter(Context context, List<Order> orders) {
         this.mInflater = LayoutInflater.from(context);
         this.mOrders = orders;
         this.mOrdersOriginal = orders;
@@ -127,7 +126,7 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
             holder.enquire.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new NotificationFragment(), null).commit();
+                    HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new NotificationsFragment(), null).commit();
                 }
             });
 
