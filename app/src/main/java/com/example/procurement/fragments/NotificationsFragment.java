@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -23,6 +24,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -32,8 +34,10 @@ public class NotificationsFragment extends Fragment {
     private ArrayList<Notification> notifications;
     private NotificationsAdapter adapter;
     private RecyclerView recyclerView;
+    private ProgressBar progressBar;
     private DatabaseReference myRef;
     private Context mContext;
+    private SimpleDateFormat format;
 
     public NotificationsFragment() {
     }
@@ -48,20 +52,23 @@ public class NotificationsFragment extends Fragment {
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         myRef = database.getReference(CommonConstants.FIREBASE_NOTIFICATION_DB);
+        format = new SimpleDateFormat("dd-MM-yyyy");
 
         notifications = new ArrayList<>();
 
+        progressBar = rootView.findViewById(R.id.progressBar);
         recyclerView = rootView.findViewById(R.id.rvNotification);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        writeStatusData();
-      //  readStatusData();
+        //writeStatusData();
+        readStatusData();
 
         return rootView;
     }
 
     private void readStatusData() {
+
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -73,12 +80,26 @@ public class NotificationsFragment extends Fragment {
 
                     if (notification != null) {
                         notifications.add(notification);
+
+//                        try {
+//                            Date orderDate = format.parse(notification.getOrderDate());
+//                            Date currentDate = format.parse(new Date().toString());
+//                            if (currentDate.equals(orderDate)) {
+//                                notifications.add(notification);
+//                            }
+//                        } catch (ParseException error) {
+//                            Log.w(TAG, "Failed to read value.", error.getCause());
+//                        }
+
                     }
                 }
-                Collections.reverse(notifications);
-                adapter = new NotificationsAdapter(mContext, notifications);
-                recyclerView.setAdapter(adapter);
 
+                if (notifications != null) {
+                    Collections.reverse(notifications);
+                    adapter = new NotificationsAdapter(mContext, notifications);
+                    progressBar.setVisibility(View.GONE);
+                    recyclerView.setAdapter(adapter);
+                }
             }
 
             @Override
@@ -90,7 +111,7 @@ public class NotificationsFragment extends Fragment {
     }
 
     private void writeStatusData() {
-        Notification createNotification = new Notification("1", "Praveen", "jj", CommonConstants.ORDER_STATUS_PENDING, "1-06-2019");
+        Notification createNotification = new Notification("1df", "Praveen", CommonConstants.ORDER_STATUS_PENDING, "21-09-2019");
         myRef.push().setValue(createNotification);
     }
 }

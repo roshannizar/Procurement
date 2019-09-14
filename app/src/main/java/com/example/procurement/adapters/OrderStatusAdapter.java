@@ -66,7 +66,7 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
             orderName = order.getName();
             orderId = order.getOrderID();
             orderDescription = order.getDescription();
-            orderStatus = order.getStatusText();
+            orderStatus = order.getStatus();
 
             int statusColor, statusIcon, statusBackground;
 
@@ -113,7 +113,7 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
             holder.statusIcon.setColorFilter(statusColor, PorterDuff.Mode.MULTIPLY);
             holder.orderIcon.setColorFilter(statusColor, PorterDuff.Mode.MULTIPLY);
 
-            if (orderStatus.equals("Placed")) {
+            if (orderStatus.equals(CommonConstants.ORDER_STATUS_PLACED)) {
                 holder.note.setVisibility(View.VISIBLE);
                 holder.note.setOnClickListener(new View.OnClickListener() {
                     @Override

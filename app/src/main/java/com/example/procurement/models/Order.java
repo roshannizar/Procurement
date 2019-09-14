@@ -7,14 +7,14 @@ import com.google.firebase.database.IgnoreExtraProperties;
 public class Order {
     private String orderID;
     private String name;
-    private int status;
+    private String status;
     private String date;
     private String description;
 
     public Order() {
     }
 
-    public Order(String orderID, String name, String description, int status, String date) {
+    public Order(String orderID, String name, String description, String status, String date) {
         this.orderID = orderID;
         this.name = name;
         this.description = description;
@@ -46,11 +46,11 @@ public class Order {
         this.name = name;
     }
 
-    public int getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -62,18 +62,4 @@ public class Order {
         this.date = date;
     }
 
-    public String getStatusText() {
-        switch (this.status) {
-            case CommonConstants.ORDER_STATUS_APPROVED:
-                return "Approved";
-            case CommonConstants.ORDER_STATUS_PENDING:
-                return "Pending";
-            case CommonConstants.ORDER_STATUS_PLACED:
-                return "Placed";
-            case CommonConstants.ORDER_STATUS_HOLD:
-                return "Hold";
-            default:
-                return "Declined";
-        }
-    }
 }

@@ -94,8 +94,8 @@ public class OrderStatusFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-//        writeStatusData();
-        readStatusData();
+        //writeStatusData();
+       readStatusData();
 
         return rootView;
     }
@@ -139,7 +139,7 @@ public class OrderStatusFragment extends Fragment {
                     Order order = data.getValue(Order.class);
 
                     if (order != null) {
-                        countStatus(order.getStatusText());
+                        countStatus(order.getStatus());
                         orders.add(order);
                     }
                 }
@@ -245,15 +245,15 @@ public class OrderStatusFragment extends Fragment {
 
     private void countStatus(String status) {
 
-        if (status.equals("Pending")) {
+        if (status.equals(CommonConstants.ORDER_STATUS_PENDING)) {
             pendingStatus++;
-        } else if (status.equals("Hold")) {
+        } else if (status.equals(CommonConstants.ORDER_STATUS_HOLD)) {
             holdStatus++;
-        } else if (status.equals("Approved")) {
+        } else if (status.equals(CommonConstants.ORDER_STATUS_APPROVED)) {
             approvedStatus++;
-        } else if (status.equals("Placed")) {
+        } else if (status.equals(CommonConstants.ORDER_STATUS_PLACED)) {
             placedStatus++;
-        } else if (status.equals("Declined")) {
+        } else if (status.equals(CommonConstants.ORDER_STATUS_DECLINED)) {
             declinedStatus++;
         }
     }

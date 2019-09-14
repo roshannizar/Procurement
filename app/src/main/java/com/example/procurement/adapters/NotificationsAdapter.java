@@ -7,10 +7,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.procurement.R;
 import com.example.procurement.models.Notification;
+import com.example.procurement.utils.CommonConstants;
 
 import java.util.List;
 
@@ -25,11 +27,13 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        final TextView notificationOrder, notificationStatus;
+        final TextView notificationOrderID, notificationStatus;
+        final CardView cvNotification;
 
         MyViewHolder(View view) {
             super(view);
-            notificationOrder = view.findViewById(R.id.notificationOrder);
+            cvNotification = view.findViewById(R.id.cvNotification);
+            notificationOrderID = view.findViewById(R.id.notificationOrderID);
             notificationStatus = view.findViewById(R.id.notificationStatus);
         }
     }
@@ -46,9 +50,29 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Notification notification = notificationsList.get(position);
-        String order = notification.getOrderID() + " " + notification.getOrderName();
-        holder.notificationOrder.setText(order);
-        holder.notificationStatus.setText(notification.getOrderName());
+        holder.notificationOrderID.setText("Order ID : " +  notification.getOrderID());
+        holder.notificationStatus.setText("Status : " + notification.getOrderStatus());
+
+        int statusColor, statusIcon, statusBackground;
+
+        switch (notification.getOrderStatus()) {
+            case CommonConstants.ORDER_STATUS_APPROVED:
+                statusColor = R.color.orderStatusAccepted;
+                break;
+            case CommonConstants.ORDER_STATUS_PENDING:
+                statusColor = R.color.orderStatusPending;
+                break;
+            case CommonConstants.ORDER_STATUS_PLACED:
+                statusColor = R.color.orderStatusPlaced;
+                break;
+            case CommonConstants.ORDER_STATUS_HOLD:
+                statusColor = R.color.orderStatusHold;
+                break;
+            default:
+                statusColor = R.color.orderStatusDenied;
+        }
+
+        holder.cvNotification.setBackgroundResource(statusColor);
     }
 
     @Override
