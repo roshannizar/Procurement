@@ -70,7 +70,6 @@ public class HomeActivity extends AppCompatActivity {
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         fm = getSupportFragmentManager();
-        SignInActivity.getCurrentUser();
 
         if (findViewById(R.id.fragment_container) != null) {
             if (savedInstanceState != null) {
