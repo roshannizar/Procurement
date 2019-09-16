@@ -1,9 +1,5 @@
 package com.example.procurement.models;
 
-import com.example.procurement.utils.CommonConstants;
-import com.google.firebase.database.IgnoreExtraProperties;
-
-@IgnoreExtraProperties
 public class Order {
     private String orderID;
     private String name;

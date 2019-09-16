@@ -4,11 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".fragments.NotesFragment">
+    android:orientation="vertical">
 
     <include
-    layout="@layout/layout_notes"
+    layout="@layout/layout_loading_recycle_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent" />
 

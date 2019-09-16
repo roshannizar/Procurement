@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="20dp">
+
+    <RelativeLayout
+        android:id="@+id/incoming"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/outgoing"
+        android:layout_marginStart="@dimen/dimen_10"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/chat_bubble_incoming"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingTop="@dimen/dimen_10"
+        android:paddingBottom="@dimen/dimen_10">
+
+        <TextView
+            android:id="@+id/noteIn"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="26dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="@dimen/dimen_10"
+            android:textColor="@color/white"
+            android:textSize="@dimen/note_list_text" />
+
+        <TextView
+            android:id="@+id/timestampIn"
+            android:layout_width="310dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/noteIn"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="20dp"
+            android:gravity="bottom|end"
+            android:textColor="@color/timestamp"
+            android:textSize="@dimen/timestamp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/outgoing"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="@dimen/dimen_10"
+        android:background="@drawable/chat_bubble_outgoing"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingTop="@dimen/dimen_10"
+        android:paddingBottom="@dimen/dimen_10">
+
+        <TextView
+            android:id="@+id/noteOut"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="@dimen/dimen_10"
+            android:textColor="@color/white"
+            android:textSize="@dimen/note_list_text" />
+
+        <TextView
+            android:id="@+id/timestampOut"
+            android:layout_width="310dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/noteOut"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="24dp"
+            android:gravity="bottom|end"
+            android:textColor="@color/timestamp"
+            android:textSize="@dimen/timestamp" />
+
+    </RelativeLayout>
+</RelativeLayout>

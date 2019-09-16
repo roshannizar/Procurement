@@ -21,7 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.procurement.R;
-import com.example.procurement.adapters.NotesAdapter;
+import com.example.procurement.adapters.NoteAdapter;
 import com.example.procurement.models.Note;
 import com.example.procurement.utils.CommonConstants;
 import com.example.procurement.utils.RecyclerTouchListener;
@@ -37,10 +37,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class NotesFragment extends Fragment {
-    private static final String TAG = "NotesFragment";
+public class NoteFragment extends Fragment {
+    private static final String TAG = "NoteFragment";
 
-    private NotesAdapter mAdapter;
+    private NoteAdapter mAdapter;
     private List<Note> notesList;
     private RecyclerView recyclerView;
     private Context mContext;
@@ -48,8 +48,7 @@ public class NotesFragment extends Fragment {
     private DatabaseReference myRef;
     private ProgressBar progressBar;
 
-    public NotesFragment() {
-        // Required empty public constructor
+    public NoteFragment() {
     }
 
     @Override
@@ -65,14 +64,14 @@ public class NotesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_notes, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_note, container, false);
         mContext = getContext();
-        recyclerView = rootView.findViewById(R.id.rvNotes);
+        recyclerView = rootView.findViewById(R.id.rvLoading);
         progressBar = rootView.findViewById(R.id.progressBar);
 
         notesList = new ArrayList<>();
 
-        mAdapter = new NotesAdapter(mContext, notesList);
+        mAdapter = new NoteAdapter(mContext, notesList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(mContext);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -98,7 +97,7 @@ public class NotesFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showNoteDialog(false, null, -1);
+                showBubbleDialog(false, null, -1);
             }
         });
 
@@ -120,7 +119,7 @@ public class NotesFragment extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (which == 0) {
-                    showNoteDialog(true, notesList.get(position), position);
+                    showBubbleDialog(true, notesList.get(position), position);
                 } else {
                     deleteNote(position);
                 }
@@ -136,7 +135,7 @@ public class NotesFragment extends Fragment {
     private void createNote(String note) {
         // inserting note in db and getting
         DatabaseReference reference = myRef.push();
-        reference.setValue(new Note(reference.getKey(),note, DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date())));
+        reference.setValue(new Note(reference.getKey(), note, DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date())));
     }
 
     /**
@@ -146,7 +145,7 @@ public class NotesFragment extends Fragment {
     private void updateNote(String noteText, int position) {
         // updating note text
         String id = notesList.get(position).getNoteID();
-        myRef.child(id).setValue(new Note(id,noteText, DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date())));
+        myRef.child(id).setValue(new Note(id, noteText, DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date())));
     }
 
     /**
@@ -174,7 +173,7 @@ public class NotesFragment extends Fragment {
                 }
 
                 if (notesList != null) {
-                    mAdapter = new NotesAdapter(mContext, notesList);
+                    mAdapter = new NoteAdapter(mContext, notesList);
                     progressBar.setVisibility(View.GONE);
                     recyclerView.setAdapter(mAdapter);
                 }
@@ -195,29 +194,33 @@ public class NotesFragment extends Fragment {
      * when shouldUpdate=true, it automatically displays old note and changes the
      * button text to UPDATE
      */
-    private void showNoteDialog(final boolean shouldUpdate, final Note note, final int position) {
+    private void showBubbleDialog(final boolean shouldUpdate, final Note note, final int position) {
         LayoutInflater layoutInflaterAndroid = LayoutInflater.from(mContext);
-        View view = layoutInflaterAndroid.inflate(R.layout.layout_add_note_dialog, null);
+        View view = layoutInflaterAndroid.inflate(R.layout.layout_add_dialog, null);
 
         AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(mContext);
         alertDialogBuilderUserInput.setView(view);
 
-        final EditText inputNote = view.findViewById(R.id.note);
+        final EditText inputText = view.findViewById(R.id.note);
+        inputText.setHint(R.string.hint_enter_enquiry);
+
         TextView dialogTitle = view.findViewById(R.id.dialog_title);
-        dialogTitle.setText(!shouldUpdate ? getString(R.string.lbl_new_note_title) : getString(R.string.lbl_edit_note_title));
+        dialogTitle.setText(!shouldUpdate ? getString(R.string.lbl_new_note_title)
+                : getString(R.string.lbl_edit_note_title));
 
         if (shouldUpdate && note != null) {
-            inputNote.setText(note.getNote());
+            inputText.setText(note.getNote());
         }
 
         alertDialogBuilderUserInput
                 .setCancelable(false)
-                .setPositiveButton(shouldUpdate ? "update" : "save", new DialogInterface.OnClickListener() {
+                .setPositiveButton(shouldUpdate ? CommonConstants.UPDATE_STRING
+                        : CommonConstants.SAVE_STRING, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogBox, int id) {
 
                     }
                 })
-                .setNegativeButton("cancel",
+                .setNegativeButton(CommonConstants.CANCEL_STRING,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialogBox, int id) {
                                 dialogBox.cancel();
@@ -231,7 +234,7 @@ public class NotesFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Show toast message when no text is entered
-                if (TextUtils.isEmpty(inputNote.getText().toString())) {
+                if (TextUtils.isEmpty(inputText.getText().toString())) {
                     Toast.makeText(mContext, "Enter note!", Toast.LENGTH_SHORT).show();
                     return;
                 } else {
@@ -241,10 +244,10 @@ public class NotesFragment extends Fragment {
                 // check if user updating note
                 if (shouldUpdate && note != null) {
                     // update note by it's id
-                    updateNote(inputNote.getText().toString(), position);
+                    updateNote(inputText.getText().toString(), position);
                 } else {
                     // create new note
-                    createNote(inputNote.getText().toString());
+                    createNote(inputText.getText().toString());
                 }
             }
         });

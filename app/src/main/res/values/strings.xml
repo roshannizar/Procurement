@@ -29,6 +29,13 @@
     <string name="lbl_new_note_title">New Note</string>
     <string name="lbl_edit_note_title">Edit Note</string>
     <string name="hint_enter_note">Enter your note!</string>
+
+    <string name="msg_no_enquires">No enquires found!</string>
+    <string name="lbl_new_enquiry_title">New Enquiry</string>
+    <string name="lbl_edit_enquiry_title">Edit Enquiry</string>
+    <string name="hint_enter_enquiry">Enter your enquiry!</string>
+
+
     <string-array name="stock_array">
         <item>-- Please select a order --</item>
         <item>Bricks</item>

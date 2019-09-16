@@ -90,7 +90,7 @@ public class OrderStatusFragment extends Fragment {
         holdOrderStatus = new HoldOrderStatus();
 
         progressBar = rootView.findViewById(R.id.progressBar);
-        recyclerView = rootView.findViewById(R.id.rvOrderMain);
+        recyclerView = rootView.findViewById(R.id.rvLoading);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 

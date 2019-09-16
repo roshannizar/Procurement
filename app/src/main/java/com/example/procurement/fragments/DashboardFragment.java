@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.procurement.R;
-import com.example.procurement.adapters.NotificationsAdapter;
+import com.example.procurement.adapters.NotificationAdapter;
 import com.example.procurement.models.Notification;
 import com.example.procurement.utils.CommonConstants;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,21 +29,17 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.SimpleDateFormat;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class DashboardFragment extends Fragment {
 
     private static final String TAG = "DashboardFragment";
     private ArrayList<Notification> notifications;
-    private NotificationsAdapter adapter;
+    private NotificationAdapter adapter;
     private RecyclerView recyclerView;
     private DatabaseReference myRef;
     private Context mContext;
@@ -106,23 +102,12 @@ public class DashboardFragment extends Fragment {
 
                     if (notification != null) {
                         notifications.add(notification);
-
-//                        try {
-//                            Date orderDate = format.parse(notification.getOrderDate());
-//                            Date currentDate = format.parse(new Date().toString());
-//                            if (currentDate.equals(orderDate)) {
-//                                notifications.add(notification);
-//                            }
-//                        } catch (ParseException error) {
-//                            Log.w(TAG, "Failed to read value.", error.getCause());
-//                        }
-
                     }
                 }
 
                 if (notifications != null) {
                     Collections.reverse(notifications);
-                    adapter = new NotificationsAdapter(mContext, notifications);
+                    adapter = new NotificationAdapter(mContext, notifications);
                     recyclerView.setAdapter(adapter);
                 }
             }

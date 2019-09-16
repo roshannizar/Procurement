@@ -18,10 +18,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.procurement.fragments.DashboardFragment;
 import com.example.procurement.activities.HomeActivity;
-import com.example.procurement.fragments.NotificationsFragment;
 import com.example.procurement.R;
+import com.example.procurement.fragments.EnquireFragment;
 import com.example.procurement.models.Order;
-import com.example.procurement.fragments.NotesFragment;
+import com.example.procurement.fragments.NoteFragment;
 import com.example.procurement.utils.CommonConstants;
 
 import java.util.ArrayList;
@@ -118,7 +118,7 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
                 holder.note.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new NotesFragment(), null).commit();
+                        HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new NoteFragment(), null).commit();
                     }
                 });
             }
@@ -126,7 +126,7 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
             holder.enquire.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new NotificationsFragment(), null).commit();
+                    HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new EnquireFragment(), null).commit();
                 }
             });
 
