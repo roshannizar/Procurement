@@ -46,10 +46,10 @@ public class NoteFragment extends Fragment {
     private FloatingActionButton fab;
     private DatabaseReference notesdatabaseRef;
     private ProgressBar progressBar;
-    private String orderID;
+    private String orderKey;
 
-    public NoteFragment(String orderID) {
-        this.orderID = orderID;
+    public NoteFragment(String orderKey) {
+        this.orderKey = orderKey;
     }
 
 
@@ -65,7 +65,7 @@ public class NoteFragment extends Fragment {
 
         notesdatabaseRef = PMS.DatabaseRef
                 .child(CommonConstants.FIREBASE_ORDER_DB)
-                .child(orderID)
+                .child(orderKey)
                 .child(CommonConstants.FIREBASE_NOTES_DB)
                 .getRef();
 

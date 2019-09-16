@@ -8,6 +8,8 @@ public class Order {
     private String status;
     private String date;
     private String description;
+    private String key;
+
     private HashMap<String, Note> notes = new HashMap<>();
 
     public Order() {
@@ -67,5 +69,13 @@ public class Order {
 
     public void setNotes(HashMap<String, Note> notes) {
         this.notes = notes;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 }
