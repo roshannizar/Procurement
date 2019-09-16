@@ -14,12 +14,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.procurement.PMS;
 import com.example.procurement.R;
 import com.example.procurement.adapters.EnquireAdapter;
 import com.example.procurement.models.Enquire;
@@ -29,7 +30,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
@@ -37,27 +37,21 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static com.example.procurement.utils.CommonConstants.ENQUIRE_FRAGMENT_TAG;
+
 public class EnquireFragment extends Fragment {
 
-    private static final String TAG = "EnquireFragment";
     private EnquireAdapter mAdapter;
     private List<Enquire> enquireList;
     private RecyclerView recyclerView;
     private Context mContext;
     private FloatingActionButton fab;
-    private DatabaseReference myRef;
+    private DatabaseReference enquireDatabaseRef;
     private ProgressBar progressBar;
+    private String orderKey;
 
-    public EnquireFragment() {
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        myRef = database.getReference(CommonConstants.FIREBASE_ENQUIRIES_DB);
-
+    public EnquireFragment(String orderKey) {
+        this.orderKey = orderKey;
     }
 
     @Override
@@ -69,18 +63,18 @@ public class EnquireFragment extends Fragment {
         recyclerView = rootView.findViewById(R.id.rvLoading);
         progressBar = rootView.findViewById(R.id.progressBar);
 
-        enquireList = new ArrayList<>();
+        enquireDatabaseRef = PMS.DatabaseRef
+                .child(CommonConstants.FIREBASE_ORDER_DB)
+                .child(orderKey)
+                .child(CommonConstants.FIREBASE_ENQUIRIES_DB)
+                .getRef();
 
+        enquireList = new ArrayList<>();
         mAdapter = new EnquireAdapter(mContext, enquireList);
+
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(mContext);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-
-        /**
-         * On long press on RecyclerView item, open alert dialog
-         * with options to choose
-         * Edit and Delete
-         * */
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(mContext,
                 recyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
@@ -134,7 +128,7 @@ public class EnquireFragment extends Fragment {
      */
     private void createNote(String enquiry) {
         // inserting note in db and getting
-        DatabaseReference reference = myRef.push();
+        DatabaseReference reference = enquireDatabaseRef.push();
         reference.setValue(new Enquire(reference.getKey(), enquiry, DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date()), CommonConstants.ENQUIRE_OUTGOING));
     }
 
@@ -144,8 +138,8 @@ public class EnquireFragment extends Fragment {
      */
     private void updateNote(String enquiryText, int position) {
         // updating note text
-        String id = enquireList.get(position).getEnquireID();
-        myRef.child(id).setValue(new Enquire(id, enquiryText, DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date()), CommonConstants.ENQUIRE_OUTGOING));
+        String id = enquireList.get(position).getKey();
+        enquireDatabaseRef.child(id).setValue(new Enquire(id, enquiryText, DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date()), CommonConstants.ENQUIRE_OUTGOING));
     }
 
     /**
@@ -154,15 +148,15 @@ public class EnquireFragment extends Fragment {
      */
     private void deleteNote(int position) {
         // deleting the note from db
-        String id = enquireList.get(position).getEnquireID();
-        myRef.child(id).removeValue();
+        String id = enquireList.get(position).getKey();
+        enquireDatabaseRef.child(id).removeValue();
     }
 
 
     private void readNotesData() {
-        myRef.addValueEventListener(new ValueEventListener() {
+        enquireDatabaseRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 enquireList.clear();
 
@@ -180,9 +174,9 @@ public class EnquireFragment extends Fragment {
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
+            public void onCancelled(@NonNull DatabaseError error) {
                 // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
+                Log.w(ENQUIRE_FRAGMENT_TAG, "Failed to read value.", error.toException());
             }
         });
     }

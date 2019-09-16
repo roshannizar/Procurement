@@ -13,7 +13,7 @@ public class ApprovedOrderStatus implements OrderStatus {
         List<Order> approvedOrders = new ArrayList<>();
 
         for (Order order : orders) {
-            if (order.getStatus() == CommonConstants.ORDER_STATUS_APPROVED) {
+            if (order.getStatus().equals(CommonConstants.ORDER_STATUS_APPROVED)) {
                 approvedOrders.add(order);
             }
         }
