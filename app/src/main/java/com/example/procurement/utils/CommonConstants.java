@@ -1,10 +1,14 @@
 package com.example.procurement.utils;
 
+import static com.example.procurement.activities.SignInActivity.uid;
+
 public class CommonConstants {
 
+    public static final String USER_DB_URL = "SiteManagers/" + uid + "/";
+
     public static final String FIREBASE_ORDER_DB = "Orders";
-    public static final String FIREBASE_NOTES_DB= "Notes";
-    public static final String FIREBASE_ENQUIRIES_DB= "Enquiries";
+    public static final String FIREBASE_NOTES_DB = "Notes";
+    public static final String FIREBASE_ENQUIRIES_DB = "Enquiries";
     public static final String FIREBASE_NOTIFICATION_DB = "Notifications";
 
     public static final String ORDER_STATUS_DECLINED = "Declined";
@@ -41,7 +45,6 @@ public class CommonConstants {
 //    public static final int ORDER_STATUS_APPROVED = 1;
 //    public static final int ORDER_STATUS_PLACED = 2;
 //    public static final int ORDER_STATUS_HOLD = 3;
-
 
 
 }

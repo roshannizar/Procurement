@@ -20,10 +20,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class SigninActivity extends AppCompatActivity {
+public class SignInActivity extends AppCompatActivity {
 
     private static final String TAG = "";
-    public static String name = "", email="";
+    public static String name = "", email="" ,uid="";
     Button btnSignIn;
     CheckBox cbShowPassword;
     EditText txtEmail, txtPassword;
@@ -63,12 +63,12 @@ public class SigninActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             getCurrentUser();
                             updateUI(user);
-                            Intent i = new Intent(SigninActivity.this, HomeActivity.class);
+                            Intent i = new Intent(SignInActivity.this, HomeActivity.class);
                             startActivity(i);
                             finish();
                         } else {
                             Log.d(TAG,"signInWithEmail:failure", task.getException());
-                            Toast.makeText(SigninActivity.this, "Authentication Failed.",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SignInActivity.this, "Authentication Failed.",Toast.LENGTH_SHORT).show();
                             updateUI(null);
                         }
                     }
@@ -77,7 +77,7 @@ public class SigninActivity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser currentUser) {
         if(currentUser!=null) {
-            Intent i = new Intent(SigninActivity.this, HomeActivity.class);
+            Intent i = new Intent(SignInActivity.this, HomeActivity.class);
             startActivity(i);
             finish();
         }
@@ -118,10 +118,9 @@ public class SigninActivity extends AppCompatActivity {
         if(user !=null) {
             name = user.getDisplayName();
             email = user.getEmail();
-
+            uid = user.getUid();
             boolean emailVerified = user.isEmailVerified();
 
-            String uid = user.getUid();
         }
     }
 
