@@ -13,7 +13,7 @@ public class PlacedOrderStatus implements OrderStatus {
         List<Order> placedOrders = new ArrayList<>();
 
         for (Order order : orders) {
-            if (order.getStatus() == CommonConstants.ORDER_STATUS_PLACED) {
+            if (order.getStatus().equals(CommonConstants.ORDER_STATUS_PLACED)) {
                 placedOrders.add(order);
             }
         }

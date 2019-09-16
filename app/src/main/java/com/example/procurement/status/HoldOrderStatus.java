@@ -13,7 +13,7 @@ public class HoldOrderStatus implements OrderStatus {
         List<Order> holdOrders = new ArrayList<>();
 
         for (Order order : orders) {
-            if (order.getStatus() == CommonConstants.ORDER_STATUS_HOLD) {
+            if (order.getStatus().equals(CommonConstants.ORDER_STATUS_HOLD)) {
                 holdOrders.add(order);
             }
         }

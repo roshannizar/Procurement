@@ -1,25 +1,25 @@
 package com.example.procurement.models;
 
 public class Note {
-    private String noteID;
+    private String key;
     private String note;
     private String timestamp;
 
     public Note() {
     }
 
-    public Note(String noteID, String note, String timestamp) {
-        this.noteID = noteID;
+    public Note(String key, String note, String timestamp) {
+        this.key = key;
         this.note = note;
         this.timestamp = timestamp;
     }
 
-    public String getNoteID() {
-        return noteID;
+    public String getKey() {
+        return key;
     }
 
-    public void setNoteID(String noteID) {
-        this.noteID = noteID;
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public String getNote() {
