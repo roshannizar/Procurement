@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.procurement.PMS;
 import com.example.procurement.R;
 import com.example.procurement.activities.HomeActivity;
 import com.example.procurement.adapters.OrderStatusAdapter;
@@ -37,15 +38,12 @@ import com.example.procurement.utils.CommonConstants;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-
-import static com.example.procurement.PMS.orderDatabaseRef;
 
 public class OrderStatusFragment extends Fragment {
 
@@ -56,6 +54,7 @@ public class OrderStatusFragment extends Fragment {
     private OrderStatus approvedOrderStatus, declinedOrderStatus, placedOrderStatus, pendingOrderStatus, holdOrderStatus;
     private RecyclerView recyclerView;
     private int checkedItem = 0;
+    private DatabaseReference orderDatabaseRef;
     private ProgressBar progressBar;
     private Context mContext;
     public static int pendingStatus = 0, approvedStatus = 0, holdStatus = 0, placedStatus = 0, declinedStatus = 0;
@@ -82,6 +81,7 @@ public class OrderStatusFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_order_status, container, false);
         mContext = rootView.getContext();
 
+        orderDatabaseRef = PMS.DatabaseRef.child(CommonConstants.FIREBASE_ORDER_DB).getRef();
 
         orders = new ArrayList<>();
 
@@ -112,26 +112,12 @@ public class OrderStatusFragment extends Fragment {
 
     private void writeStatusData() {
         Order order1 = new Order("1", "Praveen", "", CommonConstants.ORDER_STATUS_PENDING, "1-06-2019");
-//        Order order2 = new Order("2", "Kumar", "", CommonConstants.ORDER_STATUS_APPROVED, "2-06-2019");
-//        Order order3 = new Order("3", "Haresh", "", CommonConstants.ORDER_STATUS_PLACED, "3-06-2019");
-//        Order order4 = new Order("4", "Dhanush", "", CommonConstants.ORDER_STATUS_DECLINED, "4-06-2019");
-//        Order order5 = new Order("5", "Abishaan", "", CommonConstants.ORDER_STATUS_PENDING, "1-06-2019");
-//        Order order6 = new Order("6", "Roshan", "", CommonConstants.ORDER_STATUS_APPROVED, "2-06-2019");
-//        Order order7 = new Order("7", "Prashan", "", CommonConstants.ORDER_STATUS_PLACED, "3-06-2019");
-//        Order order8 = new Order("8", "Keerthigan", "", CommonConstants.ORDER_STATUS_HOLD, "4-06-2019");
-
         HashMap<String, Note> notes = new HashMap<>();
         notes.put("N1", new Note("1", "data1", DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date())));
         notes.put("N2", new Note("2", "data1", DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date())));
         order1.setNotes(notes);
         orderDatabaseRef.push().setValue(order1);
-//        myRef.push().setValue(order2);
-//        myRef.push().setValue(order3);
-//        myRef.push().setValue(order4);
-//        myRef.push().setValue(order5);
-//        myRef.push().setValue(order6);
-//        myRef.push().setValue(order7);
-//        myRef.push().setValue(order8);
+
     }
 
     private void readStatusData() {
