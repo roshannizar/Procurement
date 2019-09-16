@@ -91,7 +91,7 @@ public class OrderStatusFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        writeStatusData();
+        //writeStatusData();
         readStatusData();
 
         return rootView;
@@ -126,6 +126,7 @@ public class OrderStatusFragment extends Fragment {
                     if (order != null) {
                         countStatus(order.getStatus());
                         orders.add(order);
+                        CommonConstants.ORDER_ID = order.getOrderID();
                     }
                 }
 

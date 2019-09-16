@@ -3,8 +3,10 @@ package com.example.procurement.fragments;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,15 +22,25 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import com.example.procurement.PMS;
 import com.example.procurement.R;
+import com.example.procurement.adapters.OrderStatusAdapter;
 import com.example.procurement.models.Order;
 import com.example.procurement.utils.CommonConstants;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 
 /**
@@ -40,10 +52,10 @@ public class CreateOrderFragment extends Fragment implements AdapterView.OnItemS
     private Spinner spinnerStock;
     private Switch stockSwitch;
     private ArrayList<Order> orders;
-    private Button btnPlaceOrder;
+    private Button btnPlaceOrder,btnGenerate;
     private TextView txtStatus;
     private boolean switchPlacement;
-    private DatabaseReference myRef;
+    private DatabaseReference orderCreateRef;
     private String txtSpinnerStock;
 
     public CreateOrderFragment() {
@@ -65,12 +77,13 @@ public class CreateOrderFragment extends Fragment implements AdapterView.OnItemS
         dtpArrivalDate = v.findViewById(R.id.dtpArrivalDate);
         txtStatus = v.findViewById(R.id.txtStatus);
         txtOrderID = v.findViewById(R.id.txtOrderID);
+        btnGenerate = v.findViewById(R.id.btnGenerate);
 
+        generate();
         txtOrderName.setVisibility(View.INVISIBLE);
         spinnerStock.setOnItemSelectedListener(this);
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        myRef = database.getReference(CommonConstants.FIREBASE_ORDER_DB);
+        orderCreateRef = PMS.DatabaseRef.child(CommonConstants.FIREBASE_ORDER_DB).getRef();
         orders = new ArrayList<>();
 
         init();
@@ -80,8 +93,21 @@ public class CreateOrderFragment extends Fragment implements AdapterView.OnItemS
 
     private void init() {
         getHashOrderName();
+        getGenerateID();
         placeOrder();
         setDate();
+    }
+
+    private void generate() {
+        btnGenerate.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        setGenerateID(txtOrderID.getText().toString());
+                    }
+                }
+        );
     }
 
     private void placeOrder() {
@@ -89,16 +115,24 @@ public class CreateOrderFragment extends Fragment implements AdapterView.OnItemS
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
-                        if (validationOrders()) {
+                        // Code refactoring will be done later
+                        if (!validationOrders()) {
                             if (switchPlacement) {
-                                Order o = new Order("PO" + txtOrderID.getText().toString(), txtOrderName.getText().toString(), txtDescription.getText().toString(), CommonConstants.ORDER_STATUS_PENDING, dtpArrivalDate.getText().toString());
-                                myRef.push().setValue(o);
+                                DatabaseReference reference = orderCreateRef.push();
+                                String key = reference.getKey();
+                                Order o = new Order(txtOrderID.getText().toString(), txtOrderName.getText().toString(), txtDescription.getText().toString(), CommonConstants.ORDER_STATUS_PENDING, dtpArrivalDate.getText().toString());
+                                o.setKey(key);
+                                orderCreateRef.child(key).setValue(o);
                                 Toast.makeText(getActivity(), "Order has been placed successfully", Toast.LENGTH_LONG).show();
+                                setGenerateID(txtOrderID.getText().toString());
                             } else {
-                                Order o = new Order("PO" + txtOrderID.getText().toString(), txtSpinnerStock, txtDescription.getText().toString(), CommonConstants.ORDER_STATUS_PENDING, dtpArrivalDate.getText().toString());
-                                myRef.push().setValue(o);
+                                DatabaseReference reference = orderCreateRef.push();
+                                String key = reference.getKey();
+                                Order o = new Order(txtOrderID.getText().toString(), txtSpinnerStock, txtDescription.getText().toString(), CommonConstants.ORDER_STATUS_PENDING, dtpArrivalDate.getText().toString());
+                                o.setKey(key);
+                                orderCreateRef.child(key).setValue(o);
                                 Toast.makeText(getActivity(), "Order has been placed successfully", Toast.LENGTH_LONG).show();
+                                setGenerateID(txtOrderID.getText().toString());
                             }
                         } else {
                             new AlertDialog.Builder(getActivity())
@@ -194,7 +228,31 @@ public class CreateOrderFragment extends Fragment implements AdapterView.OnItemS
         return !txtOrderID.getText().toString().equals("") && !txtOrderName.getText().toString().equals("") && txtSpinnerStock != null && !txtSpinnerStock.equals("") && !txtDescription.getText().toString().equals("") && !dtpArrivalDate.getText().toString().equals("");
     }
 
-    private void generateID() {
+    private void getGenerateID() {
+        Pattern p = Pattern.compile("\\d+");
+        String generateNo = null;
+        Matcher m = p.matcher(CommonConstants.ORDER_ID);
+        while(m.find()) {
+            generateNo = m.group();
+        }
 
+        int value = Integer.parseInt(generateNo)+1;
+
+        txtOrderID.setText("PO - "+ value);
+    }
+
+    //Validation needed
+    private void setGenerateID(String value) {
+        Pattern p = Pattern.compile("\\d+");
+        Matcher m = p.matcher(value);
+        while(m.find()) {
+            value = m.group();
+        }
+
+        int finalValue = Integer.parseInt(value)+1;
+        String temp = "PO - "+finalValue;
+
+        txtOrderID.setText(temp);
+        CommonConstants.ORDER_ID = temp;
     }
 }
