@@ -13,7 +13,7 @@ public class DeclinedOrderStatus implements OrderStatus {
         List<Order> declinedOrders = new ArrayList<>();
 
         for (Order order : orders) {
-            if (order.getStatus() == CommonConstants.ORDER_STATUS_DECLINED) {
+            if (order.getStatus().equals(CommonConstants.ORDER_STATUS_DECLINED)) {
                 declinedOrders.add(order);
             }
         }

@@ -54,15 +54,14 @@ public class EnquireAdapter extends RecyclerView.Adapter<EnquireAdapter.MyViewHo
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Enquire enquire = enquireList.get(position);
 
-        if (enquire.getEnquiryType().equals(CommonConstants.ENQUIRE_OUTGOING)) {
-            holder.noteOut.setText(enquire.getEnquiry());
-            holder.timestampOut.setText(enquire.getTimestamp());
-         //   holder.relativeLayoutIn.setVisibility(View.GONE);
+        holder.noteOut.setText(enquire.getEnquiry());
+        holder.timestampOut.setText(enquire.getTimestamp());
+        holder.relativeLayoutIn.setVisibility(View.GONE);
 
-        } else if (enquire.getEnquiryType().equals(CommonConstants.ENQUIRE_INCOMING)) {
-            holder.noteIn.setText(enquire.getEnquiry());
-            holder.timestampIn.setText(enquire.getTimestamp());
-          //  holder.relativeLayoutOut.setVisibility(View.GONE);
+        if (enquire.isReplied()) {
+            holder.noteIn.setText(enquire.getReply());
+            holder.timestampIn.setText(enquire.getTimestampReplied());
+            holder.relativeLayoutOut.setVisibility(View.VISIBLE);
         }
 
     }

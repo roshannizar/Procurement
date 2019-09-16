@@ -14,6 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -36,15 +37,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class NoteFragment extends Fragment {
-    private static final String TAG = "NoteFragment";
+import static com.example.procurement.utils.CommonConstants.NOTE_FRAGMENT_TAG;
 
+public class NoteFragment extends Fragment {
     private NoteAdapter mAdapter;
     private List<Note> notesList;
     private RecyclerView recyclerView;
     private Context mContext;
-    private FloatingActionButton fab;
-    private DatabaseReference notesdatabaseRef;
+    private DatabaseReference notesDatabaseRef;
     private ProgressBar progressBar;
     private String orderKey;
 
@@ -54,7 +54,7 @@ public class NoteFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_note, container, false);
@@ -63,7 +63,7 @@ public class NoteFragment extends Fragment {
         progressBar = rootView.findViewById(R.id.progressBar);
 
 
-        notesdatabaseRef = PMS.DatabaseRef
+        notesDatabaseRef = PMS.DatabaseRef
                 .child(CommonConstants.FIREBASE_ORDER_DB)
                 .child(orderKey)
                 .child(CommonConstants.FIREBASE_NOTES_DB)
@@ -71,15 +71,10 @@ public class NoteFragment extends Fragment {
 
         notesList = new ArrayList<>();
         mAdapter = new NoteAdapter(mContext, notesList);
+
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(mContext);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-
-        /**
-         * On long press on RecyclerView item, open alert dialog
-         * with options to choose
-         * Edit and Delete
-         * */
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(mContext,
                 recyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
@@ -92,7 +87,7 @@ public class NoteFragment extends Fragment {
             }
         }));
 
-        fab = rootView.findViewById(R.id.fab);
+        FloatingActionButton fab = rootView.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -133,7 +128,7 @@ public class NoteFragment extends Fragment {
      */
     private void createNote(String note) {
         // inserting note in db and getting
-        DatabaseReference reference = notesdatabaseRef.push();
+        DatabaseReference reference = notesDatabaseRef.push();
         reference.setValue(new Note(reference.getKey(), note, DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date())));
     }
 
@@ -143,8 +138,8 @@ public class NoteFragment extends Fragment {
      */
     private void updateNote(String noteText, int position) {
         // updating note text
-        String id = notesList.get(position).getNoteID();
-        notesdatabaseRef.child(id).setValue(new Note(id, noteText, DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date())));
+        String id = notesList.get(position).getKey();
+        notesDatabaseRef.child(id).setValue(new Note(id, noteText, DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date())));
     }
 
     /**
@@ -153,22 +148,21 @@ public class NoteFragment extends Fragment {
      */
     private void deleteNote(int position) {
         // deleting the note from db
-        String id = notesList.get(position).getNoteID();
-        notesdatabaseRef.child(id).removeValue();
+        String id = notesList.get(position).getKey();
+        notesDatabaseRef.child(id).removeValue();
     }
 
 
     private void readNotesData() {
-        notesdatabaseRef.addValueEventListener(new ValueEventListener() {
+        notesDatabaseRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 notesList.clear();
 
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
                     Note note = data.getValue(Note.class);
                     notesList.add(note);
-                    Log.d(TAG, "Value is: " + note.getTimestamp());
                 }
 
                 if (notesList != null) {
@@ -180,9 +174,9 @@ public class NoteFragment extends Fragment {
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
+            public void onCancelled(@NonNull DatabaseError error) {
                 // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
+                Log.w(NOTE_FRAGMENT_TAG, "Failed to read value.", error.toException());
             }
         });
     }

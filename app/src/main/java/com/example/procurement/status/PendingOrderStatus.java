@@ -13,7 +13,7 @@ public class PendingOrderStatus implements OrderStatus {
         List<Order> pendingOrders = new ArrayList<>();
 
         for (Order order : orders) {
-            if (order.getStatus() == CommonConstants.ORDER_STATUS_PENDING) {
+            if (order.getStatus().equals(CommonConstants.ORDER_STATUS_PENDING)) {
                 pendingOrders.add(order);
             }
         }

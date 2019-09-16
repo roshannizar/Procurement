@@ -20,8 +20,8 @@ public class CommonConstants {
     public static final String ENQUIRE_INCOMING = "Incoming";
     public static final String ENQUIRE_OUTGOING = "Outgoing";
 
-    public static final String NOTE_FRAGMENT = "Note Fragment";
-    public static final String ENQUIRE_FRAGMENT = "Enquire Fragment";
+    public static final String NOTE_FRAGMENT_TAG = "Note Fragment";
+    public static final String ENQUIRE_FRAGMENT_TAG = "Enquire Fragment";
 
     public static final String SAVE_STRING = "Save";
     public static final String UPDATE_STRING = "Update";

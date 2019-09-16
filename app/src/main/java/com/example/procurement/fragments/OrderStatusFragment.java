@@ -76,7 +76,7 @@ public class OrderStatusFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_order_status, container, false);
         mContext = rootView.getContext();
 
-        orderDatabaseRef = PMS.DatabaseRef.child(CommonConstants.FIREBASE_ORDER_DB).getRef();
+        orderDatabaseRef = PMS.DatabaseRef.child(CommonConstants.FIREBASE_ORDER_DB);
 
         orders = new ArrayList<>();
 
@@ -108,9 +108,12 @@ public class OrderStatusFragment extends Fragment {
     private void writeStatusData() {
         DatabaseReference reference = orderDatabaseRef.push();
         String key = reference.getKey();
-        Order order = new Order("PO-01", "Praveen", "", CommonConstants.ORDER_STATUS_PENDING, "1-06-2019");
-        order.setKey(key);
-        orderDatabaseRef.child(key).setValue(order);
+
+        if (key != null) {
+            Order order = new Order("PO-01", "Praveen", "", CommonConstants.ORDER_STATUS_PENDING, "1-06-2019");
+            order.setKey(key);
+            orderDatabaseRef.child(key).setValue(order);
+        }
     }
 
     private void readStatusData() {
