@@ -4,10 +4,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingLeft="@dimen/activity_margin"
-    android:paddingRight="@dimen/activity_margin"
-    android:paddingTop="@dimen/activity_margin">
+    android:paddingTop="@dimen/activity_margin"
+    android:paddingRight="@dimen/activity_margin">
 
-    <TextView android:id="@+id/dialog_title"
+    <TextView
+        android:id="@+id/dialog_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/dimen_10"
@@ -24,7 +25,6 @@
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:gravity="top"
-        android:hint="@string/hint_enter_note"
         android:inputType="textCapSentences|textMultiLine"
         android:lines="4"
         android:textColorHint="@color/hint_enter_note"

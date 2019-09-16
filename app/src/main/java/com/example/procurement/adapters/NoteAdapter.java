@@ -14,14 +14,14 @@ import com.example.procurement.models.Note;
 
 import java.util.List;
 
-public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyViewHolder> {
+public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> {
 
     private Context context;
-    private List<Note> notesList;
+    private List<Note> noteList;
 
-    public NotesAdapter(Context context, List<Note> notesList) {
+    public NoteAdapter(Context context, List<Note> noteList) {
         this.context = context;
-        this.notesList = notesList;
+        this.noteList = noteList;
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
@@ -45,14 +45,15 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyViewHolder
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        Note note = notesList.get(position);
+        Note note = noteList.get(position);
         holder.note.setText(note.getNote());
         holder.timestamp.setText(note.getTimestamp());
+
     }
 
     @Override
     public int getItemCount() {
-        return notesList.size();
+        return noteList.size();
     }
 
 }

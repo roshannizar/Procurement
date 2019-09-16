@@ -11,14 +11,14 @@
         android:icon="@drawable/ic_order"
         android:title="@string/title_dashboard" />
 
-    <item
-        android:id="@+id/navigation_noti"
-        android:icon="@drawable/ic_notificaion_white"
-        android:title="@string/title_notification"
-        />
+    <!--<item-->
+        <!--android:id="@+id/navigation_noti"-->
+        <!--android:icon="@drawable/ic_notificaion_white"-->
+        <!--android:title="@string/title_notification"-->
+        <!--/>-->
 
     <item
-        android:id="@+id/navigation_notifications"
+        android:id="@+id/navigation_profile"
         android:icon="@drawable/ic_person"
         android:title="@string/title_profile" />
 

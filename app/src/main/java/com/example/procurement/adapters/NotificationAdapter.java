@@ -16,12 +16,12 @@ import com.example.procurement.utils.CommonConstants;
 
 import java.util.List;
 
-public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdapter.MyViewHolder> {
+public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.MyViewHolder> {
 
     private Context context;
     private List<Notification> notificationsList;
 
-    public NotificationsAdapter(Context context, List<Notification> notificationsList) {
+    public NotificationAdapter(Context context, List<Notification> notificationsList) {
         this.context = context;
         this.notificationsList = notificationsList;
     }

@@ -15,7 +15,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.procurement.R;
 import com.example.procurement.fragments.DashboardFragment;
-import com.example.procurement.fragments.NotificationsFragment;
 import com.example.procurement.fragments.OrderStatusFragment;
 import com.example.procurement.fragments.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -36,11 +35,8 @@ public class HomeActivity extends AppCompatActivity {
                 case R.id.navigation_dashboard:
                     HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new OrderStatusFragment(), null).commit();
                     return true;
-                case R.id.navigation_notifications:
+                case R.id.navigation_profile:
                     HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new ProfileFragment(), null).commit();
-                    return true;
-                case R.id.navigation_noti:
-                    HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new NotificationsFragment(), null).commit();
                     return true;
             }
             return false;
