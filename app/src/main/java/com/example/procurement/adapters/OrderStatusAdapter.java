@@ -62,7 +62,7 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
         // check if any data is available
         if (mOrders != null) {
             Order order = mOrders.get(position);
-            String orderName, orderStatus, orderDate, orderDescription, orderId;
+            final String orderName, orderStatus, orderDate, orderDescription, orderId;
             orderName = order.getName();
             orderId = order.getOrderID();
             orderDescription = order.getDescription();
@@ -118,7 +118,7 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
                 holder.note.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new NoteFragment(), null).commit();
+                        HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new NoteFragment(orderId), null).commit();
                     }
                 });
             }

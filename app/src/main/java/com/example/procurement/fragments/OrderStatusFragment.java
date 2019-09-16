@@ -96,7 +96,7 @@ public class OrderStatusFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        //writeStatusData();
+       // writeStatusData();
         readStatusData();
 
         return rootView;
@@ -112,10 +112,6 @@ public class OrderStatusFragment extends Fragment {
 
     private void writeStatusData() {
         Order order1 = new Order("1", "Praveen", "", CommonConstants.ORDER_STATUS_PENDING, "1-06-2019");
-        HashMap<String, Note> notes = new HashMap<>();
-        notes.put("N1", new Note("1", "data1", DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date())));
-        notes.put("N2", new Note("2", "data1", DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date())));
-        order1.setNotes(notes);
         orderDatabaseRef.push().setValue(order1);
 
     }

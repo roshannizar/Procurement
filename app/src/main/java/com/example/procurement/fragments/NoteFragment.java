@@ -14,7 +14,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -47,8 +46,10 @@ public class NoteFragment extends Fragment {
     private FloatingActionButton fab;
     private DatabaseReference notesdatabaseRef;
     private ProgressBar progressBar;
+    private String orderID;
 
-    public NoteFragment() {
+    public NoteFragment(String orderID) {
+        this.orderID = orderID;
     }
 
 
@@ -62,7 +63,11 @@ public class NoteFragment extends Fragment {
         progressBar = rootView.findViewById(R.id.progressBar);
 
 
-        notesdatabaseRef = PMS.DatabaseRef.child(CommonConstants.FIREBASE_ORDER_DB);
+        notesdatabaseRef = PMS.DatabaseRef
+                .child(CommonConstants.FIREBASE_ORDER_DB)
+                .child(orderID)
+                .child(CommonConstants.FIREBASE_NOTES_DB)
+                .getRef();
 
         notesList = new ArrayList<>();
         mAdapter = new NoteAdapter(mContext, notesList);
