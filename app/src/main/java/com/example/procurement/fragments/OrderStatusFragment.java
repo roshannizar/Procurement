@@ -26,7 +26,6 @@ import com.example.procurement.PMS;
 import com.example.procurement.R;
 import com.example.procurement.activities.HomeActivity;
 import com.example.procurement.adapters.OrderStatusAdapter;
-import com.example.procurement.models.Note;
 import com.example.procurement.models.Order;
 import com.example.procurement.status.ApprovedOrderStatus;
 import com.example.procurement.status.DeclinedOrderStatus;
@@ -40,15 +39,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 
 public class OrderStatusFragment extends Fragment {
 
     private static final String TAG = "OrderStatusFragment";
-
     private ArrayList<Order> orders;
     private OrderStatusAdapter adapter;
     private OrderStatus approvedOrderStatus, declinedOrderStatus, placedOrderStatus, pendingOrderStatus, holdOrderStatus;
@@ -96,7 +91,7 @@ public class OrderStatusFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-       // writeStatusData();
+        writeStatusData();
         readStatusData();
 
         return rootView;
@@ -111,9 +106,11 @@ public class OrderStatusFragment extends Fragment {
     }
 
     private void writeStatusData() {
-        Order order1 = new Order("1", "Praveen", "", CommonConstants.ORDER_STATUS_PENDING, "1-06-2019");
-        orderDatabaseRef.push().setValue(order1);
-
+        DatabaseReference reference = orderDatabaseRef.push();
+        String key = reference.getKey();
+        Order order = new Order("PO-01", "Praveen", "", CommonConstants.ORDER_STATUS_PENDING, "1-06-2019");
+        order.setKey(key);
+        orderDatabaseRef.child(key).setValue(order);
     }
 
     private void readStatusData() {
