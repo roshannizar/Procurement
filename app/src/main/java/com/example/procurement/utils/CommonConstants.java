@@ -4,8 +4,7 @@ import static com.example.procurement.activities.SignInActivity.uid;
 
 public class CommonConstants {
 
-    public static final String USER_DB_URL = "SiteManagers/" + uid + "/";
-    public static final String USER_ORDER_DB_URL = "SiteManagers/" + uid + "/Orders/";
+    public static final String USER_DB_URL = "SiteManagers/" + uid;
 
     public static final String FIREBASE_ORDER_DB = "Orders";
     public static final String FIREBASE_NOTES_DB = "Notes";

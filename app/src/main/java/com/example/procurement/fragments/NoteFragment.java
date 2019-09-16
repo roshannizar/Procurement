@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.procurement.PMS;
 import com.example.procurement.R;
 import com.example.procurement.adapters.NoteAdapter;
 import com.example.procurement.models.Note;
@@ -29,7 +30,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
@@ -45,20 +45,12 @@ public class NoteFragment extends Fragment {
     private RecyclerView recyclerView;
     private Context mContext;
     private FloatingActionButton fab;
-    private DatabaseReference myRef;
+    private DatabaseReference notesdatabaseRef;
     private ProgressBar progressBar;
 
     public NoteFragment() {
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        myRef = database.getReference(CommonConstants.FIREBASE_NOTES_DB);
-
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,8 +61,10 @@ public class NoteFragment extends Fragment {
         recyclerView = rootView.findViewById(R.id.rvLoading);
         progressBar = rootView.findViewById(R.id.progressBar);
 
-        notesList = new ArrayList<>();
 
+        notesdatabaseRef = PMS.DatabaseRef.child(CommonConstants.FIREBASE_ORDER_DB);
+
+        notesList = new ArrayList<>();
         mAdapter = new NoteAdapter(mContext, notesList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(mContext);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -134,7 +128,7 @@ public class NoteFragment extends Fragment {
      */
     private void createNote(String note) {
         // inserting note in db and getting
-        DatabaseReference reference = myRef.push();
+        DatabaseReference reference = notesdatabaseRef.push();
         reference.setValue(new Note(reference.getKey(), note, DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date())));
     }
 
@@ -145,7 +139,7 @@ public class NoteFragment extends Fragment {
     private void updateNote(String noteText, int position) {
         // updating note text
         String id = notesList.get(position).getNoteID();
-        myRef.child(id).setValue(new Note(id, noteText, DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date())));
+        notesdatabaseRef.child(id).setValue(new Note(id, noteText, DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date())));
     }
 
     /**
@@ -155,12 +149,12 @@ public class NoteFragment extends Fragment {
     private void deleteNote(int position) {
         // deleting the note from db
         String id = notesList.get(position).getNoteID();
-        myRef.child(id).removeValue();
+        notesdatabaseRef.child(id).removeValue();
     }
 
 
     private void readNotesData() {
-        myRef.addValueEventListener(new ValueEventListener() {
+        notesdatabaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
