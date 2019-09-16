@@ -55,7 +55,7 @@ public class HomeActivity extends AppCompatActivity {
 
         if (item.getItemId() == R.id.signout) {
             SignOutUser();
-            startActivity(new Intent(this, SigninActivity.class));
+            startActivity(new Intent(this, SignInActivity.class));
             finish();
             return true;
         }
@@ -70,6 +70,7 @@ public class HomeActivity extends AppCompatActivity {
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         fm = getSupportFragmentManager();
+        SignInActivity.getCurrentUser();
 
         if (findViewById(R.id.fragment_container) != null) {
             if (savedInstanceState != null) {
@@ -84,7 +85,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void SignOutUser() {
-        SigninActivity.SignOutUserFirebase();
+        SignInActivity.SignOutUserFirebase();
     }
 
     @Override

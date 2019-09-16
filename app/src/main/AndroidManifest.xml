@@ -4,12 +4,13 @@
 
     <application
         android:allowBackup="true"
+        android:name=".PMS"
         android:icon="@drawable/factory"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.SigninActivity"></activity>
+        <activity android:name=".activities.SignInActivity"></activity>
         <activity
             android:name=".activities.HomeActivity"
             android:label="@string/title_activity_home" />

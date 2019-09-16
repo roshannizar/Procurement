@@ -1,11 +1,14 @@
 package com.example.procurement.models;
 
+import java.util.HashMap;
+
 public class Order {
     private String orderID;
     private String name;
     private String status;
     private String date;
     private String description;
+    private HashMap<String, Note> notes = new HashMap<>();
 
     public Order() {
     }
@@ -58,4 +61,11 @@ public class Order {
         this.date = date;
     }
 
+    public HashMap<String, Note> getNotes() {
+        return notes;
+    }
+
+    public void setNotes(HashMap<String, Note> notes) {
+        this.notes = notes;
+    }
 }
