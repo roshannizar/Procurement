@@ -6,14 +6,8 @@ public class Enquire {
     private String timestamp;
     private boolean isReplied = false;
     private String reply;
-    private String timestampReplied;
 
     public Enquire() {
-    }
-
-    public Enquire(String reply, String timestampReplied) {
-        this.reply = reply;
-        this.timestampReplied = timestampReplied;
     }
 
     public Enquire(String key, String enquiry, String timestamp) {
@@ -62,11 +56,4 @@ public class Enquire {
         this.reply = reply;
     }
 
-    public String getTimestampReplied() {
-        return timestampReplied;
-    }
-
-    public void setTimestampReplied(String timestampReplied) {
-        this.timestampReplied = timestampReplied;
-    }
 }

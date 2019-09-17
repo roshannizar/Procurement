@@ -11,6 +11,9 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.procurement.R;
+import com.example.procurement.activities.HomeActivity;
+import com.example.procurement.fragments.CreateOrderFragment;
+import com.example.procurement.fragments.OrderViewFragment;
 import com.example.procurement.models.Notification;
 import com.example.procurement.utils.CommonConstants;
 
@@ -49,7 +52,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        Notification notification = notificationsList.get(position);
+        final Notification notification = notificationsList.get(position);
         holder.notificationOrderID.setText("Order ID : " +  notification.getOrderID());
         holder.notificationStatus.setText("Status : " + notification.getOrderStatus());
 
@@ -73,6 +76,12 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         }
 
         holder.cvNotification.setBackgroundResource(statusColor);
+        holder.cvNotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new OrderViewFragment(notification.getOrderKey()), null).commit();
+            }
+        });
     }
 
     @Override

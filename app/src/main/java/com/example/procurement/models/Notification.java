@@ -1,27 +1,18 @@
 package com.example.procurement.models;
 
 public class Notification {
-    private String notificationID;
     private String orderID;
+    private String orderKey;
     private String orderStatus;
-    private String orderDate;
+    private String notificationKey;
 
     public Notification() {
     }
 
-    public Notification(String notificationID, String orderID, String orderStatus, String orderDate) {
-        this.notificationID = notificationID;
+    public Notification(String orderID, String orderKey, String orderStatus) {
         this.orderID = orderID;
+        this.orderKey = orderKey;
         this.orderStatus = orderStatus;
-        this.orderDate = orderDate;
-    }
-
-    public String getNotificationID() {
-        return notificationID;
-    }
-
-    public void setNotificationID(String notificationID) {
-        this.notificationID = notificationID;
     }
 
     public String getOrderID() {
@@ -32,6 +23,14 @@ public class Notification {
         this.orderID = orderID;
     }
 
+    public String getOrderKey() {
+        return orderKey;
+    }
+
+    public void setOrderKey(String orderKey) {
+        this.orderKey = orderKey;
+    }
+
     public String getOrderStatus() {
         return orderStatus;
     }
@@ -40,11 +39,11 @@ public class Notification {
         this.orderStatus = orderStatus;
     }
 
-    public String getOrderDate() {
-        return orderDate;
+    public String getNotificationKey() {
+        return notificationKey;
     }
 
-    public void setOrderDate(String orderDate) {
-        this.orderDate = orderDate;
+    public void setNotificationKey(String notificationKey) {
+        this.notificationKey = notificationKey;
     }
 }

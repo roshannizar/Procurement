@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.procurement.PMS;
 import com.example.procurement.R;
 import com.example.procurement.adapters.NotificationAdapter;
 import com.example.procurement.models.Notification;
@@ -26,7 +27,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.time.Year;
@@ -41,7 +41,7 @@ public class DashboardFragment extends Fragment {
     private ArrayList<Notification> notifications;
     private NotificationAdapter adapter;
     private RecyclerView recyclerView;
-    private DatabaseReference myRef;
+    private DatabaseReference notificationDbRef;
     private Context mContext;
 
     private TextView txtUserName;
@@ -75,9 +75,7 @@ public class DashboardFragment extends Fragment {
         txtTotalOrder.setText(String.valueOf(OrderStatusFragment.approvedStatus + OrderStatusFragment.holdStatus + OrderStatusFragment.pendingStatus + OrderStatusFragment.declinedStatus + OrderStatusFragment.placedStatus) + " Orders Totally");
         setDate();
 
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        myRef = database.getReference(CommonConstants.FIREBASE_NOTIFICATION_DB);
+        notificationDbRef = PMS.DatabaseRef.child(CommonConstants.FIREBASE_NOTIFICATION_DB);
 
         notifications = new ArrayList<>();
 
@@ -85,13 +83,24 @@ public class DashboardFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         readStatusData();
-
+       // writeStatusData();
         return view;
+    }
+
+    private void writeStatusData() {
+        DatabaseReference reference = notificationDbRef.push();
+        String key = reference.getKey();
+
+        if (key != null) {
+            Notification notification = new Notification("PO-01","-LovkdDnlrX7ikscLBUl" ,CommonConstants.ORDER_STATUS_PLACED);
+            notification.setNotificationKey(key);
+            notificationDbRef.child(key).setValue(notification);
+        }
     }
 
     private void readStatusData() {
 
-        myRef.addValueEventListener(new ValueEventListener() {
+        notificationDbRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 

@@ -16,7 +16,7 @@ import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.procurement.fragments.DashboardFragment;
+import com.example.procurement.fragments.OrderViewFragment;
 import com.example.procurement.activities.HomeActivity;
 import com.example.procurement.R;
 import com.example.procurement.fragments.EnquireFragment;
@@ -62,8 +62,9 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
         // check if any data is available
         if (mOrders != null) {
             final Order order = mOrders.get(position);
-            String orderName, orderStatus, orderDate, orderDescription, orderId;
+            final String orderName, orderStatus, orderKey, orderDescription, orderId;
             orderName = order.getName();
+            orderKey = order.getKey();
             orderId = order.getOrderID();
             orderDescription = order.getDescription();
             orderStatus = order.getStatus();
@@ -112,7 +113,7 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
                 holder.note.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new NoteFragment(order.getKey()), null).commit();
+                        HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new NoteFragment(orderKey), null).commit();
                     }
                 });
             }
@@ -120,14 +121,14 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
             holder.enquire.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new EnquireFragment(order.getKey()), null).commit();
+                    HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new EnquireFragment(orderKey), null).commit();
                 }
             });
 
             holder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new DashboardFragment(), null).commit();
+                    HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new OrderViewFragment(orderKey), null).commit();
                 }
             });
         }
