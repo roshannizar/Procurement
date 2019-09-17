@@ -17,9 +17,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="@dimen/dimen_10"
-        android:layout_marginTop="2dp"
-        android:textColor="@color/white"
+        android:layout_marginEnd="16dp"
         android:textSize="@dimen/note_list_text" />
 
     <TextView
@@ -31,9 +29,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="24dp"
-        android:layout_marginTop="5dp"
         android:gravity="bottom|end"
-        android:textColor="@color/timestamp"
         android:textSize="@dimen/timestamp" />
 
 </RelativeLayout>

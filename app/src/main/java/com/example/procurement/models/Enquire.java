@@ -4,24 +4,16 @@ public class Enquire {
     private String key;
     private String enquiry;
     private String timestamp;
-    private String enquiryType;
     private boolean isReplied = false;
     private String reply;
-    private String timestampReplied;
 
     public Enquire() {
     }
 
-    public Enquire(String reply, String timestampReplied) {
-        this.reply = reply;
-        this.timestampReplied = timestampReplied;
-    }
-
-    public Enquire(String key, String enquiry, String timestamp, String enquiryType) {
+    public Enquire(String key, String enquiry, String timestamp) {
         this.key = key;
         this.enquiry = enquiry;
         this.timestamp = timestamp;
-        this.enquiryType = enquiryType;
     }
 
     public String getKey() {
@@ -48,14 +40,6 @@ public class Enquire {
         this.timestamp = timestamp;
     }
 
-    public String getEnquiryType() {
-        return enquiryType;
-    }
-
-    public void setEnquiryType(String enquiryType) {
-        this.enquiryType = enquiryType;
-    }
-
     public boolean isReplied() {
         return isReplied;
     }
@@ -72,11 +56,4 @@ public class Enquire {
         this.reply = reply;
     }
 
-    public String getTimestampReplied() {
-        return timestampReplied;
-    }
-
-    public void setTimestampReplied(String timestampReplied) {
-        this.timestampReplied = timestampReplied;
-    }
 }

@@ -10,14 +10,20 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.procurement.PMS;
 import com.example.procurement.R;
+import com.example.procurement.activities.HomeActivity;
+import com.example.procurement.fragments.CreateOrderFragment;
+import com.example.procurement.fragments.OrderViewFragment;
 import com.example.procurement.models.Notification;
 import com.example.procurement.utils.CommonConstants;
+import com.google.firebase.database.DatabaseReference;
 
 import java.util.List;
 
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.MyViewHolder> {
 
+    private DatabaseReference notificationDbRef;
     private Context context;
     private List<Notification> notificationsList;
 
@@ -49,11 +55,15 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        Notification notification = notificationsList.get(position);
+        final Notification notification = notificationsList.get(position);
+        notificationDbRef = PMS.DatabaseRef
+                .child(CommonConstants.FIREBASE_NOTIFICATION_DB)
+                .child(notification.getNotificationKey()).getRef();
+
         holder.notificationOrderID.setText("Order ID : " +  notification.getOrderID());
         holder.notificationStatus.setText("Status : " + notification.getOrderStatus());
 
-        int statusColor, statusIcon, statusBackground;
+        int statusColor;
 
         switch (notification.getOrderStatus()) {
             case CommonConstants.ORDER_STATUS_APPROVED:
@@ -73,6 +83,13 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         }
 
         holder.cvNotification.setBackgroundResource(statusColor);
+        holder.cvNotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new OrderViewFragment(notification.getOrderKey()), null).commit();
+                notificationDbRef.removeValue();
+            }
+        });
     }
 
     @Override

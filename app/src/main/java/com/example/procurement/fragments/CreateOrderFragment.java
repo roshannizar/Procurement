@@ -3,10 +3,8 @@ package com.example.procurement.fragments;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,23 +22,15 @@ import androidx.fragment.app.Fragment;
 
 import com.example.procurement.PMS;
 import com.example.procurement.R;
-import com.example.procurement.adapters.OrderStatusAdapter;
 import com.example.procurement.models.Order;
 import com.example.procurement.utils.CommonConstants;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static androidx.constraintlayout.widget.Constraints.TAG;
 
 
 /**
@@ -52,7 +42,7 @@ public class CreateOrderFragment extends Fragment implements AdapterView.OnItemS
     private Spinner spinnerStock;
     private Switch stockSwitch;
     private ArrayList<Order> orders;
-    private Button btnPlaceOrder,btnGenerate;
+    private Button btnPlaceOrder, btnGenerate;
     private TextView txtStatus;
     private boolean switchPlacement;
     private DatabaseReference orderCreateRef;
@@ -232,25 +222,26 @@ public class CreateOrderFragment extends Fragment implements AdapterView.OnItemS
         Pattern p = Pattern.compile("\\d+");
         String generateNo = null;
         Matcher m = p.matcher(CommonConstants.ORDER_ID);
-        while(m.find()) {
+
+        while (m.find()) {
             generateNo = m.group();
         }
 
-        int value = Integer.parseInt(generateNo)+1;
+        int value = Integer.parseInt(generateNo) + 1;
 
-        txtOrderID.setText("PO - "+ value);
+        txtOrderID.setText("PO - " + value);
     }
 
     //Validation needed
     private void setGenerateID(String value) {
         Pattern p = Pattern.compile("\\d+");
         Matcher m = p.matcher(value);
-        while(m.find()) {
+        while (m.find()) {
             value = m.group();
         }
 
-        int finalValue = Integer.parseInt(value)+1;
-        String temp = "PO - "+finalValue;
+        int finalValue = Integer.parseInt(value) + 1;
+        String temp = "PO - " + finalValue;
 
         txtOrderID.setText(temp);
         CommonConstants.ORDER_ID = temp;

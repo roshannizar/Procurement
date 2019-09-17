@@ -60,8 +60,8 @@ public class EnquireAdapter extends RecyclerView.Adapter<EnquireAdapter.MyViewHo
 
         if (enquire.isReplied()) {
             holder.noteIn.setText(enquire.getReply());
-            holder.timestampIn.setText(enquire.getTimestampReplied());
-            holder.relativeLayoutOut.setVisibility(View.VISIBLE);
+            holder.timestampIn.setVisibility(View.GONE);
+            holder.relativeLayoutIn.setVisibility(View.VISIBLE);
         }
 
     }

@@ -16,7 +16,7 @@ import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.procurement.fragments.DashboardFragment;
+import com.example.procurement.fragments.OrderViewFragment;
 import com.example.procurement.activities.HomeActivity;
 import com.example.procurement.R;
 import com.example.procurement.fragments.EnquireFragment;
@@ -62,8 +62,9 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
         // check if any data is available
         if (mOrders != null) {
             final Order order = mOrders.get(position);
-            String orderName, orderStatus, orderDate, orderDescription, orderId;
+            final String orderName, orderStatus, orderKey, orderDescription, orderId;
             orderName = order.getName();
+            orderKey = order.getKey();
             orderId = order.getOrderID();
             orderDescription = order.getDescription();
             orderStatus = order.getStatus();
@@ -72,31 +73,26 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
 
             switch (order.getStatus()) {
                 case CommonConstants.ORDER_STATUS_APPROVED:
-                    orderDate = order.getDate();
                     statusColor = color.orderStatusAccepted;
                     statusBackground = drawable.badge_approved;
                     statusIcon = drawable.order_ic_status_accepted;
                     break;
                 case CommonConstants.ORDER_STATUS_PENDING:
-                    orderDate = "--/--/--";
                     statusColor = color.orderStatusPending;
                     statusBackground = drawable.badge_pending;
                     statusIcon = drawable.order_ic_status_pending;
                     break;
                 case CommonConstants.ORDER_STATUS_PLACED:
-                    orderDate = order.getDate();
                     statusColor = color.orderStatusPlaced;
                     statusBackground = drawable.badge_placed;
                     statusIcon = drawable.order_ic_status_accepted;
                     break;
                 case CommonConstants.ORDER_STATUS_HOLD:
-                    orderDate = order.getDate();
                     statusColor = color.orderStatusHold;
                     statusBackground = drawable.badge_hold;
                     statusIcon = drawable.order_ic_status_pending;
                     break;
                 default:
-                    orderDate = "";
                     statusColor = color.orderStatusDenied;
                     statusBackground = drawable.badge_denied;
                     statusIcon = drawable.order_ic_status_denied;
@@ -105,7 +101,6 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
             statusColor = ContextCompat.getColor(holder.itemView.getContext(), statusColor);
 
             holder.name.setText(orderId + " - " + orderName);
-            holder.date.setText(orderDate);
             holder.status.setText(orderStatus);
             holder.description.setText(orderDescription);
             holder.status.setBackgroundResource(statusBackground);
@@ -118,7 +113,7 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
                 holder.note.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new NoteFragment(order.getKey()), null).commit();
+                        HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new NoteFragment(orderKey), null).commit();
                     }
                 });
             }
@@ -126,14 +121,14 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
             holder.enquire.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new EnquireFragment(order.getKey()), null).commit();
+                    HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new EnquireFragment(orderKey), null).commit();
                 }
             });
 
             holder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new DashboardFragment(), null).commit();
+                    HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new OrderViewFragment(orderKey), null).commit();
                 }
             });
         }
@@ -154,7 +149,7 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
     // Stores and recycles views as they are scrolled off screen
     class OrdersViewHolder extends RecyclerView.ViewHolder {
         // Hold views
-        final TextView name, status, date, enquire, note;
+        final TextView name, status, enquire, note;
         final ImageView orderIcon;
         final ImageView statusIcon;
         final TextView description;
@@ -164,7 +159,6 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
             super(view);
             name = view.findViewById(id.orderName);
             status = view.findViewById(id.orderStatus);
-            date = view.findViewById(id.orderDate);
             orderIcon = view.findViewById(id.orderIcon);
             statusIcon = view.findViewById(id.orderStatusIcon);
             description = view.findViewById(id.orderDescription);
