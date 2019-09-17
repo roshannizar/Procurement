@@ -82,12 +82,12 @@ public class DashboardFragment extends Fragment {
         recyclerView = view.findViewById(R.id.rvNotification);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        readStatusData();
-       // writeStatusData();
+        readData();
+       //writeData();
         return view;
     }
 
-    private void writeStatusData() {
+    private void writeData() {
         DatabaseReference reference = notificationDbRef.push();
         String key = reference.getKey();
 
@@ -98,7 +98,7 @@ public class DashboardFragment extends Fragment {
         }
     }
 
-    private void readStatusData() {
+    private void readData() {
 
         notificationDbRef.addValueEventListener(new ValueEventListener() {
             @Override
