@@ -129,7 +129,7 @@ public class EnquireFragment extends Fragment {
     private void createNote(String enquiry) {
         // inserting note in db and getting
         DatabaseReference reference = enquireDatabaseRef.push();
-        reference.setValue(new Enquire(reference.getKey(), enquiry, DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date()), CommonConstants.ENQUIRE_OUTGOING));
+        reference.setValue(new Enquire(reference.getKey(), enquiry, DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date())));
     }
 
     /**
@@ -139,7 +139,7 @@ public class EnquireFragment extends Fragment {
     private void updateNote(String enquiryText, int position) {
         // updating note text
         String id = enquireList.get(position).getKey();
-        enquireDatabaseRef.child(id).setValue(new Enquire(id, enquiryText, DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date()), CommonConstants.ENQUIRE_OUTGOING));
+        enquireDatabaseRef.child(id).setValue(new Enquire(id, enquiryText, DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date())));
     }
 
     /**

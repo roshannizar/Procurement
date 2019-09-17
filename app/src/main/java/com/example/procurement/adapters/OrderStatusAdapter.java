@@ -72,31 +72,26 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
 
             switch (order.getStatus()) {
                 case CommonConstants.ORDER_STATUS_APPROVED:
-                    orderDate = order.getDate();
                     statusColor = color.orderStatusAccepted;
                     statusBackground = drawable.badge_approved;
                     statusIcon = drawable.order_ic_status_accepted;
                     break;
                 case CommonConstants.ORDER_STATUS_PENDING:
-                    orderDate = "--/--/--";
                     statusColor = color.orderStatusPending;
                     statusBackground = drawable.badge_pending;
                     statusIcon = drawable.order_ic_status_pending;
                     break;
                 case CommonConstants.ORDER_STATUS_PLACED:
-                    orderDate = order.getDate();
                     statusColor = color.orderStatusPlaced;
                     statusBackground = drawable.badge_placed;
                     statusIcon = drawable.order_ic_status_accepted;
                     break;
                 case CommonConstants.ORDER_STATUS_HOLD:
-                    orderDate = order.getDate();
                     statusColor = color.orderStatusHold;
                     statusBackground = drawable.badge_hold;
                     statusIcon = drawable.order_ic_status_pending;
                     break;
                 default:
-                    orderDate = "";
                     statusColor = color.orderStatusDenied;
                     statusBackground = drawable.badge_denied;
                     statusIcon = drawable.order_ic_status_denied;
@@ -105,7 +100,6 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
             statusColor = ContextCompat.getColor(holder.itemView.getContext(), statusColor);
 
             holder.name.setText(orderId + " - " + orderName);
-            holder.date.setText(orderDate);
             holder.status.setText(orderStatus);
             holder.description.setText(orderDescription);
             holder.status.setBackgroundResource(statusBackground);
@@ -154,7 +148,7 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
     // Stores and recycles views as they are scrolled off screen
     class OrdersViewHolder extends RecyclerView.ViewHolder {
         // Hold views
-        final TextView name, status, date, enquire, note;
+        final TextView name, status, enquire, note;
         final ImageView orderIcon;
         final ImageView statusIcon;
         final TextView description;
@@ -164,7 +158,6 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
             super(view);
             name = view.findViewById(id.orderName);
             status = view.findViewById(id.orderStatus);
-            date = view.findViewById(id.orderDate);
             orderIcon = view.findViewById(id.orderIcon);
             statusIcon = view.findViewById(id.orderStatusIcon);
             description = view.findViewById(id.orderDescription);

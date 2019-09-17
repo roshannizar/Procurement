@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -237,12 +238,13 @@ public class NoteFragment extends Fragment {
                 // check if user updating note
                 if (shouldUpdate && note != null) {
                     // update note by it's id
-                    updateNote(inputText.getText().toString(), position);
+                    updateNote(inputText.getText().toString().trim(), position);
                 } else {
                     // create new note
-                    createNote(inputText.getText().toString());
+                    createNote(inputText.getText().toString().trim());
                 }
             }
         });
     }
+
 }

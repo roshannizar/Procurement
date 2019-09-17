@@ -17,9 +17,6 @@ public class CommonConstants {
     public static final String ORDER_STATUS_PLACED = "Placed";
     public static final String ORDER_STATUS_HOLD = "Hold";
 
-    public static final String ENQUIRE_INCOMING = "Incoming";
-    public static final String ENQUIRE_OUTGOING = "Outgoing";
-
     public static final String NOTE_FRAGMENT_TAG = "Note Fragment";
     public static final String ENQUIRE_FRAGMENT_TAG = "Enquire Fragment";
 

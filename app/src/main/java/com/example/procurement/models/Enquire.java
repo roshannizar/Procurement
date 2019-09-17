@@ -4,7 +4,6 @@ public class Enquire {
     private String key;
     private String enquiry;
     private String timestamp;
-    private String enquiryType;
     private boolean isReplied = false;
     private String reply;
     private String timestampReplied;
@@ -17,11 +16,10 @@ public class Enquire {
         this.timestampReplied = timestampReplied;
     }
 
-    public Enquire(String key, String enquiry, String timestamp, String enquiryType) {
+    public Enquire(String key, String enquiry, String timestamp) {
         this.key = key;
         this.enquiry = enquiry;
         this.timestamp = timestamp;
-        this.enquiryType = enquiryType;
     }
 
     public String getKey() {
@@ -46,14 +44,6 @@ public class Enquire {
 
     public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
-    }
-
-    public String getEnquiryType() {
-        return enquiryType;
-    }
-
-    public void setEnquiryType(String enquiryType) {
-        this.enquiryType = enquiryType;
     }
 
     public boolean isReplied() {
