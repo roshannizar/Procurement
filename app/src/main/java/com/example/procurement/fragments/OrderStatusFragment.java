@@ -129,6 +129,7 @@ public class OrderStatusFragment extends Fragment {
                     if (order != null) {
                         countStatus(order.getStatus());
                         orders.add(order);
+                        CommonConstants.ORDER_ID = order.getOrderID();
                     }
                 }
 

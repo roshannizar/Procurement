@@ -27,6 +27,7 @@ public class CommonConstants {
     public static final String UPDATE_STRING = "Update";
     public static final String CANCEL_STRING = "Cancel";
 
+    public static String ORDER_ID = null;
 
 //    public static final int ORDER_STATUS_DECLINED = -1;
 //    public static final int ORDER_STATUS_PENDING = 0;
