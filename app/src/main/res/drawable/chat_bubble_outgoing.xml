@@ -13,7 +13,7 @@
                     android:bottom="1px"
                     android:left="1px"
                     android:right="1px" />
-                <solid android:color="#01000000" />
+                <solid android:color="@color/outgoing" />
             </shape>
         </rotate>
     </item>
@@ -25,7 +25,7 @@
                 android:bottom="1px"
                 android:left="1px"
                 android:right="1px" />
-            <solid android:color="#01000000" />
+            <solid android:color="@color/outgoing" />
         </shape>
     </item>
 
@@ -38,7 +38,7 @@
             <shape android:shape="rectangle">
                 <corners android:radius="4dp" />
                 <padding android:bottom="1px" />
-                <solid android:color="#09000000" />
+                <solid android:color="@color/outgoing" />
             </shape>
         </rotate>
     </item>
@@ -47,7 +47,7 @@
         <shape android:shape="rectangle">
             <corners android:radius="4dp" />
             <padding android:bottom="1px" />
-            <solid android:color="#09000000" />
+            <solid android:color="@color/outgoing" />
         </shape>
     </item>
 
@@ -63,7 +63,7 @@
                     android:bottom="1px"
                     android:left="1px"
                     android:right="1px" />
-                <solid android:color="#10000000" />
+                <solid android:color="@color/outgoing" />
             </shape>
         </rotate>
     </item>
@@ -75,7 +75,7 @@
                 android:bottom="1px"
                 android:left="1px"
                 android:right="1px" />
-            <solid android:color="#10000000" />
+            <solid android:color="@color/outgoing" />
         </shape>
     </item>
 
@@ -86,14 +86,14 @@
             android:pivotY="0%"
             android:toDegrees="0">
             <shape android:shape="rectangle">
-                <solid android:color="@color/notificationStatusPlaced" />
+                <solid android:color="@color/outgoing" />
             </shape>
         </rotate>
     </item>
 
     <item android:right="10dp">
         <shape android:shape="rectangle">
-            <solid android:color="@color/notificationStatusPlaced" />
+            <solid android:color="@color/outgoing" />
             <corners android:radius="4dp" />
         </shape>
     </item>

@@ -57,8 +57,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     public void onBindViewHolder(MyViewHolder holder, int position) {
         final Notification notification = notificationsList.get(position);
         notificationDbRef = PMS.DatabaseRef
-                .child(CommonConstants.FIREBASE_NOTIFICATION_DB)
-                .child(notification.getNotificationKey()).getRef();
+                .child(CommonConstants.FIREBASE_NOTIFICATION_DB).getRef();
 
         holder.notificationOrderID.setText("Order ID : " +  notification.getOrderID());
         holder.notificationStatus.setText("Status : " + notification.getOrderStatus());
@@ -86,8 +85,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         holder.cvNotification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                notificationDbRef.child(notification.getNotificationKey()).removeValue();
                 HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new OrderViewFragment(notification.getOrderKey()), null).commit();
-                notificationDbRef.removeValue();
             }
         });
     }

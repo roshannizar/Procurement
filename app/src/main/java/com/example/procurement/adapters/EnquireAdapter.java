@@ -27,7 +27,7 @@ public class EnquireAdapter extends RecyclerView.Adapter<EnquireAdapter.MyViewHo
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        final TextView noteIn, noteOut, timestampIn, timestampOut;
+        final TextView noteIn, noteOut, timestampIn, timestampOut,enquiryID;
         final RelativeLayout relativeLayoutIn, relativeLayoutOut;
 
         MyViewHolder(View view) {
@@ -38,6 +38,8 @@ public class EnquireAdapter extends RecyclerView.Adapter<EnquireAdapter.MyViewHo
             noteOut = view.findViewById(R.id.noteOut);
             timestampIn = view.findViewById(R.id.timestampIn);
             timestampOut = view.findViewById(R.id.timestampOut);
+            enquiryID =view.findViewById(R.id.enquiryID);
+
         }
     }
 
@@ -54,6 +56,8 @@ public class EnquireAdapter extends RecyclerView.Adapter<EnquireAdapter.MyViewHo
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Enquire enquire = enquireList.get(position);
 
+        String eid = "Enquiry " + String.valueOf(position + 1) + " :";
+        holder.enquiryID.setText(eid);
         holder.noteOut.setText(enquire.getEnquiry());
         holder.timestampOut.setText(enquire.getTimestamp());
         holder.relativeLayoutIn.setVisibility(View.GONE);
