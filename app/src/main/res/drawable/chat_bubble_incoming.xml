@@ -13,7 +13,7 @@
                     android:bottom="1px"
                     android:left="1px"
                     android:right="1px" />
-                <solid android:color="@color/hint_enter_note" />
+                <solid android:color="@color/incoming" />
             </shape>
         </rotate>
     </item>
@@ -24,7 +24,7 @@
                 android:bottom="1px"
                 android:left="1px"
                 android:right="1px" />
-            <solid android:color="@color/hint_enter_note" />
+            <solid android:color="@color/incoming" />
             <corners android:radius="8dp" />
         </shape>
     </item>
@@ -38,7 +38,7 @@
             <shape android:shape="rectangle">
                 <corners android:radius="4dp" />
                 <padding android:bottom="1px" />
-                <solid android:color="@color/hint_enter_note" />
+                <solid android:color="@color/incoming" />
             </shape>
         </rotate>
     </item>
@@ -46,7 +46,7 @@
     <item android:left="8dp">
         <shape android:shape="rectangle">
             <padding android:bottom="1px" />
-            <solid android:color="@color/hint_enter_note" />
+            <solid android:color="@color/incoming" />
             <corners android:radius="8dp" />
         </shape>
     </item>
@@ -63,7 +63,7 @@
                     android:bottom="1px"
                     android:left="1px"
                     android:right="1px" />
-                <solid android:color="@color/hint_enter_note" />
+                <solid android:color="@color/incoming" />
             </shape>
         </rotate>
     </item>
@@ -74,7 +74,7 @@
                 android:bottom="1px"
                 android:left="1px"
                 android:right="1px" />
-            <solid android:color="@color/hint_enter_note" />
+            <solid android:color="@color/incoming" />
             <corners android:radius="8dp" />
         </shape>
     </item>
@@ -87,14 +87,14 @@
             android:toDegrees="0">
             <shape android:shape="rectangle">
                 <corners android:radius="4dp" />
-                <solid android:color="@color/hint_enter_note" />
+                <solid android:color="@color/incoming" />
             </shape>
         </rotate>
     </item>
 
     <item android:left="8dp">
         <shape android:shape="rectangle">
-            <solid android:color="@color/hint_enter_note" />
+            <solid android:color="@color/incoming" />
             <corners android:radius="8dp" />
         </shape>
     </item>

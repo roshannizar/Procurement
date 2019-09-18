@@ -8,13 +8,22 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/colorWhiteSmoke"
+        app:cardBackgroundColor="@color/timestamp"
         app:cardCornerRadius="@dimen/dimen_10">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp">
+
+            <TextView
+                android:id="@+id/enquiryID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                app:layout_constraintBottom_toTopOf="@+id/outgoing"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <RelativeLayout
                 android:id="@+id/outgoing"
@@ -25,10 +34,11 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:paddingTop="@dimen/dimen_10"
+                android:layout_marginTop="@dimen/dimen_10"
                 android:paddingBottom="@dimen/dimen_10"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toBottomOf="@+id/enquiryID">
 
                 <TextView
                     android:id="@+id/noteOut"
@@ -38,7 +48,6 @@
                     android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="2dp"
                     android:layout_marginEnd="@dimen/dimen_10"
                     android:textColor="@color/white"
                     android:textSize="@dimen/note_list_text" />
@@ -51,7 +60,6 @@
                     android:layout_alignParentStart="true"
                     android:layout_alignParentEnd="true"
                     android:layout_marginStart="10dp"
-                    android:layout_marginTop="5dp"
                     android:layout_marginEnd="24dp"
                     android:gravity="bottom|end"
                     android:textColor="@color/timestamp"
@@ -82,7 +90,6 @@
                     android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"
                     android:layout_marginStart="26dp"
-                    android:layout_marginTop="2dp"
                     android:layout_marginEnd="@dimen/dimen_10"
                     android:textColor="@color/white"
                     android:textSize="@dimen/note_list_text" />
@@ -95,7 +102,6 @@
                     android:layout_alignParentStart="true"
                     android:layout_alignParentEnd="true"
                     android:layout_marginStart="24dp"
-                    android:layout_marginTop="5dp"
                     android:layout_marginEnd="20dp"
                     android:gravity="bottom|start"
                     android:textColor="@color/timestamp"

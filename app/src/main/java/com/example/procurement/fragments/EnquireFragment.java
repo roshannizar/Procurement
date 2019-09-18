@@ -91,7 +91,7 @@ public class EnquireFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showBubbleDialog(false, null, -1);
+                showBubbleDialog( null, -1);
             }
         });
 
@@ -105,16 +105,14 @@ public class EnquireFragment extends Fragment {
      * Delete - 0
      */
     private void showActionsDialog(final int position) {
-        CharSequence options[] = new CharSequence[]{"Edit", "Delete"};
+        CharSequence options[] = new CharSequence[]{"Delete"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-        builder.setTitle("Choose option");
+        builder.setTitle("Enquiry Options");
         builder.setItems(options, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (which == 0) {
-                    showBubbleDialog(true, enquireList.get(position), position);
-                } else {
                     deleteNote(position);
                 }
             }
@@ -132,15 +130,6 @@ public class EnquireFragment extends Fragment {
         reference.setValue(new Enquire(reference.getKey(), enquiry, DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date())));
     }
 
-    /**
-     * Updating note in db and updating
-     * item in the list by its position
-     */
-    private void updateNote(String enquiryText, int position) {
-        // updating note text
-        String id = enquireList.get(position).getKey();
-        enquireDatabaseRef.child(id).setValue(new Enquire(id, enquiryText, DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date())));
-    }
 
     /**
      * Deleting note from SQLite and removing the
@@ -187,7 +176,7 @@ public class EnquireFragment extends Fragment {
      * when shouldUpdate=true, it automatically displays old note and changes the
      * button text to UPDATE
      */
-    private void showBubbleDialog(final boolean shouldUpdate, final Enquire enquire, final int position) {
+    private void showBubbleDialog(final Enquire enquire, final int position) {
         LayoutInflater layoutInflaterAndroid = LayoutInflater.from(mContext);
         View view = layoutInflaterAndroid.inflate(R.layout.layout_add_dialog, null);
 
@@ -198,17 +187,11 @@ public class EnquireFragment extends Fragment {
         inputText.setHint(R.string.hint_enter_enquiry);
 
         TextView dialogTitle = view.findViewById(R.id.dialog_title);
-        dialogTitle.setText(!shouldUpdate ? getString(R.string.lbl_new_enquiry_title)
-                : getString(R.string.lbl_edit_enquiry_title));
-
-        if (shouldUpdate && enquire != null) {
-            inputText.setText(enquire.getEnquiry());
-        }
+        dialogTitle.setText(getString(R.string.lbl_new_enquiry_title));
 
         alertDialogBuilderUserInput
                 .setCancelable(false)
-                .setPositiveButton(shouldUpdate ? CommonConstants.UPDATE_STRING
-                        : CommonConstants.SAVE_STRING, new DialogInterface.OnClickListener() {
+                .setPositiveButton(CommonConstants.SAVE_STRING, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogBox, int id) {
 
                     }
@@ -234,14 +217,9 @@ public class EnquireFragment extends Fragment {
                     alertDialog.dismiss();
                 }
 
-                // check if user updating note
-                if (shouldUpdate && enquire != null) {
-                    // update note by it's id
-                    updateNote(inputText.getText().toString(), position);
-                } else {
-                    // create new note
-                    createNote(inputText.getText().toString());
-                }
+                // create new note
+                createNote(inputText.getText().toString());
+
             }
         });
     }
