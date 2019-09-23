@@ -95,7 +95,7 @@
                         android:paddingRight="10dp"
                         android:paddingBottom="5dp"
                         android:text="18 Orders Totally"
-                        android:textColor="@color/colorGreen"
+                        android:textColor="@color/colorDarkGreen"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/txtPlacedCounts"
                         app:layout_constraintStart_toStartOf="parent"

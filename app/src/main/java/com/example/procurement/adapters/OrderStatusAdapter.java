@@ -2,6 +2,7 @@ package com.example.procurement.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,18 +11,20 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.procurement.fragments.OrderViewFragment;
-import com.example.procurement.activities.HomeActivity;
 import com.example.procurement.R;
+import com.example.procurement.activities.HomeActivity;
 import com.example.procurement.fragments.EnquireFragment;
-import com.example.procurement.models.Order;
 import com.example.procurement.fragments.NoteFragment;
+import com.example.procurement.fragments.OrderStatusFragment;
+import com.example.procurement.fragments.OrderViewFragment;
+import com.example.procurement.models.Order;
 import com.example.procurement.utils.CommonConstants;
 
 import java.util.ArrayList;
@@ -37,14 +40,14 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
     private final LayoutInflater mInflater;
     private List<Order> mOrders; // copy of orders
     private List<Order> mOrdersOriginal;
-    private View v1;
+    private Context mContext;
 
     // pass data into constructor
     public OrderStatusAdapter(Context context, List<Order> orders) {
+        this.mContext = context;
         this.mInflater = LayoutInflater.from(context);
         this.mOrders = orders;
         this.mOrdersOriginal = orders;
-
     }
 
     // inflate the row layout from xml when needed
@@ -109,11 +112,25 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
             holder.orderIcon.setColorFilter(statusColor, PorterDuff.Mode.MULTIPLY);
 
             if (orderStatus.equals(CommonConstants.ORDER_STATUS_PLACED)) {
-                holder.note.setVisibility(View.VISIBLE);
-                holder.note.setOnClickListener(new View.OnClickListener() {
+                holder.noteOrSend.setText("NOTE");
+                holder.noteOrSend.setVisibility(View.VISIBLE);
+                holder.noteOrSend.setTextColor(Color.parseColor("#014A70"));
+                holder.noteOrSend.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new NoteFragment(orderKey), null).commit();
+                    }
+                });
+            }
+
+            if (orderStatus.equals(CommonConstants.ORDER_STATUS_APPROVED)) {
+                holder.noteOrSend.setText("SEND");
+                holder.noteOrSend.setVisibility(View.VISIBLE);
+                holder.noteOrSend.setTextColor(Color.parseColor("#1F4037"));
+                holder.noteOrSend.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(mContext,"Mail Sent !!!",Toast.LENGTH_LONG).show();
                     }
                 });
             }
@@ -149,7 +166,7 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
     // Stores and recycles views as they are scrolled off screen
     class OrdersViewHolder extends RecyclerView.ViewHolder {
         // Hold views
-        final TextView name, status, enquire, note;
+        final TextView name, status, enquire, noteOrSend;
         final ImageView orderIcon;
         final ImageView statusIcon;
         final TextView description;
@@ -162,12 +179,11 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
             orderIcon = view.findViewById(id.orderIcon);
             statusIcon = view.findViewById(id.orderStatusIcon);
             description = view.findViewById(id.orderDescription);
-            note = view.findViewById(id.noteCRUD);
+            noteOrSend = view.findViewById(id.noteOrSend);
             enquire = view.findViewById(id.enquireCRUD);
             cardView = view.findViewById(id.cardOrder);
 
-            note.setVisibility(View.INVISIBLE);
-
+            noteOrSend.setVisibility(View.INVISIBLE);
         }
 
     }

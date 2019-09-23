@@ -4,7 +4,8 @@
     <color name="colorPrimaryDark">#480048</color>
     <color name="colorAccent">#480048</color>
     <color name="colorWhiteSmoke">#F5F5F5</color>
-    <color name="colorGreen">#1F4037</color>
+    <color name="colorDarkGreen">#1F4037</color>
+    <color name="colorDarkBlue">#014A70</color>
 
     <!--Order Status Colors-->
     <color name="orderListDivider">#e0e0e0</color>
