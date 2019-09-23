@@ -252,7 +252,7 @@
                         android:paddingRight="10dp"
                         android:paddingBottom="5dp"
                         android:text="@string/pending"
-                        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                        android:textColor="@color/common_google_signin_btn_text_dark_default"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView30" />
