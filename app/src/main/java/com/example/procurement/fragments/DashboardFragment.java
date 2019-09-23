@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -43,7 +44,7 @@ public class DashboardFragment extends Fragment {
     private RecyclerView recyclerView;
     private DatabaseReference notificationDbRef;
     private Context mContext;
-
+    private ProgressBar progressBar;
     private TextView txtUserName;
     private TextView txtMonthDate;
     private FirebaseAuth mAuth;
@@ -63,6 +64,7 @@ public class DashboardFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         txtUserName = view.findViewById(R.id.txtUserName);
         txtMonthDate = view.findViewById(R.id.txtMonthData);
+        progressBar = view.findViewById(R.id.progressBar2);
         TextView txtApprovedCount = view.findViewById(R.id.txtApprovedCount);
         TextView txtHoldCount = view.findViewById(R.id.txtHoldCount);
         TextView txtPendingCount = view.findViewById(R.id.txtPendingCount);
@@ -117,6 +119,7 @@ public class DashboardFragment extends Fragment {
                 if (notifications != null) {
                     Collections.reverse(notifications);
                     adapter = new NotificationAdapter(mContext, notifications);
+                    progressBar.setVisibility(View.GONE);
                     recyclerView.setAdapter(adapter);
                 }
             }
