@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -19,9 +21,16 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.procurement.PMS;
 import com.example.procurement.R;
+import com.example.procurement.activities.HomeActivity;
+import com.example.procurement.adapters.DialogAdapter;
+import com.example.procurement.models.InventoryData;
+import com.example.procurement.models.Note;
 import com.example.procurement.models.Order;
 import com.example.procurement.utils.CommonConstants;
 import com.google.firebase.database.DatabaseReference;
@@ -29,6 +38,7 @@ import com.google.firebase.database.DatabaseReference;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -58,6 +68,7 @@ public class CreateOrderFragment extends Fragment implements AdapterView.OnItemS
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_create_order, container, false);
+
         txtCurrentDate = v.findViewById(R.id.txtCurrentDate);
         spinnerStock = v.findViewById(R.id.spinnerstock);
         txtOrderName = v.findViewById(R.id.txtOrderName);
@@ -68,18 +79,19 @@ public class CreateOrderFragment extends Fragment implements AdapterView.OnItemS
         txtStatus = v.findViewById(R.id.txtStatus);
         txtOrderID = v.findViewById(R.id.txtOrderID);
         btnGenerate = v.findViewById(R.id.btnGenerate);
-
-        generate();
         txtOrderName.setVisibility(View.INVISIBLE);
         spinnerStock.setOnItemSelectedListener(this);
 
         orderCreateRef = PMS.DatabaseRef.child(CommonConstants.FIREBASE_ORDER_DB).getRef();
         orders = new ArrayList<>();
 
+        generate();
         init();
 
         return v;
     }
+
+
 
     private void init() {
         getHashOrderName();
@@ -151,9 +163,11 @@ public class CreateOrderFragment extends Fragment implements AdapterView.OnItemS
                             spinnerStock.setVisibility(View.INVISIBLE);
                             switchPlacement = true;
                         } else {
-                            txtOrderName.setVisibility(View.INVISIBLE);
-                            spinnerStock.setVisibility(View.VISIBLE);
-                            switchPlacement = false;
+//                            txtOrderName.setVisibility(View.INVISIBLE);
+//                            spinnerStock.setVisibility(View.VISIBLE);
+//                            switchPlacement = false;
+                            HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new InventoryDialog(), null).commit();
+                            //showBubbleDialog(false,null,-1);
                         }
                     }
                 }
@@ -245,5 +259,39 @@ public class CreateOrderFragment extends Fragment implements AdapterView.OnItemS
 
         txtOrderID.setText(temp);
         CommonConstants.ORDER_ID = temp;
+    }
+
+    private void showBubbleDialog(final boolean shouldUpdate, final Note note, final int position) {
+        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(getContext());
+        View view = layoutInflaterAndroid.inflate(R.layout.layout_inventory_dialog, null);
+
+        android.app.AlertDialog.Builder alertDialogBuilderUserInput = new android.app.AlertDialog.Builder(getContext());
+        alertDialogBuilderUserInput.setView(view);
+
+
+        alertDialogBuilderUserInput
+                .setCancelable(false)
+                .setPositiveButton(shouldUpdate ? CommonConstants.UPDATE_STRING
+                        : CommonConstants.SAVE_STRING, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogBox, int id) {
+
+                    }
+                })
+                .setNegativeButton(CommonConstants.CANCEL_STRING,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialogBox, int id) {
+                                dialogBox.cancel();
+                            }
+                        });
+
+        final android.app.AlertDialog alertDialog = alertDialogBuilderUserInput.create();
+        alertDialog.show();
+
+        alertDialog.getButton(android.app.AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 }

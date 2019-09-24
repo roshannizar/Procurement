@@ -13,7 +13,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="4dp"
         app:cardBackgroundColor="@color/colorWhiteSmoke"
         app:cardCornerRadius="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -38,6 +38,33 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/order_list_icon_style" />
 
+            <ImageView
+                android:id="@+id/orderStatusIcon"
+                android:layout_width="@dimen/orderRowStatusIconSize"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:contentDescription="@string/order_status_placeholder"
+                android:tint="@color/orderStatusPending"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider2"
+                app:srcCompat="@drawable/order_ic_status_pending" />
+
+            <TextView
+                android:id="@+id/orderDescription"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="8dp"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="Contrary to popular belief, rature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin "
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/orderIcon"
+                app:layout_constraintTop_toBottomOf="@+id/orderName" />
+
             <TextView
                 android:id="@+id/orderName"
                 android:layout_width="0dp"
@@ -58,46 +85,6 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/orderIcon"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/orderDescription"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginEnd="8dp"
-                android:ellipsize="end"
-                android:maxLines="2"
-                android:text="Contrary to popular belief, rature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin "
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/orderIcon"
-                app:layout_constraintTop_toBottomOf="@+id/orderName" />
-
-            <View
-                android:id="@+id/divider2"
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginRight="5dp"
-                android:background="?android:attr/listDivider"
-                app:layout_constraintBottom_toBottomOf="@+id/orderDescription"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/orderIcon" />
-
-            <ImageView
-                android:id="@+id/orderStatusIcon"
-                android:layout_width="@dimen/orderRowStatusIconSize"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:contentDescription="@string/order_status_placeholder"
-                android:tint="@color/orderStatusPending"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider2"
-                app:srcCompat="@drawable/order_ic_status_pending" />
 
             <TextView
                 android:id="@+id/orderStatus"
@@ -161,6 +148,19 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/enquireCRUD"
                 app:layout_constraintTop_toBottomOf="@+id/divider2" />
+
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginRight="5dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintBottom_toBottomOf="@+id/orderDescription"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/orderIcon" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

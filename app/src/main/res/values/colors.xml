@@ -10,12 +10,12 @@
     <!--Order Status Colors-->
     <color name="orderListDivider">#e0e0e0</color>
     <color name="orderStatusDenied">#FC4441</color>
-    <color name="orderStatusPending">#f9a825</color>
+    <color name="orderStatusPending">#F9A825</color>
     <color name="orderStatusPlaced">#990288D1</color>
     <color name="orderStatusHold">#9EA7004E</color>
     <color name="orderStatusAccepted">#8bc34a</color>
     <color name="orderIconForeground">#424242</color>
-    <color name="orderIconBorder">#e0e0e0</color>
+    <color name="orderIconBorder">#E0E0E0</color>
     <color name="orderIconBackground">#fff</color>
 
     <!--Notification Colors-->
