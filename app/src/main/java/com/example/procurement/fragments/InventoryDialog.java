@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.procurement.R;
+import com.example.procurement.activities.HomeActivity;
 import com.example.procurement.adapters.DialogAdapter;
 import com.example.procurement.models.InventoryData;
 
@@ -26,6 +28,7 @@ public class InventoryDialog extends Fragment implements AdapterView.OnItemSelec
 
     private RecyclerView recyclerView;
     private ArrayList<InventoryData> listData;
+    private TextView btnSave;
     private SeekBar skCount;
     private InventoryData d;
     private DialogAdapter dialogAdapter;
@@ -45,12 +48,24 @@ public class InventoryDialog extends Fragment implements AdapterView.OnItemSelec
         c = v.getContext();
         listData = new ArrayList<>();
         dialogAdapter = new DialogAdapter(c,listData);
-
+        btnSave = v.findViewById(R.id.btnSave);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         WriteDataValues();
+        DialogChooser();
         return v;
+    }
+
+    private void DialogChooser() {
+        btnSave.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        HomeActivity.fm.beginTransaction().replace(R.id.fragment_container,new CreateOrderFragment(),null).commit();
+                    }
+                }
+        );
     }
 
     private void WriteDataValues() {

@@ -417,10 +417,13 @@
 
                     <ProgressBar
                         android:id="@+id/progressBar2"
-                        style="?android:attr/progressBarStyle"
+                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
                         android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:indeterminate="true"
                         app:layout_constraintBottom_toBottomOf="@+id/rvNotification"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -461,8 +464,10 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="16dp"
+                        android:indeterminate="false"
                         android:max="100"
                         android:progress="10"
+                        android:progressTint="#009688"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView15" />
