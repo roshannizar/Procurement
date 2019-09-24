@@ -39,7 +39,7 @@ public class DialogAdapter extends RecyclerView.Adapter<DialogAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(DialogAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
         InventoryData inventoryData = listData.get(position);
 
         holder.checkBox.setText(inventoryData.getIName());

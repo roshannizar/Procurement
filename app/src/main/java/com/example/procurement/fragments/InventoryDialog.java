@@ -24,7 +24,7 @@ import java.util.List;
 public class InventoryDialog extends Fragment implements AdapterView.OnItemSelectedListener {
 
     private RecyclerView recyclerView;
-    private List<InventoryData> listData;
+    private ArrayList<InventoryData> listData;
     private ProgressBar pbInventoryLevel;
     private SeekBar skCount;
     private DialogAdapter dialogAdapter;

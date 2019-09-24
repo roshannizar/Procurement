@@ -166,8 +166,8 @@ public class CreateOrderFragment extends Fragment implements AdapterView.OnItemS
 //                            txtOrderName.setVisibility(View.INVISIBLE);
 //                            spinnerStock.setVisibility(View.VISIBLE);
 //                            switchPlacement = false;
-                            //HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new InventoryDialog(), null).commit();
-                            showBubbleDialog(false,null,-1);
+                            HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new InventoryDialog(), null).commit();
+                            //showBubbleDialog(false,null,-1);
                         }
                     }
                 }
