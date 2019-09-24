@@ -85,7 +85,7 @@ public class DashboardFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         readData();
-       //writeData();
+      // writeData();
         return view;
     }
 
