@@ -9,11 +9,11 @@
 
     <!--Order Status Colors-->
     <color name="orderListDivider">#e0e0e0</color>
-    <color name="orderStatusDenied">#FC4441</color>
-    <color name="orderStatusPending">#F9A825</color>
-    <color name="orderStatusPlaced">#990288D1</color>
-    <color name="orderStatusHold">#9EA7004E</color>
-    <color name="orderStatusAccepted">#8bc34a</color>
+    <color name="orderStatusDenied">#E74C3C</color>
+    <color name="orderStatusPending">#F1C40F</color>
+    <color name="orderStatusPlaced">#21618C</color>
+    <color name="orderStatusHold">#E6B0AA</color>
+    <color name="orderStatusAccepted">#17A589</color>
     <color name="orderIconForeground">#424242</color>
     <color name="orderIconBorder">#E0E0E0</color>
     <color name="orderIconBackground">#fff</color>

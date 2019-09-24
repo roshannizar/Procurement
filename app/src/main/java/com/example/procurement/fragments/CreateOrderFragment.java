@@ -43,7 +43,6 @@ import static com.example.procurement.utils.CommonConstants.ORDER_ID;
 public class CreateOrderFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     private EditText txtCurrentDate, txtOrderName, txtDescription, dtpArrivalDate, txtOrderID;
-    private Spinner spinnerStock;
     private Switch stockSwitch;
     private ArrayList<Order> orders;
     private Button btnPlaceOrder, btnGenerate;
@@ -64,7 +63,6 @@ public class CreateOrderFragment extends Fragment implements AdapterView.OnItemS
         View v = inflater.inflate(R.layout.fragment_create_order, container, false);
 
         txtCurrentDate = v.findViewById(R.id.txtCurrentDate);
-        spinnerStock = v.findViewById(R.id.spinnerstock);
         txtOrderName = v.findViewById(R.id.txtOrderName);
         stockSwitch = v.findViewById(R.id.stockSwitch);
         btnPlaceOrder = v.findViewById(R.id.btnPlaceOrder);
@@ -73,8 +71,6 @@ public class CreateOrderFragment extends Fragment implements AdapterView.OnItemS
         txtStatus = v.findViewById(R.id.txtStatus);
         txtOrderID = v.findViewById(R.id.txtOrderID);
         btnGenerate = v.findViewById(R.id.btnGenerate);
-        txtOrderName.setVisibility(View.INVISIBLE);
-        spinnerStock.setOnItemSelectedListener(this);
 
         orderCreateRef = PMS.DatabaseRef.child(CommonConstants.FIREBASE_ORDER_DB).getRef();
         orders = new ArrayList<>();
@@ -152,14 +148,11 @@ public class CreateOrderFragment extends Fragment implements AdapterView.OnItemS
                     @Override
                     public void onClick(View view) {
                         if (stockSwitch.isChecked()) {
-                            txtOrderName.setVisibility(View.VISIBLE);
-                            spinnerStock.setVisibility(View.INVISIBLE);
-                            switchPlacement = true;
-                        } else {
-//                            txtOrderName.setVisibility(View.INVISIBLE);
-//                            spinnerStock.setVisibility(View.VISIBLE);
-//                            switchPlacement = false;
+
                             HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new InventoryDialog(), null).commit();
+                        } else {
+                            txtOrderName.setVisibility(View.VISIBLE);
+                            switchPlacement = true;
                             //showBubbleDialog(false,null,-1);
                         }
                     }
@@ -255,6 +248,7 @@ public class CreateOrderFragment extends Fragment implements AdapterView.OnItemS
     }
 
     private void showBubbleDialog(final boolean shouldUpdate, final Note note, final int position) {
+        InventoryDialog idialog = new InventoryDialog();
         LayoutInflater layoutInflaterAndroid = LayoutInflater.from(getContext());
         View view = layoutInflaterAndroid.inflate(R.layout.layout_inventory_dialog, null);
 

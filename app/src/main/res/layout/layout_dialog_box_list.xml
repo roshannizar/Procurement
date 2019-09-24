@@ -8,52 +8,39 @@
     <CheckBox
         android:id="@+id/cbItem"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
         android:text="Bricks"
-        android:textSize="24sp"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/divider3"
         app:layout_constraintEnd_toStartOf="@+id/seekBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <ProgressBar
-        android:id="@+id/pbStockLevel"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:progress="24"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/seekBar" />
 
     <SeekBar
         android:id="@+id/seekBar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="16dp"
+        android:max="100"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/cbItem"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
     <TextView
         android:id="@+id/txtRemaining"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:text="50 out of 100"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pbStockLevel" />
+        app:layout_constraintTop_toBottomOf="@+id/seekBar" />
 
     <View
         android:id="@+id/divider3"
@@ -64,5 +51,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtRemaining" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:text="Quantity"
+        app:layout_constraintStart_toEndOf="@+id/cbItem"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

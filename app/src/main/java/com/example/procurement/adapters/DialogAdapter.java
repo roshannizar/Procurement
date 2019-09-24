@@ -18,14 +18,15 @@ import com.example.procurement.models.InventoryData;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DialogAdapter extends RecyclerView.Adapter<DialogAdapter.ViewHolder> {
 
-    private List<InventoryData> listData;
+    private ArrayList<InventoryData> listData;
     private Context c;
 
-    public DialogAdapter(Context c, List<InventoryData> listData) {
+    public DialogAdapter(Context c, ArrayList<InventoryData> listData) {
         this.c = c;
         this.listData = listData;
     }
@@ -43,14 +44,14 @@ public class DialogAdapter extends RecyclerView.Adapter<DialogAdapter.ViewHolder
         InventoryData inventoryData = listData.get(position);
 
         holder.checkBox.setText(inventoryData.getIName());
-        holder.progressBar.setProgress(Integer.parseInt(inventoryData.getProgressLevel()));
-        holder.textView.setText(inventoryData.getCount());
+        holder.textView.setText(inventoryData.getCount() + " out of "+100);
+        holder.seekBar.setProgress(Integer.parseInt(inventoryData.getCount()));
     }
 
     public int getItemCount() {
 
         if (listData != null) {
-            return 0;
+            return listData.size();
         } else {
             return 0;
         }
@@ -69,7 +70,6 @@ public class DialogAdapter extends RecyclerView.Adapter<DialogAdapter.ViewHolder
             seekBar = view.findViewById(R.id.seekBar);
             textView = view.findViewById(R.id.txtRemaining);
             checkBox = view.findViewById(R.id.cbItem);
-            progressBar = view.findViewById(R.id.pbStockLevel);
         }
     }
 }
