@@ -1,5 +1,6 @@
 package com.example.procurement.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,6 +54,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         return new MyViewHolder(itemView);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         final Notification notification = notificationsList.get(position);

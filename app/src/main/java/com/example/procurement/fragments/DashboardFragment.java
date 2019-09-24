@@ -73,8 +73,8 @@ public class DashboardFragment extends Fragment {
         txtPendingCount.setText(String.valueOf(OrderStatusFragment.pendingStatus));
         txtApprovedCount.setText(String.valueOf(OrderStatusFragment.approvedStatus));
         txtHoldCount.setText(String.valueOf(OrderStatusFragment.holdStatus));
-        txtPlacedCount.setText(String.valueOf(OrderStatusFragment.placedStatus) + " Orders Placed");
-        txtTotalOrder.setText(String.valueOf(OrderStatusFragment.approvedStatus + OrderStatusFragment.holdStatus + OrderStatusFragment.pendingStatus + OrderStatusFragment.declinedStatus + OrderStatusFragment.placedStatus) + " Orders Totally");
+        txtPlacedCount.setText(OrderStatusFragment.placedStatus + " Order(s) Placed");
+        txtTotalOrder.setText((OrderStatusFragment.approvedStatus + OrderStatusFragment.holdStatus + OrderStatusFragment.pendingStatus + OrderStatusFragment.declinedStatus + OrderStatusFragment.placedStatus) + " Order(s) Totally");
         setDate();
 
         notificationDbRef = PMS.DatabaseRef.child(CommonConstants.FIREBASE_NOTIFICATION_DB);

@@ -71,7 +71,6 @@ public class CreateOrderFragment extends Fragment implements AdapterView.OnItemS
         txtStatus = v.findViewById(R.id.txtStatus);
         txtOrderID = v.findViewById(R.id.txtOrderID);
         btnGenerate = v.findViewById(R.id.btnGenerate);
-        txtOrderName.setVisibility(View.INVISIBLE);
 
         orderCreateRef = PMS.DatabaseRef.child(CommonConstants.FIREBASE_ORDER_DB).getRef();
         orders = new ArrayList<>();
