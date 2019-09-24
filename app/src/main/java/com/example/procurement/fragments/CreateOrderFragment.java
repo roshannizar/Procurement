@@ -11,8 +11,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -21,15 +19,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.procurement.PMS;
 import com.example.procurement.R;
 import com.example.procurement.activities.HomeActivity;
-import com.example.procurement.adapters.DialogAdapter;
-import com.example.procurement.models.InventoryData;
 import com.example.procurement.models.Note;
 import com.example.procurement.models.Order;
 import com.example.procurement.utils.CommonConstants;
@@ -38,9 +31,10 @@ import com.google.firebase.database.DatabaseReference;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static com.example.procurement.utils.CommonConstants.ORDER_ID;
 
 
 /**
@@ -87,7 +81,6 @@ public class CreateOrderFragment extends Fragment implements AdapterView.OnItemS
 
         return v;
     }
-
 
 
     private void init() {
@@ -229,15 +222,15 @@ public class CreateOrderFragment extends Fragment implements AdapterView.OnItemS
     private void getGenerateID() {
         Pattern p = Pattern.compile("\\d+");
         String generateNo = null;
-        Matcher m = p.matcher(CommonConstants.ORDER_ID);
+        if (ORDER_ID != null) {
+            Matcher m = p.matcher(ORDER_ID);
 
-        while (m.find()) {
-            generateNo = m.group();
+            while (m.find()) {
+                generateNo = m.group();
+            }
+            int value = Integer.parseInt(generateNo) + 1;
+            txtOrderID.setText("PO - " + value);
         }
-
-        int value = Integer.parseInt(generateNo) + 1;
-
-        txtOrderID.setText("PO - " + value);
     }
 
     //Validation needed
@@ -252,7 +245,7 @@ public class CreateOrderFragment extends Fragment implements AdapterView.OnItemS
         String temp = "PO - " + finalValue;
 
         txtOrderID.setText(temp);
-        CommonConstants.ORDER_ID = temp;
+        ORDER_ID = temp;
     }
 
     private void showBubbleDialog(final boolean shouldUpdate, final Note note, final int position) {
