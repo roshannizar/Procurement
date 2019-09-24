@@ -1,5 +1,6 @@
 package com.example.procurement.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,9 +26,10 @@ public class InventoryDialog extends Fragment implements AdapterView.OnItemSelec
 
     private RecyclerView recyclerView;
     private ArrayList<InventoryData> listData;
-    private ProgressBar pbInventoryLevel;
     private SeekBar skCount;
+    private InventoryData d;
     private DialogAdapter dialogAdapter;
+    private Context c;
 
     public InventoryDialog() {
 
@@ -39,11 +41,10 @@ public class InventoryDialog extends Fragment implements AdapterView.OnItemSelec
         View v = inflater.inflate(R.layout.layout_inventory_dialog, container, false);
 
         recyclerView = v.findViewById(R.id.checkBoxRecycle);
-        pbInventoryLevel = v.findViewById(R.id.pbStockLevel);
         skCount = v.findViewById(R.id.seekBar);
-
+        c = v.getContext();
         listData = new ArrayList<>();
-        dialogAdapter = new DialogAdapter(getActivity(),listData);
+        dialogAdapter = new DialogAdapter(c,listData);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -54,10 +55,13 @@ public class InventoryDialog extends Fragment implements AdapterView.OnItemSelec
 
     private void WriteDataValues() {
 
-        InventoryData d = new InventoryData("Bricks","5","10");
-        listData.add(d);
+        for(int i=0;i<5;i++) {
+            d = new InventoryData("Sand Heap","7","2");
+            listData.add(d);
+        }
 
-        dialogAdapter = new DialogAdapter(getActivity(), listData);
+
+        dialogAdapter = new DialogAdapter(c, listData);
         recyclerView.setAdapter(dialogAdapter);
     }
 

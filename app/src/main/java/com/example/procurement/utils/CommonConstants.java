@@ -4,7 +4,7 @@ import static com.example.procurement.activities.SignInActivity.uid;
 
 public class CommonConstants {
 
-    public static final String USER_DB_URL = "users/siteManagers/" + uid;
+    public static final String USER_DB_URL = "employees/siteManagers/" + uid;
 
     public static final String FIREBASE_ORDER_DB = "orders";
     public static final String FIREBASE_NOTES_DB = "notes";
@@ -24,7 +24,7 @@ public class CommonConstants {
     public static final String UPDATE_STRING = "Update";
     public static final String CANCEL_STRING = "Cancel";
 
-    public static String ORDER_ID = null;
+    public static String ORDER_ID = "PO - 00";
 
 //    public static final int ORDER_STATUS_DECLINED = -1;
 //    public static final int ORDER_STATUS_PENDING = 0;
