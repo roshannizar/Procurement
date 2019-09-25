@@ -6,6 +6,7 @@
     <color name="colorWhiteSmoke">#F5F5F5</color>
     <color name="colorDarkGreen">#1F4037</color>
     <color name="colorDarkBlue">#014A70</color>
+    <color name="editTextBackground">#F1F5F8</color>
 
     <!--Order Status Colors-->
     <color name="orderListDivider">#e0e0e0</color>
