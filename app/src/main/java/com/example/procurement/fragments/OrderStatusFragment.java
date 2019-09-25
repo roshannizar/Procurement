@@ -25,7 +25,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.procurement.R;
 import com.example.procurement.activities.HomeActivity;
-import com.example.procurement.activities.RequisitionActivity;
 import com.example.procurement.adapters.OrderStatusAdapter;
 import com.example.procurement.models.Order;
 import com.example.procurement.status.ApprovedOrderStatus;
@@ -244,10 +243,10 @@ public class OrderStatusFragment extends Fragment {
             dialog.show();
 
         } else if (item.getItemId() == R.id.action_create) {
-            //HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new CreatePurchaseOrderFragment(), null).commit();
+            HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new CreatePurchaseOrderFragment(), null).commit();
             //HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new CreateOrderFragment(), null).commit();
-            Intent i = new Intent(this.getActivity(), RequisitionActivity.class);
-            startActivity(i);
+//            Intent i = new Intent(this.getActivity(), RequisitionActivity.class);
+//            startActivity(i);
         }
 
         return super.onOptionsItemSelected(item);
