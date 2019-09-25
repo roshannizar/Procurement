@@ -18,7 +18,7 @@
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/editText"
+                android:id="@+id/txtRequisitionNo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -38,7 +38,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView27" />
 
             <EditText
-                android:id="@+id/editText2"
+                android:id="@+id/txtPurpose"
                 android:layout_width="0dp"
                 android:layout_height="111dp"
                 android:layout_marginStart="16dp"
@@ -67,7 +67,7 @@
                 android:baselineAligned="false"
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/textView49"
+                app:layout_constraintStart_toEndOf="@+id/txtTotalAmount"
                 app:layout_constraintTop_toBottomOf="@+id/textView39">
 
                 <RadioButton
@@ -124,7 +124,7 @@
                 android:textColor="@color/colorWhiteSmoke"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/editText"
+                app:layout_constraintStart_toEndOf="@+id/txtRequisitionNo"
                 app:layout_constraintTop_toBottomOf="@+id/textView27" />
 
             <TextView
@@ -136,7 +136,7 @@
                 android:text="Item(s):"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editText" />
+                app:layout_constraintTop_toBottomOf="@+id/txtRequisitionNo" />
 
             <TextView
                 android:id="@+id/textView31"
@@ -158,10 +158,10 @@
                 android:text="Delivery Date:"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editText2" />
+                app:layout_constraintTop_toBottomOf="@+id/txtPurpose" />
 
             <TextView
-                android:id="@+id/textView33"
+                android:id="@+id/txtDeliveryDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -186,10 +186,10 @@
                 android:text="Status:"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/textView32"
-                app:layout_constraintTop_toBottomOf="@+id/editText2" />
+                app:layout_constraintTop_toBottomOf="@+id/txtPurpose" />
 
             <TextView
-                android:id="@+id/textView35"
+                android:id="@+id/txtStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="70dp"
@@ -202,7 +202,7 @@
                 android:text="@string/pending"
                 android:textColor="@color/colorWhiteSmoke"
                 android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/textView33"
+                app:layout_constraintStart_toEndOf="@+id/txtDeliveryDate"
                 app:layout_constraintTop_toBottomOf="@+id/textView34" />
 
             <TextView
@@ -214,7 +214,7 @@
                 android:text="Total Amount:"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView33" />
+                app:layout_constraintTop_toBottomOf="@+id/txtDeliveryDate" />
 
             <TextView
                 android:id="@+id/textView39"
@@ -225,10 +225,10 @@
                 android:text="With In Budget:"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/textView37"
-                app:layout_constraintTop_toBottomOf="@+id/textView35" />
+                app:layout_constraintTop_toBottomOf="@+id/txtStatus" />
 
             <TextView
-                android:id="@+id/textView49"
+                android:id="@+id/txtTotalAmount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -267,10 +267,10 @@
                 android:text="Comments"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView49" />
+                app:layout_constraintTop_toBottomOf="@+id/txtTotalAmount" />
 
             <EditText
-                android:id="@+id/editText3"
+                android:id="@+id/txtComments"
                 android:layout_width="0dp"
                 android:layout_height="100dp"
                 android:layout_marginStart="16dp"
@@ -305,7 +305,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editText3" />
+                app:layout_constraintTop_toBottomOf="@+id/txtComments" />
 
             <TextView
                 android:id="@+id/textView52"

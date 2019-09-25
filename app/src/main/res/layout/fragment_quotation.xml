@@ -31,7 +31,7 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/btnBackRequisition"
-                app:layout_constraintTop_toBottomOf="@+id/textView62" />
+                app:layout_constraintTop_toBottomOf="@+id/txtProposalDate" />
 
             <Button
                 android:id="@+id/btnBackRequisition"
@@ -46,10 +46,10 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/btnPlaceRequisition2"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView62" />
+                app:layout_constraintTop_toBottomOf="@+id/txtProposalDate" />
 
             <EditText
-                android:id="@+id/editText5"
+                android:id="@+id/txtReason"
                 android:layout_width="0dp"
                 android:layout_height="100dp"
                 android:layout_marginStart="16dp"
@@ -58,6 +58,7 @@
                 android:background="@drawable/text_box"
                 android:ems="10"
                 android:gravity="start|top"
+                android:hint="Enter Reason"
                 android:inputType="textMultiLine"
                 android:paddingLeft="10dp"
                 android:paddingTop="5dp"
@@ -96,10 +97,10 @@
                 android:text="Proposal Date:"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editText5" />
+                app:layout_constraintTop_toBottomOf="@+id/txtReason" />
 
             <TextView
-                android:id="@+id/textView62"
+                android:id="@+id/txtProposalDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -124,10 +125,10 @@
                 android:text="Proposed By:"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editText5" />
+                app:layout_constraintTop_toBottomOf="@+id/txtReason" />
 
             <TextView
-                android:id="@+id/textView64"
+                android:id="@+id/txtProposedBy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -163,7 +164,7 @@
                 android:text="Recommended Supplier:"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView33" />
+                app:layout_constraintTop_toBottomOf="@+id/txtDeliveryDate" />
 
             <TextView
                 android:id="@+id/textView25"
@@ -190,7 +191,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView25" />
 
             <TextView
-                android:id="@+id/textView33"
+                android:id="@+id/txtDeliveryDate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
