@@ -2,7 +2,6 @@ package com.example.procurement.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +21,6 @@ import com.example.procurement.R;
 import com.example.procurement.activities.HomeActivity;
 import com.example.procurement.fragments.EnquireFragment;
 import com.example.procurement.fragments.NoteFragment;
-import com.example.procurement.fragments.OrderStatusFragment;
 import com.example.procurement.fragments.OrderViewFragment;
 import com.example.procurement.models.Order;
 import com.example.procurement.utils.CommonConstants;
@@ -141,7 +139,7 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
                 holder.enquireOrSend.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(mContext,"Mail Sent !!!",Toast.LENGTH_LONG).show();
+                        Toast.makeText(mContext, "Mail Sent !!!", Toast.LENGTH_LONG).show();
                     }
                 });
             }
@@ -215,10 +213,11 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
                     mOrdersOriginal = new ArrayList<>(mOrders);
                 if (constraint != null && constraint.length() > 0) {
                     if (mOrdersOriginal != null && mOrdersOriginal.size() > 0) {
-                        for (final Order cd : mOrdersOriginal) {
-                            if (cd.getName().toLowerCase()
-                                    .contains(constraint.toString().toLowerCase()))
-                                results.add(cd);
+                        for (final Order order : mOrdersOriginal) {
+                            if (order.getName() != null) {
+                                if (order.getName().toLowerCase().contains(constraint.toString().toLowerCase()))
+                                    results.add(order);
+                            }
                         }
                     }
                     oReturn.values = results;

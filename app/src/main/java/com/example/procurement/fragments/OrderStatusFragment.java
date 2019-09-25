@@ -13,10 +13,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,7 +25,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.procurement.R;
 import com.example.procurement.activities.HomeActivity;
-import com.example.procurement.activities.RequisitionActivity;
 import com.example.procurement.adapters.OrderStatusAdapter;
 import com.example.procurement.models.Order;
 import com.example.procurement.status.ApprovedOrderStatus;
@@ -38,11 +35,11 @@ import com.example.procurement.status.OrderStatus;
 import com.example.procurement.status.PendingOrderStatus;
 import com.example.procurement.status.PlacedOrderStatus;
 import com.example.procurement.utils.CommonConstants;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -54,8 +51,6 @@ public class OrderStatusFragment extends Fragment {
 
     private static final String TAG = "OrderStatusFragment";
     private ArrayList<Order> orders;
-    private ImageView imgLoader;
-    private TextView txtLoader,txtWait;
     private OrderStatusAdapter adapter;
     private OrderStatus approvedOrderStatus, declinedOrderStatus, placedOrderStatus, pendingOrderStatus, holdOrderStatus, draftOrderStatus;
     private RecyclerView recyclerView;
@@ -102,9 +97,6 @@ public class OrderStatusFragment extends Fragment {
         recyclerView = rootView.findViewById(R.id.rvLoading);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        imgLoader = rootView.findViewById(R.id.imgLoader);
-        txtLoader = rootView.findViewById(R.id.txtLoader);
-        txtWait = rootView.findViewById(R.id.txtWait);
 
         //writeStatusData();
         readStatusData();
@@ -143,29 +135,26 @@ public class OrderStatusFragment extends Fragment {
 
     private void readStatusData() {
 
-        orderDBRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        orderDBRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful() && task.getResult() != null) {
-                    orders.clear();
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e);
+                }
 
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        Order order = document.toObject(Order.class);
-                        countStatus(order.getStatus());
-                        orders.add(order);
-                        CommonConstants.ORDER_ID = order.getOrderID();
-                    }
+                orders.clear();
 
+                for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                    Order order = document.toObject(Order.class);
+                    countStatus(order.getStatus());
+                    orders.add(order);
+                    CommonConstants.ORDER_ID = order.getOrderID();
+                }
 
+                if (orders != null) {
                     adapter = new OrderStatusAdapter(mContext, orders);
                     progressBar.setVisibility(View.GONE);
-                    imgLoader.setVisibility(View.INVISIBLE);
-                    txtLoader.setVisibility(View.INVISIBLE);
-                    txtWait.setVisibility(View.INVISIBLE);
                     recyclerView.setAdapter(adapter);
-
-                } else {
-                    Log.w(TAG, "Error getting documents.", task.getException());
                 }
             }
         });
@@ -179,6 +168,7 @@ public class OrderStatusFragment extends Fragment {
 
         final MenuItem searchItem = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setQueryHint("Search by Order Name");
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -252,6 +242,11 @@ public class OrderStatusFragment extends Fragment {
             AlertDialog dialog = builder.create();
             dialog.show();
 
+        } else if (item.getItemId() == R.id.action_create) {
+            HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new CreatePurchaseOrderFragment(), null).commit();
+            //HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new CreateOrderFragment(), null).commit();
+//            Intent i = new Intent(this.getActivity(), RequisitionActivity.class);
+//            startActivity(i);
         }
 
         return super.onOptionsItemSelected(item);
