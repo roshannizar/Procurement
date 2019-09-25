@@ -59,7 +59,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     public void onBindViewHolder(MyViewHolder holder, int position) {
         final Notification notification = notificationsList.get(position);
         notificationDbRef = PMS.DatabaseRef
-                .child(CommonConstants.FIREBASE_NOTIFICATION_DB).getRef();
+                .child(CommonConstants.COLLECTION_NOTIFICATION).getRef();
 
         holder.notificationOrderID.setText("Order ID : " +  notification.getOrderID());
         holder.notificationStatus.setText("Status : " + notification.getOrderStatus());

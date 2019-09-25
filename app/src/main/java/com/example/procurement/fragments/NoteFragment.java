@@ -75,9 +75,9 @@ public class NoteFragment extends Fragment {
         recyclerView = rootView.findViewById(R.id.rvLoading);
         progressBar = rootView.findViewById(R.id.progressBar);
 
-        notesDBRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_ORDER_DB)
+        notesDBRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_ORDER)
                 .document(orderKey)
-                .collection(CommonConstants.COLLECTION_NOTES_DB);
+                .collection(CommonConstants.COLLECTION_NOTES);
 
         notesList = new ArrayList<>();
         mAdapter = new NoteAdapter(mContext, notesList);
