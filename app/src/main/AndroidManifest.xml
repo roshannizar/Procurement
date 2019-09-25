@@ -3,14 +3,23 @@
     package="com.example.procurement">
 
     <application
-        android:allowBackup="true"
         android:name=".PMS"
+        android:allowBackup="true"
         android:icon="@drawable/factory"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.SignInActivity"></activity>
+        <activity
+            android:name=".activities.RequisitionActivity"
+            android:label="@string/title_activity_requisition"
+            android:parentActivityName=".activities.HomeActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.procurement.activities.HomeActivity" />
+        </activity>
+        <activity android:name=".activities.SignInActivity" />
         <activity
             android:name=".activities.HomeActivity"
             android:label="@string/title_activity_home" />
