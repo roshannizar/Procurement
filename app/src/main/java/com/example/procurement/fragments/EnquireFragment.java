@@ -66,7 +66,7 @@ public class EnquireFragment extends Fragment {
         enquireDatabaseRef = PMS.DatabaseRef
                 .child(CommonConstants.FIREBASE_ORDER_DB)
                 .child(orderKey)
-                .child(CommonConstants.FIREBASE_ENQUIRIES_DB)
+                .child(CommonConstants.COLLECTION_ENQUIRIES)
                 .getRef();
 
         enquireList = new ArrayList<>();

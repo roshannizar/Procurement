@@ -77,7 +77,7 @@ public class DashboardFragment extends Fragment {
         txtTotalOrder.setText((OrderStatusFragment.approvedStatus + OrderStatusFragment.holdStatus + OrderStatusFragment.pendingStatus + OrderStatusFragment.declinedStatus + OrderStatusFragment.placedStatus) + " Order(s) Totally");
         setDate();
 
-        notificationDbRef = PMS.DatabaseRef.child(CommonConstants.FIREBASE_NOTIFICATION_DB);
+        notificationDbRef = PMS.DatabaseRef.child(CommonConstants.COLLECTION_NOTIFICATION);
 
         notifications = new ArrayList<>();
 

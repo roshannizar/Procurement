@@ -80,7 +80,7 @@ public class OrderStatusFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_order_status, container, false);
         mContext = rootView.getContext();
 
-        orderDBRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_ORDER_DB);
+        orderDBRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_ORDER);
         orders = new ArrayList<>();
 
         approvedOrderStatus = new ApprovedOrderStatus();
