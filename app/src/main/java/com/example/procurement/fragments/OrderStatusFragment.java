@@ -13,8 +13,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -52,6 +54,8 @@ public class OrderStatusFragment extends Fragment {
 
     private static final String TAG = "OrderStatusFragment";
     private ArrayList<Order> orders;
+    private ImageView imgLoader;
+    private TextView txtLoader,txtWait;
     private OrderStatusAdapter adapter;
     private OrderStatus approvedOrderStatus, declinedOrderStatus, placedOrderStatus, pendingOrderStatus, holdOrderStatus, draftOrderStatus;
     private RecyclerView recyclerView;
@@ -98,6 +102,9 @@ public class OrderStatusFragment extends Fragment {
         recyclerView = rootView.findViewById(R.id.rvLoading);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+        imgLoader = rootView.findViewById(R.id.imgLoader);
+        txtLoader = rootView.findViewById(R.id.txtLoader);
+        txtWait = rootView.findViewById(R.id.txtWait);
 
         //writeStatusData();
         readStatusData();
@@ -152,6 +159,9 @@ public class OrderStatusFragment extends Fragment {
 
                     adapter = new OrderStatusAdapter(mContext, orders);
                     progressBar.setVisibility(View.GONE);
+                    imgLoader.setVisibility(View.INVISIBLE);
+                    txtLoader.setVisibility(View.INVISIBLE);
+                    txtWait.setVisibility(View.INVISIBLE);
                     recyclerView.setAdapter(adapter);
 
                 } else {
@@ -242,11 +252,6 @@ public class OrderStatusFragment extends Fragment {
             AlertDialog dialog = builder.create();
             dialog.show();
 
-        } else if (item.getItemId() == R.id.action_create) {
-            //HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new CreatePurchaseOrderFragment(), null).commit();
-            //HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new CreateOrderFragment(), null).commit();
-            Intent i = new Intent(this.getActivity(), RequisitionActivity.class);
-            startActivity(i);
         }
 
         return super.onOptionsItemSelected(item);
