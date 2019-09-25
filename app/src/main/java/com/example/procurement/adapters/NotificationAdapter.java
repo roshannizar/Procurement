@@ -19,12 +19,15 @@ import com.example.procurement.fragments.OrderViewFragment;
 import com.example.procurement.models.Notification;
 import com.example.procurement.utils.CommonConstants;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.firestore.CollectionReference;
 
 import java.util.List;
 
+import static com.example.procurement.PMS.siteManagerDBRef;
+
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.MyViewHolder> {
 
-    private DatabaseReference notificationDbRef;
+    private CollectionReference notificationDbRef;
     private Context context;
     private List<Notification> notificationsList;
 
@@ -58,8 +61,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         final Notification notification = notificationsList.get(position);
-        notificationDbRef = PMS.DatabaseRef
-                .child(CommonConstants.COLLECTION_NOTIFICATION).getRef();
+
+        notificationDbRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_NOTIFICATION);
+
 
         holder.notificationOrderID.setText("Order ID : " +  notification.getOrderID());
         holder.notificationStatus.setText("Status : " + notification.getOrderStatus());
@@ -87,7 +91,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         holder.cvNotification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                notificationDbRef.child(notification.getNotificationKey()).removeValue();
+                notificationDbRef.document(notification.getNotificationKey()).delete();
                 HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new OrderViewFragment(notification.getOrderKey()), null).commit();
             }
         });

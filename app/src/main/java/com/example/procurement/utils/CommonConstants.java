@@ -12,9 +12,6 @@ public class CommonConstants {
     public static final String COLLECTION_ENQUIRIES = "enquiries";
     public static final String COLLECTION_NOTIFICATION = "notifications";
 
-    public static final String USER_DB_URL = "employees/siteManagers/" + uid;
-
-    public static final String FIREBASE_ORDER_DB = "orders";
 
     public static final String ORDER_STATUS_DECLINED = "Declined";
     public static final String ORDER_STATUS_PENDING = "Pending";

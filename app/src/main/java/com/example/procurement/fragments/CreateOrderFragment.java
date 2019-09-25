@@ -5,13 +5,13 @@ import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,20 +20,25 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
-import com.example.procurement.PMS;
 import com.example.procurement.R;
 import com.example.procurement.activities.HomeActivity;
 import com.example.procurement.models.Note;
 import com.example.procurement.models.Order;
 import com.example.procurement.utils.CommonConstants;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.firestore.CollectionReference;
 
+import java.text.DateFormat;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.example.procurement.PMS.siteManagerDBRef;
 import static com.example.procurement.utils.CommonConstants.ORDER_ID;
 
 
@@ -48,7 +53,7 @@ public class CreateOrderFragment extends Fragment implements AdapterView.OnItemS
     private Button btnPlaceOrder, btnGenerate;
     private TextView txtStatus;
     private boolean switchPlacement;
-    private DatabaseReference orderCreateRef;
+    private CollectionReference orderDBRef;
     private String txtSpinnerStock;
 
     public CreateOrderFragment() {
@@ -72,7 +77,7 @@ public class CreateOrderFragment extends Fragment implements AdapterView.OnItemS
         txtOrderID = v.findViewById(R.id.txtOrderID);
         btnGenerate = v.findViewById(R.id.btnGenerate);
 
-        orderCreateRef = PMS.DatabaseRef.child(CommonConstants.FIREBASE_ORDER_DB).getRef();
+        orderDBRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_ORDER);
         orders = new ArrayList<>();
 
         generate();
@@ -109,20 +114,46 @@ public class CreateOrderFragment extends Fragment implements AdapterView.OnItemS
                         // Code refactoring will be done later
                         if (!validationOrders()) {
                             if (switchPlacement) {
-                                DatabaseReference reference = orderCreateRef.push();
-                                String key = reference.getKey();
-                                Order o = new Order(txtOrderID.getText().toString(), txtOrderName.getText().toString(), txtDescription.getText().toString(), CommonConstants.ORDER_STATUS_PENDING, dtpArrivalDate.getText().toString());
-                                o.setKey(key);
-                                orderCreateRef.child(key).setValue(o);
-                                Toast.makeText(getActivity(), "Order has been placed successfully", Toast.LENGTH_LONG).show();
+
+                                String key = orderDBRef.document().getId();
+                                Order order = new Order(txtOrderID.getText().toString(), txtOrderName.getText().toString(), txtDescription.getText().toString(), CommonConstants.ORDER_STATUS_PENDING, dtpArrivalDate.getText().toString());
+                                order.setKey(key);
+                                orderDBRef.document(key)
+                                        .set(order)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Toast.makeText(getActivity(), "Order has been placed successfully", Toast.LENGTH_LONG).show();
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Toast.makeText(getActivity(), "Ordering Failed", Toast.LENGTH_LONG).show();
+                                            }
+                                        });
+
                                 setGenerateID(txtOrderID.getText().toString());
                             } else {
-                                DatabaseReference reference = orderCreateRef.push();
-                                String key = reference.getKey();
-                                Order o = new Order(txtOrderID.getText().toString(), txtSpinnerStock, txtDescription.getText().toString(), CommonConstants.ORDER_STATUS_PENDING, dtpArrivalDate.getText().toString());
-                                o.setKey(key);
-                                orderCreateRef.child(key).setValue(o);
-                                Toast.makeText(getActivity(), "Order has been placed successfully", Toast.LENGTH_LONG).show();
+
+                                String key = orderDBRef.document().getId();
+                                Order order = new Order(txtOrderID.getText().toString(), txtSpinnerStock, txtDescription.getText().toString(), CommonConstants.ORDER_STATUS_PENDING, dtpArrivalDate.getText().toString());
+                                order.setKey(key);
+                                orderDBRef.document(key)
+                                        .set(order)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Toast.makeText(getActivity(), "Order has been placed successfully", Toast.LENGTH_LONG).show();
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Toast.makeText(getActivity(), "Ordering Failed", Toast.LENGTH_LONG).show();
+                                            }
+                                        });
+
                                 setGenerateID(txtOrderID.getText().toString());
                             }
                         } else {

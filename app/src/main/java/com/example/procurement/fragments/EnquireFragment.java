@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -23,20 +24,30 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.procurement.PMS;
 import com.example.procurement.R;
 import com.example.procurement.adapters.EnquireAdapter;
+import com.example.procurement.adapters.NoteAdapter;
 import com.example.procurement.models.Enquire;
+import com.example.procurement.models.Note;
 import com.example.procurement.utils.CommonConstants;
 import com.example.procurement.utils.RecyclerTouchListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static com.example.procurement.PMS.siteManagerDBRef;
 import static com.example.procurement.utils.CommonConstants.ENQUIRE_FRAGMENT_TAG;
 
 public class EnquireFragment extends Fragment {
@@ -46,7 +57,7 @@ public class EnquireFragment extends Fragment {
     private RecyclerView recyclerView;
     private Context mContext;
     private FloatingActionButton fab;
-    private DatabaseReference enquireDatabaseRef;
+    private CollectionReference enquireDBRef;
     private ProgressBar progressBar;
     private String orderKey;
 
@@ -63,11 +74,9 @@ public class EnquireFragment extends Fragment {
         recyclerView = rootView.findViewById(R.id.rvLoading);
         progressBar = rootView.findViewById(R.id.progressBar);
 
-        enquireDatabaseRef = PMS.DatabaseRef
-                .child(CommonConstants.FIREBASE_ORDER_DB)
-                .child(orderKey)
-                .child(CommonConstants.COLLECTION_ENQUIRIES)
-                .getRef();
+        enquireDBRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_ORDER)
+                .document(orderKey)
+                .collection(CommonConstants.COLLECTION_ENQUIRIES);
 
         enquireList = new ArrayList<>();
         mAdapter = new EnquireAdapter(mContext, enquireList);
@@ -124,10 +133,24 @@ public class EnquireFragment extends Fragment {
      * Inserting new note in db
      * and refreshing the list
      */
-    private void createNote(String enquiry) {
-        // inserting note in db and getting
-        DatabaseReference reference = enquireDatabaseRef.push();
-        reference.setValue(new Enquire(reference.getKey(), enquiry, DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date())));
+    private void createEnquiry(String enquiry) {
+        String key = enquireDBRef.document().getId();
+        Enquire enquire =new Enquire(key, enquiry, DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date()));
+
+        enquireDBRef.document(key)
+                .set(enquire)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(ENQUIRE_FRAGMENT_TAG, "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(ENQUIRE_FRAGMENT_TAG, "Error writing document", e);
+                    }
+                });
     }
 
 
@@ -137,35 +160,47 @@ public class EnquireFragment extends Fragment {
      */
     private void deleteNote(int position) {
         // deleting the note from db
-        String id = enquireList.get(position).getKey();
-        enquireDatabaseRef.child(id).removeValue();
+        String key = enquireList.get(position).getKey();
+
+        enquireDBRef.document(key)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(ENQUIRE_FRAGMENT_TAG, "DocumentSnapshot successfully deleted!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(ENQUIRE_FRAGMENT_TAG, "Error deleting document", e);
+                    }
+                });
     }
 
 
     private void readNotesData() {
-        enquireDatabaseRef.addValueEventListener(new ValueEventListener() {
+
+        enquireDBRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(ENQUIRE_FRAGMENT_TAG, "Listen failed.", e);
+                }
 
                 enquireList.clear();
 
-                for (DataSnapshot data : dataSnapshot.getChildren()) {
-                    Enquire enquire = data.getValue(Enquire.class);
+                for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                    Enquire enquire = document.toObject(Enquire.class);
                     enquireList.add(enquire);
                 }
+
 
                 if (enquireList != null) {
                     mAdapter = new EnquireAdapter(mContext, enquireList);
                     progressBar.setVisibility(View.GONE);
                     recyclerView.setAdapter(mAdapter);
                 }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // Failed to read value
-                Log.w(ENQUIRE_FRAGMENT_TAG, "Failed to read value.", error.toException());
             }
         });
     }
@@ -217,8 +252,8 @@ public class EnquireFragment extends Fragment {
                     alertDialog.dismiss();
                 }
 
-                // create new note
-                createNote(inputText.getText().toString());
+                // create new enquiry
+                createEnquiry(inputText.getText().toString());
 
             }
         });
