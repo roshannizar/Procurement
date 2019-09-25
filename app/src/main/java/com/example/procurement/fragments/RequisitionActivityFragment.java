@@ -2,11 +2,15 @@ package com.example.procurement.fragments;
 
 import androidx.fragment.app.Fragment;
 
+import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -14,12 +18,17 @@ import com.example.procurement.R;
 import com.example.procurement.activities.RequisitionActivity;
 import com.google.firestore.v1.Write;
 
+import java.util.Calendar;
+import java.util.Objects;
+
 public class RequisitionActivityFragment extends Fragment {
 
+
+    private DatePickerDialog picker;
     private Button btnQuotation;
     private EditText txtRequisitionNo,txtPurpose,txtComments;
     private TextView txtDeliveryDate,txtTotalAmount;
-    public static String REQUISITION_NO,PURPOSE,COMMENTS,DELIVERY_DATE,TOTAL_AMOUNT;
+    static String REQUISITION_NO,PURPOSE,COMMENTS,DELIVERY_DATE,TOTAL_AMOUNT;
 
     public RequisitionActivityFragment() {
     }
@@ -37,9 +46,35 @@ public class RequisitionActivityFragment extends Fragment {
         txtTotalAmount = v.findViewById(R.id.txtTotalAmount);
 
         GoToQuotation();
+        showDialog();
 
         return v;
     }
+
+    private void showDialog() {
+        txtDeliveryDate.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        final Calendar c = Calendar.getInstance();
+                        int day = c.get(Calendar.DAY_OF_MONTH);
+                        int month = c.get(Calendar.MONTH);
+                        int year = c.get(Calendar.YEAR);
+                        picker = new DatePickerDialog(Objects.requireNonNull(getContext()),
+                                new DatePickerDialog.OnDateSetListener() {
+                                    @SuppressLint("SetTextI18n")
+                                    @Override
+                                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                        txtDeliveryDate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                                    }
+                                }, year, month, day);
+                        picker.show();
+                    }
+                }
+        );
+    }
+
 
     private void GoToQuotation() {
         btnQuotation.setOnClickListener(
