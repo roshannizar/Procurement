@@ -1,6 +1,7 @@
 package com.example.procurement.fragments;
 
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -24,6 +25,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 
+import java.util.Calendar;
+
 import static androidx.constraintlayout.widget.Constraints.TAG;
 import static com.example.procurement.activities.SignInActivity.siteManagerDBRef;
 
@@ -33,6 +36,7 @@ public class QuotationFragment extends Fragment {
     private EditText txtReason;
     private TextView txtProposalDate,txtProposedBy;
     private CollectionReference requisitionRef;
+    private final Calendar c = Calendar.getInstance();
 
     public QuotationFragment() {
 
@@ -42,7 +46,6 @@ public class QuotationFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_quotation, container, false);
 
         btnPlacedRequisition = v.findViewById(R.id.btnPlaceRequisition2);
@@ -51,10 +54,16 @@ public class QuotationFragment extends Fragment {
         txtProposalDate = v.findViewById(R.id.txtProposalDate);
         txtProposedBy = v.findViewById(R.id.txtProposedBy);
         requisitionRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_REQUISITION);
+
         PlaceOrder();
         GoToRequisition();
-
+        setProposalDate();
         return v;
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void setProposalDate() {
+        txtProposalDate.setText(c.get(Calendar.DAY_OF_MONTH)+"/"+c.get(Calendar.MONTH)+"/"+c.get(Calendar.YEAR));
     }
 
     private void WriteStatus() {
