@@ -8,6 +8,13 @@ public class Requisition {
     private String comment;
     private String budget;
     private String purpose;
+    private String deliveryDate;
+    private String requisitionStatus;
+    private String totalAmount;
+    private String reason;
+    private String proposalDate;
+    private String proposedBy;
+    private String key;
 
     public Requisition() {
         requisitionNo = null;
@@ -18,13 +25,16 @@ public class Requisition {
         purpose = null;
     }
 
-    public Requisition(String requisitionNo, String itemNo, String description, String comment, String budget, String purpose) {
+    public Requisition(String requisitionNo, String comment, String purpose, String deliveryDate, String totalAmount, String requisitionStatus, String reason, String proposalDate, String proposedBy) {
         this. requisitionNo = requisitionNo;
-        this.itemNo = itemNo;
-        this.description = description;
         this.comment = comment;
-        this.budget = budget;
         this.purpose = purpose;
+        this.deliveryDate = deliveryDate;
+        this.totalAmount = totalAmount;
+        this.requisitionStatus = requisitionStatus;
+        this.reason = reason;
+        this.proposalDate = proposalDate;
+        this.proposedBy = proposedBy;
     }
 
     public String getBudget() {
@@ -51,6 +61,34 @@ public class Requisition {
         return requisitionNo;
     }
 
+    public String getReason() {
+        return reason;
+    }
+
+    public String getDeliveryDate() {
+        return deliveryDate;
+    }
+
+    public String getTotalAmount() {
+        return totalAmount;
+    }
+
+    public String getRequisitonStatus() {
+        return requisitionStatus;
+    }
+
+    public String getProposalDate() {
+        return proposalDate;
+    }
+
+    public String getProposedBy() {
+        return proposedBy;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
     public void setBudget(String budget) {
         this.budget = budget;
     }
@@ -73,5 +111,33 @@ public class Requisition {
 
     public void setRequisitionNo(String requisitionNo) {
         this.requisitionNo = requisitionNo;
+    }
+
+    public void setRequisitionStatus(String requisitionStatus) {
+        this.requisitionStatus = requisitionStatus;
+    }
+
+    public void setDeliveryDate(String deliveryDate) {
+        this.deliveryDate = deliveryDate;
+    }
+
+    public void setTotalAmount(String totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    public void setProposalDate(String proposalDate) {
+        this.proposalDate = proposalDate;
+    }
+
+    public void setProposedBy(String proposedBy) {
+        this.proposedBy = proposedBy;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 }

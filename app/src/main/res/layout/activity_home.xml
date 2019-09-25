@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
+    android:background="@drawable/factory"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.HomeActivity">
@@ -15,7 +16,7 @@
         android:elevation="10dp"
         app:elevation="10dp"
         app:itemHorizontalTranslationEnabled="true"
-        app:itemIconSize="32dp"
+        app:itemIconSize="24dp"
         app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"

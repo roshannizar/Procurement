@@ -7,6 +7,7 @@ public class CommonConstants {
     public static final String COLLECTION_NOTES = "notes";
     public static final String COLLECTION_ENQUIRIES = "enquiries";
     public static final String COLLECTION_NOTIFICATION = "notifications";
+    public static final String COLLECTION_REQUISITION = "requisitions";
 
 
     public static final String ORDER_STATUS_DECLINED = "Declined";

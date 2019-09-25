@@ -17,6 +17,7 @@ import com.example.procurement.R;
 import com.example.procurement.fragments.DashboardFragment;
 import com.example.procurement.fragments.OrderStatusFragment;
 import com.example.procurement.fragments.ProfileFragment;
+import com.example.procurement.fragments.RequisitionViewFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class HomeActivity extends AppCompatActivity {
@@ -32,11 +33,14 @@ public class HomeActivity extends AppCompatActivity {
                 case R.id.navigation_home:
                     HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new DashboardFragment(), null).commit();
                     return true;
-                case R.id.navigation_dashboard:
+                case R.id.navigation_order:
                     HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new OrderStatusFragment(), null).commit();
                     return true;
                 case R.id.navigation_profile:
                     HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new ProfileFragment(), null).commit();
+                    return true;
+                case R.id.navigation_requisition:
+                    HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new RequisitionViewFragment(),null).commit();
                     return true;
             }
             return false;
