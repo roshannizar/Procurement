@@ -23,7 +23,7 @@ import com.google.firebase.firestore.CollectionReference;
 
 import java.util.List;
 
-import static com.example.procurement.PMS.siteManagerDBRef;
+import static com.example.procurement.activities.SignInActivity.siteManagerDBRef;
 
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.MyViewHolder> {
 

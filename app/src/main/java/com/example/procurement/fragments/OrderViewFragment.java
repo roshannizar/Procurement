@@ -27,8 +27,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import static com.example.procurement.PMS.siteManagerDBRef;
-
+import static com.example.procurement.activities.SignInActivity.siteManagerDBRef;
 
 public class OrderViewFragment extends Fragment {
     private static final String TAG = "OrderViewFragment";

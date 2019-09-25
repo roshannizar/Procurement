@@ -41,7 +41,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 
-import static com.example.procurement.PMS.siteManagerDBRef;
+import static com.example.procurement.activities.SignInActivity.siteManagerDBRef;
 
 
 public class DashboardFragment extends Fragment {

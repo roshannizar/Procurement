@@ -47,7 +47,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static com.example.procurement.PMS.siteManagerDBRef;
+import static com.example.procurement.activities.SignInActivity.siteManagerDBRef;
 import static com.example.procurement.utils.CommonConstants.ENQUIRE_FRAGMENT_TAG;
 
 public class EnquireFragment extends Fragment {
