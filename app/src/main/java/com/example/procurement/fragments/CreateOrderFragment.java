@@ -38,7 +38,7 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.example.procurement.PMS.siteManagerDBRef;
+import static com.example.procurement.activities.SignInActivity.siteManagerDBRef;
 import static com.example.procurement.utils.CommonConstants.ORDER_ID;
 
 

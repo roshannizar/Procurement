@@ -1,10 +1,6 @@
 package com.example.procurement.utils;
 
-import static com.example.procurement.activities.SignInActivity.uid;
-
 public class CommonConstants {
-
-    public static final String DOCUMENT_EID = uid;
 
     public static final String COLLECTION_SITE_MANGER = "siteManagers";
     public static final String COLLECTION_ORDER = "orders";

@@ -19,6 +19,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import static com.example.procurement.utils.CommonConstants.COLLECTION_SITE_MANGER;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -28,6 +32,7 @@ public class SignInActivity extends AppCompatActivity {
     CheckBox cbShowPassword;
     EditText txtEmail, txtPassword;
     private FirebaseAuth mAuth;
+    public static DocumentReference siteManagerDBRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,7 +125,7 @@ public class SignInActivity extends AppCompatActivity {
             email = user.getEmail();
             uid = user.getUid();
             boolean emailVerified = user.isEmailVerified();
-
+            siteManagerDBRef = FirebaseFirestore.getInstance().collection(COLLECTION_SITE_MANGER).document(uid);
         }
     }
 

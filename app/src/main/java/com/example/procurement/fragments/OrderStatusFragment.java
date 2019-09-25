@@ -44,7 +44,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-import static com.example.procurement.PMS.siteManagerDBRef;
+import static com.example.procurement.activities.SignInActivity.siteManagerDBRef;
 
 public class OrderStatusFragment extends Fragment {
 
