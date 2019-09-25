@@ -22,7 +22,6 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.procurement.PMS;
 import com.example.procurement.R;
 import com.example.procurement.activities.HomeActivity;
 import com.example.procurement.adapters.OrderStatusAdapter;
@@ -34,12 +33,17 @@ import com.example.procurement.status.OrderStatus;
 import com.example.procurement.status.PendingOrderStatus;
 import com.example.procurement.status.PlacedOrderStatus;
 import com.example.procurement.utils.CommonConstants;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+
+import static com.example.procurement.PMS.siteManagerDBRef;
 
 public class OrderStatusFragment extends Fragment {
 
@@ -49,7 +53,7 @@ public class OrderStatusFragment extends Fragment {
     private OrderStatus approvedOrderStatus, declinedOrderStatus, placedOrderStatus, pendingOrderStatus, holdOrderStatus;
     private RecyclerView recyclerView;
     private int checkedItem = 0;
-    private DatabaseReference orderDatabaseRef;
+    private CollectionReference orderDBRef;
     private ProgressBar progressBar;
     private Context mContext;
     public static int pendingStatus = 0, approvedStatus = 0, holdStatus = 0, placedStatus = 0, declinedStatus = 0;
@@ -76,8 +80,7 @@ public class OrderStatusFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_order_status, container, false);
         mContext = rootView.getContext();
 
-        orderDatabaseRef = PMS.DatabaseRef.child(CommonConstants.FIREBASE_ORDER_DB);
-
+        orderDBRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_ORDER);
         orders = new ArrayList<>();
 
         approvedOrderStatus = new ApprovedOrderStatus();
@@ -106,43 +109,49 @@ public class OrderStatusFragment extends Fragment {
     }
 
     private void writeStatusData() {
-        DatabaseReference reference = orderDatabaseRef.push();
-        String key = reference.getKey();
 
-        if (key != null) {
-            Order order = new Order("PO-01", "Praveen", "", CommonConstants.ORDER_STATUS_PENDING, "1-06-2019");
-            order.setKey(key);
-            orderDatabaseRef.child(key).setValue(order);
-        }
+        String key = orderDBRef.document().getId();
+        Order order = new Order("PO-02", "Praveen", "", CommonConstants.ORDER_STATUS_PENDING, "1-06-2019");
+        order.setKey(key);
+        orderDBRef.document(key)
+                .set(order)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing document", e);
+                    }
+                });
     }
 
     private void readStatusData() {
-        orderDatabaseRef.addValueEventListener(new ValueEventListener() {
+
+        orderDBRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    orders.clear();
 
-                orders.clear();
-
-                for (DataSnapshot data : dataSnapshot.getChildren()) {
-                    Order order = data.getValue(Order.class);
-
-                    if (order != null) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Order order = document.toObject(Order.class);
                         countStatus(order.getStatus());
                         orders.add(order);
                         CommonConstants.ORDER_ID = order.getOrderID();
                     }
+
+
+                    adapter = new OrderStatusAdapter(mContext, orders);
+                    progressBar.setVisibility(View.GONE);
+                    recyclerView.setAdapter(adapter);
+
+                } else {
+                    Log.w(TAG, "Error getting documents.", task.getException());
                 }
-
-                adapter = new OrderStatusAdapter(mContext, orders);
-                progressBar.setVisibility(View.GONE);
-                recyclerView.setAdapter(adapter);
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
             }
         });
     }

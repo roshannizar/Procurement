@@ -61,7 +61,7 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
     // bind the data to the TextView in each row
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull OrdersViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final OrdersViewHolder holder, int position) {
         // check if any data is available
         if (mOrders != null) {
             final Order order = mOrders.get(position);
@@ -112,22 +112,40 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
             holder.orderIcon.setColorFilter(statusColor, PorterDuff.Mode.MULTIPLY);
 
             if (orderStatus.equals(CommonConstants.ORDER_STATUS_PLACED)) {
-                holder.noteOrSend.setText("NOTE");
-                holder.noteOrSend.setVisibility(View.VISIBLE);
-                holder.noteOrSend.setTextColor(Color.parseColor("#014A70"));
-                holder.noteOrSend.setOnClickListener(new View.OnClickListener() {
+                holder.note.setVisibility(View.VISIBLE);
+                holder.note.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new NoteFragment(orderKey), null).commit();
                     }
                 });
+
+                holder.enquireOrSend.setText("ENQUIRE");
+                holder.enquireOrSend.setVisibility(View.VISIBLE);
+                holder.enquireOrSend.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new EnquireFragment(orderKey), null).commit();
+                    }
+                });
+            }
+
+            if (orderStatus.equals(CommonConstants.ORDER_STATUS_PENDING)) {
+                holder.enquireOrSend.setText("SEND");
+                holder.enquireOrSend.setVisibility(View.VISIBLE);
+                holder.enquireOrSend.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        holder.enquireOrSend.setText("RE-SEND");
+                        Toast.makeText(mContext,"Mail Sent !!!",Toast.LENGTH_LONG).show();
+                    }
+                });
             }
 
             if (orderStatus.equals(CommonConstants.ORDER_STATUS_APPROVED)) {
-                holder.noteOrSend.setText("SEND");
-                holder.noteOrSend.setVisibility(View.VISIBLE);
-                holder.noteOrSend.setTextColor(Color.parseColor("#1F4037"));
-                holder.noteOrSend.setOnClickListener(new View.OnClickListener() {
+                holder.enquireOrSend.setText("RE-SEND");
+                holder.enquireOrSend.setVisibility(View.VISIBLE);
+                holder.enquireOrSend.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         Toast.makeText(mContext,"Mail Sent !!!",Toast.LENGTH_LONG).show();
@@ -135,12 +153,6 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
                 });
             }
 
-            holder.enquire.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new EnquireFragment(orderKey), null).commit();
-                }
-            });
 
             holder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -166,7 +178,7 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
     // Stores and recycles views as they are scrolled off screen
     class OrdersViewHolder extends RecyclerView.ViewHolder {
         // Hold views
-        final TextView name, status, enquire, noteOrSend;
+        final TextView name, status, enquireOrSend, note;
         final ImageView orderIcon;
         final ImageView statusIcon;
         final TextView description;
@@ -179,11 +191,12 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
             orderIcon = view.findViewById(id.orderIcon);
             statusIcon = view.findViewById(id.orderStatusIcon);
             description = view.findViewById(id.orderDescription);
-            noteOrSend = view.findViewById(id.noteOrSend);
-            enquire = view.findViewById(id.enquireCRUD);
+            note = view.findViewById(id.note);
+            enquireOrSend = view.findViewById(id.enquireOrSend);
             cardView = view.findViewById(id.cardOrder);
 
-            noteOrSend.setVisibility(View.INVISIBLE);
+            note.setVisibility(View.INVISIBLE);
+            enquireOrSend.setVisibility(View.INVISIBLE);
         }
 
     }

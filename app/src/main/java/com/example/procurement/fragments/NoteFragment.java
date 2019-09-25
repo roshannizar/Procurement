@@ -15,37 +15,49 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.procurement.PMS;
 import com.example.procurement.R;
 import com.example.procurement.adapters.NoteAdapter;
+import com.example.procurement.adapters.OrderStatusAdapter;
 import com.example.procurement.models.Note;
+import com.example.procurement.models.Order;
 import com.example.procurement.utils.CommonConstants;
 import com.example.procurement.utils.RecyclerTouchListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static com.example.procurement.PMS.siteManagerDBRef;
 import static com.example.procurement.utils.CommonConstants.NOTE_FRAGMENT_TAG;
 
 public class NoteFragment extends Fragment {
+    private static final String TAG = "NoteFragment";
+
     private NoteAdapter mAdapter;
     private List<Note> notesList;
     private RecyclerView recyclerView;
     private Context mContext;
-    private DatabaseReference notesDatabaseRef;
+    private CollectionReference notesDBRef;
     private ProgressBar progressBar;
     private String orderKey;
 
@@ -63,12 +75,9 @@ public class NoteFragment extends Fragment {
         recyclerView = rootView.findViewById(R.id.rvLoading);
         progressBar = rootView.findViewById(R.id.progressBar);
 
-
-        notesDatabaseRef = PMS.DatabaseRef
-                .child(CommonConstants.FIREBASE_ORDER_DB)
-                .child(orderKey)
-                .child(CommonConstants.FIREBASE_NOTES_DB)
-                .getRef();
+        notesDBRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_ORDER)
+                .document(orderKey)
+                .collection(CommonConstants.COLLECTION_NOTES);
 
         notesList = new ArrayList<>();
         mAdapter = new NoteAdapter(mContext, notesList);
@@ -128,9 +137,23 @@ public class NoteFragment extends Fragment {
      * and refreshing the list
      */
     private void createNote(String note) {
-        // inserting note in db and getting
-        DatabaseReference reference = notesDatabaseRef.push();
-        reference.setValue(new Note(reference.getKey(), note, DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date())));
+        String key = notesDBRef.document().getId();
+        Note noteItem = new Note(key, note, DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date()));
+
+        notesDBRef.document(key)
+                .set(noteItem)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing document", e);
+                    }
+                });
     }
 
     /**
@@ -138,9 +161,23 @@ public class NoteFragment extends Fragment {
      * item in the list by its position
      */
     private void updateNote(String noteText, int position) {
-        // updating note text
-        String id = notesList.get(position).getKey();
-        notesDatabaseRef.child(id).setValue(new Note(id, noteText, DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date())));
+        String key = notesList.get(position).getKey();
+        Note noteItem = new Note(key, noteText, DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date()));
+
+        notesDBRef.document(key)
+                .set(noteItem)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully updated!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing document", e);
+                    }
+                });
     }
 
     /**
@@ -149,35 +186,46 @@ public class NoteFragment extends Fragment {
      */
     private void deleteNote(int position) {
         // deleting the note from db
-        String id = notesList.get(position).getKey();
-        notesDatabaseRef.child(id).removeValue();
+        String key = notesList.get(position).getKey();
+
+        notesDBRef.document(key)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error deleting document", e);
+                    }
+                });
     }
 
 
     private void readNotesData() {
-        notesDatabaseRef.addValueEventListener(new ValueEventListener() {
+        notesDBRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e);
+                }
 
                 notesList.clear();
 
-                for (DataSnapshot data : dataSnapshot.getChildren()) {
-                    Note note = data.getValue(Note.class);
+                for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                    Note note = document.toObject(Note.class);
                     notesList.add(note);
                 }
+
 
                 if (notesList != null) {
                     mAdapter = new NoteAdapter(mContext, notesList);
                     progressBar.setVisibility(View.GONE);
                     recyclerView.setAdapter(mAdapter);
                 }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // Failed to read value
-                Log.w(NOTE_FRAGMENT_TAG, "Failed to read value.", error.toException());
             }
         });
     }
