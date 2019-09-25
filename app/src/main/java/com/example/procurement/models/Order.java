@@ -10,8 +10,6 @@ public class Order {
     private String description;
     private String key;
 
-    private HashMap<String, Note> notes = new HashMap<>();
-
     public Order() {
     }
 
@@ -61,14 +59,6 @@ public class Order {
 
     public void setDate(String date) {
         this.date = date;
-    }
-
-    public HashMap<String, Note> getNotes() {
-        return notes;
-    }
-
-    public void setNotes(HashMap<String, Note> notes) {
-        this.notes = notes;
     }
 
     public String getKey() {

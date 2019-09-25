@@ -4,10 +4,15 @@ import static com.example.procurement.activities.SignInActivity.uid;
 
 public class CommonConstants {
 
+    public static final String DOCUMENT_EID = uid;
+
+    public static final String COLLECTION_SITE_MANGER = "siteManagers";
+    public static final String COLLECTION_ORDER_DB = "orders";
+    public static final String COLLECTION_NOTES_DB = "notes";
+
     public static final String USER_DB_URL = "employees/siteManagers/" + uid;
 
     public static final String FIREBASE_ORDER_DB = "orders";
-    public static final String FIREBASE_NOTES_DB = "notes";
     public static final String FIREBASE_ENQUIRIES_DB = "enquiries";
     public static final String FIREBASE_NOTIFICATION_DB = "notifications";
 
