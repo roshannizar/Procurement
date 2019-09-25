@@ -194,7 +194,7 @@ public class OrderStatusFragment extends Fragment {
 
             // add a radio button list
             String[] status = {
-                    getString(R.string.default_status),
+                    getString(R.string.draft),
                     getString(R.string.approved),
                     getString(R.string.declined),
                     getString(R.string.hold),

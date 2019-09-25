@@ -95,6 +95,11 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
                     statusBackground = drawable.badge_hold;
                     statusIcon = drawable.order_ic_status_pending;
                     break;
+                case CommonConstants.ORDER_STATUS_DRAFT:
+                    statusColor = color.orderStatusDraft;
+                    statusBackground = drawable.badge_draft;
+                    statusIcon = drawable.order_ic_status_pending;
+                    break;
                 default:
                     statusColor = color.orderStatusDenied;
                     statusBackground = drawable.badge_denied;

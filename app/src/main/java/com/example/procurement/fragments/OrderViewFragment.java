@@ -28,7 +28,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import static com.example.procurement.PMS.siteManagerDBRef;
-import static com.example.procurement.utils.CommonConstants.ORDER_VIEW_FRAGMENT_TAG;
 
 
 public class OrderViewFragment extends Fragment {
