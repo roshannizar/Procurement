@@ -20,7 +20,7 @@
     <string name="pending">Pending</string>
     <string name="placed">Placed</string>
     <string name="declined">Declined</string>
-    <string name="default_status">Default</string>
+    <string name="draft">Draft</string>
     <string name="filter_status">Filter Status</string>
     <string name="hold">Hold</string>
 

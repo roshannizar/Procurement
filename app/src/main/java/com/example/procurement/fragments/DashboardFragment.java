@@ -13,13 +13,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.procurement.PMS;
 import com.example.procurement.R;
+import com.example.procurement.adapters.NoteAdapter;
 import com.example.procurement.adapters.NotificationAdapter;
 import com.example.procurement.models.Notification;
 import com.example.procurement.utils.CommonConstants;
@@ -29,11 +30,18 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+
+import static com.example.procurement.PMS.siteManagerDBRef;
 
 
 public class DashboardFragment extends Fragment {
@@ -42,7 +50,7 @@ public class DashboardFragment extends Fragment {
     private ArrayList<Notification> notifications;
     private NotificationAdapter adapter;
     private RecyclerView recyclerView;
-    private DatabaseReference notificationDbRef;
+    private CollectionReference notificationDbRef;
     private Context mContext;
     private ProgressBar progressBar;
     private TextView txtUserName;
@@ -77,7 +85,7 @@ public class DashboardFragment extends Fragment {
         txtTotalOrder.setText((OrderStatusFragment.approvedStatus + OrderStatusFragment.holdStatus + OrderStatusFragment.pendingStatus + OrderStatusFragment.declinedStatus + OrderStatusFragment.placedStatus) + " Order(s) Totally");
         setDate();
 
-        notificationDbRef = PMS.DatabaseRef.child(CommonConstants.COLLECTION_NOTIFICATION);
+        notificationDbRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_NOTIFICATION);
 
         notifications = new ArrayList<>();
 
@@ -85,36 +93,37 @@ public class DashboardFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         readData();
-      // writeData();
+        // writeData();
         return view;
     }
 
-    private void writeData() {
-        DatabaseReference reference = notificationDbRef.push();
-        String key = reference.getKey();
-
-        if (key != null) {
-            Notification notification = new Notification("PO-01","-LovkdDnlrX7ikscLBUl" ,CommonConstants.ORDER_STATUS_PLACED);
-            notification.setNotificationKey(key);
-            notificationDbRef.child(key).setValue(notification);
-        }
-    }
+//    private void writeData() {
+//        DatabaseReference reference = notificationDbRef.push();
+//        String key = reference.getKey();
+//
+//        if (key != null) {
+//            Notification notification = new Notification("PO-01", "-LovkdDnlrX7ikscLBUl", CommonConstants.ORDER_STATUS_PLACED);
+//            notification.setNotificationKey(key);
+//            notificationDbRef.child(key).setValue(notification);
+//        }
+//    }
 
     private void readData() {
 
-        notificationDbRef.addValueEventListener(new ValueEventListener() {
+        notificationDbRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e);
+                }
 
                 notifications.clear();
 
-                for (DataSnapshot data : dataSnapshot.getChildren()) {
-                    Notification notification = data.getValue(Notification.class);
-
-                    if (notification != null) {
-                        notifications.add(notification);
-                    }
+                for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                    Notification notification = document.toObject(Notification.class);
+                    notifications.add(notification);
                 }
+
 
                 if (notifications != null) {
                     Collections.reverse(notifications);
@@ -122,12 +131,6 @@ public class DashboardFragment extends Fragment {
                     progressBar.setVisibility(View.GONE);
                     recyclerView.setAdapter(adapter);
                 }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
             }
         });
     }

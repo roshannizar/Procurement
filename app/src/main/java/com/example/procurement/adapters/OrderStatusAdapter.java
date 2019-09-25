@@ -95,6 +95,11 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
                     statusBackground = drawable.badge_hold;
                     statusIcon = drawable.order_ic_status_pending;
                     break;
+                case CommonConstants.ORDER_STATUS_DRAFT:
+                    statusColor = color.orderStatusDraft;
+                    statusBackground = drawable.badge_draft;
+                    statusIcon = drawable.order_ic_status_pending;
+                    break;
                 default:
                     statusColor = color.orderStatusDenied;
                     statusBackground = drawable.badge_denied;
@@ -136,22 +141,21 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
                 holder.enquireOrSend.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        holder.enquireOrSend.setText("RE-SEND");
                         Toast.makeText(mContext,"Mail Sent !!!",Toast.LENGTH_LONG).show();
                     }
                 });
             }
 
-            if (orderStatus.equals(CommonConstants.ORDER_STATUS_APPROVED)) {
-                holder.enquireOrSend.setText("RE-SEND");
-                holder.enquireOrSend.setVisibility(View.VISIBLE);
-                holder.enquireOrSend.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Toast.makeText(mContext,"Mail Sent !!!",Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
+//            if (orderStatus.equals(CommonConstants.ORDER_STATUS_APPROVED)) {
+//                holder.enquireOrSend.setText("RE-SEND");
+//                holder.enquireOrSend.setVisibility(View.VISIBLE);
+//                holder.enquireOrSend.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        Toast.makeText(mContext,"Mail Sent !!!",Toast.LENGTH_LONG).show();
+//                    }
+//                });
+//            }
 
 
             holder.cardView.setOnClickListener(new View.OnClickListener() {

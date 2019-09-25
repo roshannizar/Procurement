@@ -12,26 +12,32 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.example.procurement.PMS;
 import com.example.procurement.R;
 import com.example.procurement.activities.HomeActivity;
 import com.example.procurement.models.Order;
 import com.example.procurement.utils.CommonConstants;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
-import static com.example.procurement.utils.CommonConstants.ORDER_VIEW_FRAGMENT_TAG;
+import static com.example.procurement.PMS.siteManagerDBRef;
 
 
 public class OrderViewFragment extends Fragment {
+    private static final String TAG = "OrderViewFragment";
 
     private String orderKey;
     private Order order;
-    private DatabaseReference orderDatabaseRef;
+    private DocumentReference orderDBRef;
     private ImageView btnBack;
-    private TextView txtOrderNameTitle,txtOrderIdView,txtOrderNameView,dtpDateView,txtDescriptionView,txtStatusView;
+    private TextView txtOrderNameTitle, txtOrderIdView, txtOrderNameView, dtpDateView, txtDescriptionView, txtStatusView;
 
     public OrderViewFragment(String orderKey) {
         this.orderKey = orderKey;
@@ -44,7 +50,8 @@ public class OrderViewFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_order_view, container, false);
 
-        orderDatabaseRef = PMS.DatabaseRef.child(CommonConstants.FIREBASE_ORDER_DB).child(orderKey).getRef();
+        orderDBRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_ORDER)
+                .document(orderKey);
         btnBack = view.findViewById(R.id.btnBack);
         txtOrderNameTitle = view.findViewById(R.id.txtOrderNameTitle);
         txtOrderIdView = view.findViewById(R.id.txtOrderIdView);
@@ -63,32 +70,24 @@ public class OrderViewFragment extends Fragment {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        HomeActivity.fm.beginTransaction().replace(R.id.fragment_container,new OrderStatusFragment(),null).commit();
+                        HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new OrderStatusFragment(), null).commit();
                     }
                 }
         );
     }
 
     private void readStatusData() {
-
-        orderDatabaseRef.addValueEventListener(new ValueEventListener() {
+        orderDBRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
                 order = new Order();
-                order = dataSnapshot.getValue(Order.class);
-                txtOrderNameTitle.setText(order.getOrderID() + " - "+order.getName());
+                order = documentSnapshot.toObject(Order.class);
+                txtOrderNameTitle.setText(order.getOrderID() + " - " + order.getName());
                 txtOrderIdView.setText(order.getOrderID());
                 txtOrderNameView.setText(order.getName());
                 txtDescriptionView.setText(order.getDescription());
                 dtpDateView.setText(order.getDate());
-                txtStatusView.setText(order.getStatus());
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // Failed to read value
-                Log.w(ORDER_VIEW_FRAGMENT_TAG, "Failed to read value.", error.toException());
-            }
+                txtStatusView.setText(order.getStatus());            }
         });
     }
 }
