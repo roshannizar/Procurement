@@ -136,22 +136,21 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
                 holder.enquireOrSend.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        holder.enquireOrSend.setText("RE-SEND");
                         Toast.makeText(mContext,"Mail Sent !!!",Toast.LENGTH_LONG).show();
                     }
                 });
             }
 
-            if (orderStatus.equals(CommonConstants.ORDER_STATUS_APPROVED)) {
-                holder.enquireOrSend.setText("RE-SEND");
-                holder.enquireOrSend.setVisibility(View.VISIBLE);
-                holder.enquireOrSend.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Toast.makeText(mContext,"Mail Sent !!!",Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
+//            if (orderStatus.equals(CommonConstants.ORDER_STATUS_APPROVED)) {
+//                holder.enquireOrSend.setText("RE-SEND");
+//                holder.enquireOrSend.setVisibility(View.VISIBLE);
+//                holder.enquireOrSend.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        Toast.makeText(mContext,"Mail Sent !!!",Toast.LENGTH_LONG).show();
+//                    }
+//                });
+//            }
 
 
             holder.cardView.setOnClickListener(new View.OnClickListener() {

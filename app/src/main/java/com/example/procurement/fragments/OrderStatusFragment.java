@@ -50,13 +50,13 @@ public class OrderStatusFragment extends Fragment {
     private static final String TAG = "OrderStatusFragment";
     private ArrayList<Order> orders;
     private OrderStatusAdapter adapter;
-    private OrderStatus approvedOrderStatus, declinedOrderStatus, placedOrderStatus, pendingOrderStatus, holdOrderStatus;
+    private OrderStatus approvedOrderStatus, declinedOrderStatus, placedOrderStatus, pendingOrderStatus, holdOrderStatus, draftOrderStatus;
     private RecyclerView recyclerView;
     private int checkedItem = 0;
     private CollectionReference orderDBRef;
     private ProgressBar progressBar;
     private Context mContext;
-    public static int pendingStatus = 0, approvedStatus = 0, holdStatus = 0, placedStatus = 0, declinedStatus = 0;
+    public static int pendingStatus = 0, approvedStatus = 0, holdStatus = 0, placedStatus = 0, declinedStatus = 0, draftStatus = 0;
 
     public OrderStatusFragment() {
         // Required empty public constructor
@@ -71,6 +71,7 @@ public class OrderStatusFragment extends Fragment {
         holdStatus = 0;
         placedStatus = 0;
         declinedStatus = 0;
+        draftStatus = 0;
     }
 
     @Override
@@ -134,7 +135,7 @@ public class OrderStatusFragment extends Fragment {
         orderDBRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
+                if (task.isSuccessful() && task.getResult() != null) {
                     orders.clear();
 
                     for (QueryDocumentSnapshot document : task.getResult()) {
@@ -243,16 +244,25 @@ public class OrderStatusFragment extends Fragment {
 
     private void countStatus(String status) {
 
-        if (status.equals(CommonConstants.ORDER_STATUS_PENDING)) {
-            pendingStatus++;
-        } else if (status.equals(CommonConstants.ORDER_STATUS_HOLD)) {
-            holdStatus++;
-        } else if (status.equals(CommonConstants.ORDER_STATUS_APPROVED)) {
-            approvedStatus++;
-        } else if (status.equals(CommonConstants.ORDER_STATUS_PLACED)) {
-            placedStatus++;
-        } else if (status.equals(CommonConstants.ORDER_STATUS_DECLINED)) {
-            declinedStatus++;
+        switch (status) {
+            case CommonConstants.ORDER_STATUS_PENDING:
+                pendingStatus++;
+                break;
+            case CommonConstants.ORDER_STATUS_HOLD:
+                holdStatus++;
+                break;
+            case CommonConstants.ORDER_STATUS_APPROVED:
+                approvedStatus++;
+                break;
+            case CommonConstants.ORDER_STATUS_PLACED:
+                placedStatus++;
+                break;
+            case CommonConstants.ORDER_STATUS_DECLINED:
+                declinedStatus++;
+                break;
+            case CommonConstants.ORDER_STATUS_DRAFT:
+                draftStatus++;
+                break;
         }
     }
 
