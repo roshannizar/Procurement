@@ -47,5 +47,7 @@
         <item>Wires</item>
         <item>Cement Mixer</item>
     </string-array>
+    <string name="title_activity_requisition">Requisition Form</string>
+    <string name="action_settings">Settings</string>
 
 </resources>
