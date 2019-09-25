@@ -36,11 +36,11 @@ import com.example.procurement.status.OrderStatus;
 import com.example.procurement.status.PendingOrderStatus;
 import com.example.procurement.status.PlacedOrderStatus;
 import com.example.procurement.utils.CommonConstants;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -136,26 +136,26 @@ public class OrderStatusFragment extends Fragment {
 
     private void readStatusData() {
 
-        orderDBRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        orderDBRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful() && task.getResult() != null) {
-                    orders.clear();
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e);
+                }
 
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        Order order = document.toObject(Order.class);
-                        countStatus(order.getStatus());
-                        orders.add(order);
-                        CommonConstants.ORDER_ID = order.getOrderID();
-                    }
+                orders.clear();
 
+                for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                    Order order = document.toObject(Order.class);
+                    countStatus(order.getStatus());
+                    orders.add(order);
+                    CommonConstants.ORDER_ID = order.getOrderID();
+                }
 
+                if (orders != null) {
                     adapter = new OrderStatusAdapter(mContext, orders);
                     progressBar.setVisibility(View.GONE);
                     recyclerView.setAdapter(adapter);
-
-                } else {
-                    Log.w(TAG, "Error getting documents.", task.getException());
                 }
             }
         });
@@ -169,6 +169,7 @@ public class OrderStatusFragment extends Fragment {
 
         final MenuItem searchItem = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setQueryHint("Search by Order Name");
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
