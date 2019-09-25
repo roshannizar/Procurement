@@ -123,7 +123,7 @@ public class CreateOrderFragment extends Fragment implements AdapterView.OnItemS
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
-                                                Toast.makeText(getActivity(), "Order has been placed successfully", Toast.LENGTH_LONG).show();
+                                                Toast.makeText(getActivity(), txtOrderName.getText().toString() + "Order has been placed successfully", Toast.LENGTH_LONG).show();
                                             }
                                         })
                                         .addOnFailureListener(new OnFailureListener() {

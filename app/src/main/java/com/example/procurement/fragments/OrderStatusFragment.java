@@ -241,7 +241,7 @@ public class OrderStatusFragment extends Fragment {
             dialog.show();
 
         } else if (item.getItemId() == R.id.action_create) {
-            HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new CreateOrderFragment(), null).commit();
+            HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new CreatePurchaseOrderFragment(), null).commit();
         }
 
         return super.onOptionsItemSelected(item);
