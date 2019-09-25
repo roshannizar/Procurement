@@ -62,7 +62,7 @@ public class OrderStatusFragment extends Fragment {
     private Context mContext;
     private ImageView imgLoader;
     private TextView txtLoader,txtWait;
-    public static int pendingStatus = 0, approvedStatus = 0, holdStatus = 0, placedStatus = 0, declinedStatus = 0, draftStatus = 0;
+    static int pendingStatus = 0, approvedStatus = 0, holdStatus = 0, placedStatus = 0, declinedStatus = 0, draftStatus = 0;
 
     public OrderStatusFragment() {
         // Required empty public constructor
