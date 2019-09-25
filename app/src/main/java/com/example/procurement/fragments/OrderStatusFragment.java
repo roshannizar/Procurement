@@ -28,6 +28,7 @@ import com.example.procurement.adapters.OrderStatusAdapter;
 import com.example.procurement.models.Order;
 import com.example.procurement.status.ApprovedOrderStatus;
 import com.example.procurement.status.DeclinedOrderStatus;
+import com.example.procurement.status.DraftOrderStatus;
 import com.example.procurement.status.HoldOrderStatus;
 import com.example.procurement.status.OrderStatus;
 import com.example.procurement.status.PendingOrderStatus;
@@ -52,7 +53,7 @@ public class OrderStatusFragment extends Fragment {
     private OrderStatusAdapter adapter;
     private OrderStatus approvedOrderStatus, declinedOrderStatus, placedOrderStatus, pendingOrderStatus, holdOrderStatus, draftOrderStatus;
     private RecyclerView recyclerView;
-    private int checkedItem = 0;
+    private int checkedItem = -99;
     private CollectionReference orderDBRef;
     private ProgressBar progressBar;
     private Context mContext;
@@ -89,6 +90,7 @@ public class OrderStatusFragment extends Fragment {
         pendingOrderStatus = new PendingOrderStatus();
         placedOrderStatus = new PlacedOrderStatus();
         holdOrderStatus = new HoldOrderStatus();
+        draftOrderStatus = new DraftOrderStatus();
 
         progressBar = rootView.findViewById(R.id.progressBar);
         recyclerView = rootView.findViewById(R.id.rvLoading);
@@ -208,7 +210,7 @@ public class OrderStatusFragment extends Fragment {
                 public void onClick(DialogInterface dialog, int which) {
                     switch (which) {
                         case 0:
-                            adapter = new OrderStatusAdapter(mContext, orders);
+                            adapter = new OrderStatusAdapter(mContext, draftOrderStatus.meetOrderStatus(orders));
                             break;
                         case 1:
                             adapter = new OrderStatusAdapter(mContext, approvedOrderStatus.meetOrderStatus(orders));
@@ -224,6 +226,9 @@ public class OrderStatusFragment extends Fragment {
                             break;
                         case 5:
                             adapter = new OrderStatusAdapter(mContext, placedOrderStatus.meetOrderStatus(orders));
+                            break;
+                        default:
+                            adapter = new OrderStatusAdapter(mContext, orders);
                             break;
                     }
                     setCheckedItem(which);
