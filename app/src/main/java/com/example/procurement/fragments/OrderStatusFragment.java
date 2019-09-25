@@ -28,6 +28,7 @@ import com.example.procurement.adapters.OrderStatusAdapter;
 import com.example.procurement.models.Order;
 import com.example.procurement.status.ApprovedOrderStatus;
 import com.example.procurement.status.DeclinedOrderStatus;
+import com.example.procurement.status.DraftOrderStatus;
 import com.example.procurement.status.HoldOrderStatus;
 import com.example.procurement.status.OrderStatus;
 import com.example.procurement.status.PendingOrderStatus;
@@ -50,13 +51,13 @@ public class OrderStatusFragment extends Fragment {
     private static final String TAG = "OrderStatusFragment";
     private ArrayList<Order> orders;
     private OrderStatusAdapter adapter;
-    private OrderStatus approvedOrderStatus, declinedOrderStatus, placedOrderStatus, pendingOrderStatus, holdOrderStatus;
+    private OrderStatus approvedOrderStatus, declinedOrderStatus, placedOrderStatus, pendingOrderStatus, holdOrderStatus, draftOrderStatus;
     private RecyclerView recyclerView;
-    private int checkedItem = 0;
+    private int checkedItem = -99;
     private CollectionReference orderDBRef;
     private ProgressBar progressBar;
     private Context mContext;
-    public static int pendingStatus = 0, approvedStatus = 0, holdStatus = 0, placedStatus = 0, declinedStatus = 0;
+    public static int pendingStatus = 0, approvedStatus = 0, holdStatus = 0, placedStatus = 0, declinedStatus = 0, draftStatus = 0;
 
     public OrderStatusFragment() {
         // Required empty public constructor
@@ -71,6 +72,7 @@ public class OrderStatusFragment extends Fragment {
         holdStatus = 0;
         placedStatus = 0;
         declinedStatus = 0;
+        draftStatus = 0;
     }
 
     @Override
@@ -88,6 +90,7 @@ public class OrderStatusFragment extends Fragment {
         pendingOrderStatus = new PendingOrderStatus();
         placedOrderStatus = new PlacedOrderStatus();
         holdOrderStatus = new HoldOrderStatus();
+        draftOrderStatus = new DraftOrderStatus();
 
         progressBar = rootView.findViewById(R.id.progressBar);
         recyclerView = rootView.findViewById(R.id.rvLoading);
@@ -134,7 +137,7 @@ public class OrderStatusFragment extends Fragment {
         orderDBRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
+                if (task.isSuccessful() && task.getResult() != null) {
                     orders.clear();
 
                     for (QueryDocumentSnapshot document : task.getResult()) {
@@ -193,7 +196,7 @@ public class OrderStatusFragment extends Fragment {
 
             // add a radio button list
             String[] status = {
-                    getString(R.string.default_status),
+                    getString(R.string.draft),
                     getString(R.string.approved),
                     getString(R.string.declined),
                     getString(R.string.hold),
@@ -207,7 +210,7 @@ public class OrderStatusFragment extends Fragment {
                 public void onClick(DialogInterface dialog, int which) {
                     switch (which) {
                         case 0:
-                            adapter = new OrderStatusAdapter(mContext, orders);
+                            adapter = new OrderStatusAdapter(mContext, draftOrderStatus.meetOrderStatus(orders));
                             break;
                         case 1:
                             adapter = new OrderStatusAdapter(mContext, approvedOrderStatus.meetOrderStatus(orders));
@@ -223,6 +226,9 @@ public class OrderStatusFragment extends Fragment {
                             break;
                         case 5:
                             adapter = new OrderStatusAdapter(mContext, placedOrderStatus.meetOrderStatus(orders));
+                            break;
+                        default:
+                            adapter = new OrderStatusAdapter(mContext, orders);
                             break;
                     }
                     setCheckedItem(which);
@@ -243,16 +249,25 @@ public class OrderStatusFragment extends Fragment {
 
     private void countStatus(String status) {
 
-        if (status.equals(CommonConstants.ORDER_STATUS_PENDING)) {
-            pendingStatus++;
-        } else if (status.equals(CommonConstants.ORDER_STATUS_HOLD)) {
-            holdStatus++;
-        } else if (status.equals(CommonConstants.ORDER_STATUS_APPROVED)) {
-            approvedStatus++;
-        } else if (status.equals(CommonConstants.ORDER_STATUS_PLACED)) {
-            placedStatus++;
-        } else if (status.equals(CommonConstants.ORDER_STATUS_DECLINED)) {
-            declinedStatus++;
+        switch (status) {
+            case CommonConstants.ORDER_STATUS_PENDING:
+                pendingStatus++;
+                break;
+            case CommonConstants.ORDER_STATUS_HOLD:
+                holdStatus++;
+                break;
+            case CommonConstants.ORDER_STATUS_APPROVED:
+                approvedStatus++;
+                break;
+            case CommonConstants.ORDER_STATUS_PLACED:
+                placedStatus++;
+                break;
+            case CommonConstants.ORDER_STATUS_DECLINED:
+                declinedStatus++;
+                break;
+            case CommonConstants.ORDER_STATUS_DRAFT:
+                draftStatus++;
+                break;
         }
     }
 

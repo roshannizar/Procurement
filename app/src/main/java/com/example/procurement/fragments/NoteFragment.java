@@ -48,7 +48,6 @@ import java.util.Date;
 import java.util.List;
 
 import static com.example.procurement.PMS.siteManagerDBRef;
-import static com.example.procurement.utils.CommonConstants.NOTE_FRAGMENT_TAG;
 
 public class NoteFragment extends Fragment {
     private static final String TAG = "NoteFragment";
