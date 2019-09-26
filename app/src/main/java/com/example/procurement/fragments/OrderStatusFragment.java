@@ -175,6 +175,16 @@ public class OrderStatusFragment extends Fragment {
                         recyclerView.setAdapter(adapter);
                     }
                 }
+
+                if(orders.size()==0){
+                    imgLoader.refreshDrawableState();
+                    imgLoader.setImageResource(R.drawable.ic_safebox);
+                    imgLoader.setVisibility(View.INVISIBLE);
+                    txtLoader.setVisibility(View.INVISIBLE);
+                    txtLoader.setText("Purchase Order is empty!");
+                    txtWait.setText("No point in waiting!");
+                    txtWait.setVisibility(View.INVISIBLE);
+                }
             }
         });
     }

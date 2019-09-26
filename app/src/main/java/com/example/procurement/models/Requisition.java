@@ -17,7 +17,6 @@ public class Requisition {
     private String key;
 
     public Requisition() {
-
     }
 
     public Requisition(String requisitionNo, String comment, String purpose, String deliveryDate, String totalAmount, String requisitionStatus, String reason, String proposalDate, String proposedBy, String budget) {
@@ -69,7 +68,7 @@ public class Requisition {
         return totalAmount;
     }
 
-    public String getRequisitonStatus() {
+    public String getRequisitionStatus() {
         return requisitionStatus;
     }
 
