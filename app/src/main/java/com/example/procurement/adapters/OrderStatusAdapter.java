@@ -62,10 +62,10 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
         // check if any data is available
         if (mOrders != null) {
             final Order order = mOrders.get(position);
-            final String orderName, orderStatus, orderKey, orderDescription, orderId;
-            orderName = order.getOrderName();
-            orderKey = order.getKey();
+            final String orderStatus, orderKey, orderDescription, orderId,reqId;
+            orderKey = order.getOrderKey();
             orderId = order.getOrderID();
+            reqId = order.getRequisitionID();
             orderDescription = order.getDescription();
             orderStatus = order.getOrderStatus();
 
@@ -105,7 +105,7 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
 
             statusColor = ContextCompat.getColor(holder.itemView.getContext(), statusColor);
 
-            holder.name.setText(orderId + " - " + orderName);
+            holder.name.setText(orderId + " --> " + reqId);
             holder.status.setText(orderStatus);
             holder.description.setText(orderDescription);
             holder.status.setBackgroundResource(statusBackground);

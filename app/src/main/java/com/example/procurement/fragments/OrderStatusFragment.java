@@ -102,7 +102,7 @@ public class OrderStatusFragment extends Fragment {
         txtLoader = rootView.findViewById(R.id.txtLoader);
         imgLoader = rootView.findViewById(R.id.imgLoader);
 
-        // writeStatusData();
+        //writeStatusData();
         readStatusData();
 
         return rootView;
@@ -130,7 +130,7 @@ public class OrderStatusFragment extends Fragment {
         order.setDescription("Lorem LoremLoremLoremLoremLoremLoremLoremLorem ");
         order.setOrderStatus("Pending");
         order.setSubTotal(2500.00);
-        order.setKey(key);
+        order.setOrderKey(key);
         orderDBRef.document(key)
                 .set(order)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
