@@ -38,7 +38,8 @@ public class RequisitionAdapter extends RecyclerView.Adapter<RequisitionAdapter.
         Requisition requisition = iRequisition.get(position);
 
         holder.txtRequisitionName.setText(requisition.getRequisitionNo());
-        holder.txtRequisitionStatus.setText(requisition.getRequisitonStatus());
+        holder.txtRequisitionStatus.setText(requisition.getRequisitionStatus());
+        System.out.println("Status------------------- "+requisition.getRequisitionStatus());
         holder.txtRequisitionDescription.setText(requisition.getBudget()+", "+requisition.getTotalAmount());
     }
 
