@@ -11,7 +11,8 @@ public class Order {
     private String deliveryDate;
     private String orderedDate;
     private String description;
-    private String key;
+    private String orderKey;
+    private String requisitionKey;
     private double subTotal;
 
     public Order() {
@@ -89,12 +90,20 @@ public class Order {
         this.description = description;
     }
 
-    public String getKey() {
-        return key;
+    public String getOrderKey() {
+        return orderKey;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setOrderKey(String orderKey) {
+        this.orderKey = orderKey;
+    }
+
+    public String getRequisitionKey() {
+        return requisitionKey;
+    }
+
+    public void setRequisitionKey(String requisitionKey) {
+        this.requisitionKey = requisitionKey;
     }
 
     public double getSubTotal() {

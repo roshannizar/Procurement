@@ -4,6 +4,7 @@ package com.example.procurement.fragments;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,7 +30,9 @@ import com.example.procurement.adapters.InventoryAdapter;
 import com.example.procurement.models.Inventory;
 import com.example.procurement.models.Order;
 import com.example.procurement.utils.CommonConstants;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 
@@ -42,7 +45,7 @@ public class OrderViewFragment extends Fragment {
 
     private String orderKey;
     private Order order;
-    private DocumentReference orderDBRef;
+    private CollectionReference orderDBRef;
     private ImageView btnBack;
     private RecyclerView productItemView;
     private EditText etCompany, etVendor;
@@ -71,8 +74,8 @@ public class OrderViewFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_purchase_order_view, container, false);
 
-        orderDBRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_ORDER)
-                .document(orderKey);
+        orderDBRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_ORDER);
+
 
         btnBack = rootView.findViewById(R.id.btnBack);
         txtOrderId = rootView.findViewById(R.id.txtOrderId);
@@ -128,7 +131,6 @@ public class OrderViewFragment extends Fragment {
 
         switch (item.getItemId()) {
             case R.id.menu_edit:
-                HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new CreatePurchaseOrderFragment(), null).commit();
                 break;
             case R.id.menu_delete:
                 Toast.makeText(getActivity(), "Order Delete !!!", Toast.LENGTH_LONG).show();
@@ -150,7 +152,7 @@ public class OrderViewFragment extends Fragment {
     }
 
     private void readStatusData() {
-        orderDBRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        orderDBRef.document(orderKey).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 order = new Order();
@@ -220,7 +222,22 @@ public class OrderViewFragment extends Fragment {
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // deleting the note from db
 
+                orderDBRef.document(orderKey)
+                        .delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w(TAG, "Error deleting document", e);
+                            }
+                        });
             }
         });
     }

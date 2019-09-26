@@ -11,6 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.procurement.R;
+import com.example.procurement.activities.HomeActivity;
+import com.example.procurement.fragments.CreatePurchaseOrderFragment;
+import com.example.procurement.fragments.NoteFragment;
 import com.example.procurement.models.Requisition;
 
 import java.util.ArrayList;
@@ -35,13 +38,20 @@ public class RequisitionAdapter extends RecyclerView.Adapter<RequisitionAdapter.
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Requisition requisition = iRequisition.get(position);
+        final Requisition requisition = iRequisition.get(position);
 
         holder.txtRequisitionName.setText(requisition.getRequisitionNo());
         holder.txtRequisitionStatus.setText(requisition.getRequisitionStatus());
         holder.txtwithInBudget.setText(requisition.getBudget());
         holder.txtdeliveryDate.setText(requisition.getDeliveryDate());
         holder.txtTotalAmount.setText("Rs: "+requisition.getTotalAmount());
+
+        holder.txtPlaceOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new CreatePurchaseOrderFragment(requisition.getKey()), null).commit();
+            }
+        });
     }
 
     public int getItemCount() {
