@@ -102,7 +102,7 @@ public class OrderStatusFragment extends Fragment {
         txtLoader = rootView.findViewById(R.id.txtLoader);
         imgLoader = rootView.findViewById(R.id.imgLoader);
 
-       // writeStatusData();
+        // writeStatusData();
         readStatusData();
 
         return rootView;
@@ -173,18 +173,21 @@ public class OrderStatusFragment extends Fragment {
                         txtLoader.setVisibility(View.INVISIBLE);
                         txtWait.setVisibility(View.INVISIBLE);
                         recyclerView.setAdapter(adapter);
+
+                        if (orders.size() == 0) {
+                            imgLoader.refreshDrawableState();
+                            imgLoader.setImageResource(R.drawable.ic_safebox);
+                            imgLoader.setVisibility(View.VISIBLE);
+                            txtLoader.setVisibility(View.VISIBLE);
+                            txtWait.setVisibility(View.VISIBLE);
+                            txtLoader.setText("Purchase Order is empty!");
+                            txtWait.setText("No point in waiting!");
+                        }
                     }
+
                 }
 
-                if(orders.size()==0){
-                    imgLoader.refreshDrawableState();
-                    imgLoader.setImageResource(R.drawable.ic_safebox);
-                    imgLoader.setVisibility(View.INVISIBLE);
-                    txtLoader.setVisibility(View.INVISIBLE);
-                    txtLoader.setText("Purchase Order is empty!");
-                    txtWait.setText("No point in waiting!");
-                    txtWait.setVisibility(View.INVISIBLE);
-                }
+
             }
         });
     }

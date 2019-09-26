@@ -209,6 +209,16 @@ public class EnquireFragment extends Fragment {
                     txtWait.setVisibility(View.INVISIBLE);
                     progressBar.setVisibility(View.GONE);
                     recyclerView.setAdapter(mAdapter);
+
+                    if (enquireList.size() == 0) {
+                        imgLoader.refreshDrawableState();
+                        imgLoader.setImageResource(R.drawable.ic_safebox);
+                        imgLoader.setVisibility(View.VISIBLE);
+                        txtLoader.setVisibility(View.VISIBLE);
+                        txtWait.setVisibility(View.VISIBLE);
+                        txtLoader.setText("Enquiry is Empty!");
+                        txtWait.setText("No point in waiting!");
+                    }
                 }
             }
         });

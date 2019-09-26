@@ -1,11 +1,21 @@
 package com.example.procurement.fragments;
 
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.SearchView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,25 +24,9 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.SearchView;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.example.procurement.R;
 import com.example.procurement.activities.RequisitionActivity;
-import com.example.procurement.adapters.OrderStatusAdapter;
 import com.example.procurement.adapters.RequisitionAdapter;
-import com.example.procurement.models.Order;
 import com.example.procurement.models.Requisition;
 import com.example.procurement.utils.CommonConstants;
 import com.google.firebase.firestore.CollectionReference;
@@ -55,7 +49,7 @@ public class RequisitionViewFragment extends Fragment {
     private RequisitionAdapter requisitionAdapter;
     private Context c;
     private ProgressBar progressBar;
-    private TextView txtLoader,txtWait;
+    private TextView txtLoader, txtWait;
     private ImageView imgLoader;
 
     public RequisitionViewFragment() {
@@ -92,8 +86,8 @@ public class RequisitionViewFragment extends Fragment {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
 
-                        if(e!= null) {
-                            Log.v(TAG,"Listen Failed",e);
+                        if (e != null) {
+                            Log.v(TAG, "Listen Failed", e);
                         }
 
                         iRequisition.clear();
@@ -111,17 +105,18 @@ public class RequisitionViewFragment extends Fragment {
                             txtLoader.setVisibility(View.INVISIBLE);
                             txtWait.setVisibility(View.INVISIBLE);
                             recyclerView.setAdapter(requisitionAdapter);
+
+                            if (iRequisition.size() == 0) {
+                                imgLoader.refreshDrawableState();
+                                imgLoader.setImageResource(R.drawable.ic_safebox);
+                                imgLoader.setVisibility(View.VISIBLE);
+                                txtLoader.setVisibility(View.VISIBLE);
+                                txtWait.setVisibility(View.VISIBLE);
+                                txtLoader.setText("Requisition is empty!");
+                                txtWait.setText("No point in waiting!");
+                            }
                         }
 
-                        if(iRequisition.size()==0){
-                            imgLoader.refreshDrawableState();
-                            imgLoader.setImageResource(R.drawable.ic_safebox);
-                            imgLoader.setVisibility(View.VISIBLE);
-                            txtLoader.setVisibility(View.VISIBLE);
-                            txtWait.setVisibility(View.VISIBLE);
-                            txtLoader.setText("Requisition is empty!");
-                            txtWait.setText("No point in waiting!");
-                        }
                     }
                 }
         );
@@ -158,7 +153,7 @@ public class RequisitionViewFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         if (item.getItemId() == R.id.filter_status) {
-            Toast.makeText(this.getContext(),"Constructing still!",Toast.LENGTH_LONG).show();
+            Toast.makeText(this.getContext(), "Constructing still!", Toast.LENGTH_LONG).show();
 //            // setup the alert builder
 //            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
 //            builder.setTitle("Choose Status Filter Type");
