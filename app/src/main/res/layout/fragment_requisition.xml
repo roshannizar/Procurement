@@ -62,13 +62,11 @@
                 android:id="@+id/budgetRadio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="100dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="80dp"
                 android:baselineAligned="false"
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/txtTotalAmount"
                 app:layout_constraintTop_toBottomOf="@+id/textView39">
 
                 <RadioButton
@@ -239,7 +237,7 @@
                 android:paddingTop="5dp"
                 android:paddingRight="10dp"
                 android:paddingBottom="5dp"
-                android:text="150,000"
+                android:text="Rs: 150,000"
                 android:textColor="@color/colorWhiteSmoke"
                 android:textSize="14sp"
                 android:textStyle="bold"
