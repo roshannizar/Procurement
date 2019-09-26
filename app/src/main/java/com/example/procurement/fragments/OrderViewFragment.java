@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +35,7 @@ public class OrderViewFragment extends Fragment {
     private Order order;
     private DocumentReference orderDBRef;
     private ImageView btnBack;
+    private EditText etCompany, etVendor;
     private TextView txtOrderId, txtRequisitionId, txtOrderName, txtDeliveryDate,
             txtDescription, txtStatusView, txtSubTotal, txtTax, txtTotal, txtOrderedDate;
     private Button btnUpdate;
@@ -53,34 +55,37 @@ public class OrderViewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_purchase_order_view, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_purchase_order_view, container, false);
 
         orderDBRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_ORDER)
                 .document(orderKey);
 
-        btnBack = view.findViewById(R.id.btnBack);
-        txtOrderId = view.findViewById(R.id.txtOrderId);
-        txtRequisitionId = view.findViewById(R.id.txtRequisitionId);
-        txtOrderName = view.findViewById(R.id.txtOrderName);
-        txtOrderedDate = view.findViewById(R.id.txtOrderedDate);
-        txtDeliveryDate = view.findViewById(R.id.txtDeliveryDate);
-        txtDescription = view.findViewById(R.id.txtDescription);
-        txtStatusView = view.findViewById(R.id.txtStatusView);
-        txtSubTotal = view.findViewById(R.id.txtSubTotal);
-        txtTax = view.findViewById(R.id.txtTax);
-        txtTotal = view.findViewById(R.id.txtTotal);
-        btnUpdate = view.findViewById(R.id.btnUpdate);
-        btnUpdate.setVisibility(View.INVISIBLE);
+        btnBack = rootView.findViewById(R.id.btnBack);
+        txtOrderId = rootView.findViewById(R.id.txtOrderId);
+        txtRequisitionId = rootView.findViewById(R.id.txtRequisitionId);
+        txtOrderName = rootView.findViewById(R.id.txtOrderName);
+        txtOrderedDate = rootView.findViewById(R.id.txtOrderedDate);
+        txtDeliveryDate = rootView.findViewById(R.id.txtDeliveryDate);
+        txtDescription = rootView.findViewById(R.id.txtDescription);
+        txtStatusView = rootView.findViewById(R.id.txtStatusView);
+        txtSubTotal = rootView.findViewById(R.id.txtSubTotal);
+        txtTax = rootView.findViewById(R.id.txtTax);
+        txtTotal = rootView.findViewById(R.id.txtTotal);
+        etCompany = rootView.findViewById(R.id.etCompany);
+        etVendor = rootView.findViewById(R.id.etVendor);
+        btnUpdate = rootView.findViewById(R.id.btnUpdate);
+        btnUpdate.setText("Delete");
+        btnUpdate.setBackgroundResource(R.drawable.badge_denied);
+
         readStatusData();
         getBack();
 
-        return view;
+        return rootView;
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
-        inflater.inflate(R.menu.view_order_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -126,10 +131,11 @@ public class OrderViewFragment extends Fragment {
                     String orderName = getString(R.string.orderName) + order.getOrderName();
                     String orderStatus = order.getOrderStatus();
                     String deliveryDate = getString(R.string.deliveryDate) + order.getDeliveryDate();
-                    String orderedDate = getString(R.string.deliveryDate) + order.getOrderedDate();
+                    String orderedDate = getString(R.string.orderedDate) + order.getOrderedDate();
                     String description = getString(R.string.description) + order.getDescription();
 
-
+                    etVendor.setText(vendor);
+                    etCompany.setText(company);
                     txtOrderId.setText(orderID);
                     txtRequisitionId.setText(requisitionID);
                     txtOrderName.setText(orderName);
@@ -138,8 +144,30 @@ public class OrderViewFragment extends Fragment {
                     txtDescription.setText(description);
                     txtStatusView.setText(orderStatus);
 
+                    switch (orderStatus) {
+                        case CommonConstants.ORDER_STATUS_APPROVED:
+                            txtStatusView.setBackgroundResource(R.drawable.badge_approved);
+                            break;
+                        case CommonConstants.ORDER_STATUS_PENDING:
+                            txtStatusView.setBackgroundResource(R.drawable.badge_pending);
+                            break;
+                        case CommonConstants.ORDER_STATUS_PLACED:
+                            txtStatusView.setBackgroundResource(R.drawable.badge_placed);
+                            break;
+                        case CommonConstants.ORDER_STATUS_HOLD:
+                            txtStatusView.setBackgroundResource(R.drawable.badge_hold);
+                            break;
+                        case CommonConstants.ORDER_STATUS_DRAFT:
+                            txtStatusView.setBackgroundResource(R.drawable.badge_draft);
+                            btnUpdate.setText("Edit");
+                            btnUpdate.setBackgroundResource(R.drawable.badge_approved);
+                            break;
+                        default:
+                            txtStatusView.setBackgroundResource(R.drawable.badge_denied);
+                    }
+
                     double subTotal = order.getSubTotal();
-                    double tax = subTotal * 10;
+                    double tax = subTotal * 0.10;
                     double total = subTotal + tax;
                     txtSubTotal.setText(String.valueOf(subTotal));
                     txtTax.setText(String.valueOf(tax));

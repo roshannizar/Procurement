@@ -233,6 +233,16 @@ public class NoteFragment extends Fragment {
                     txtWait.setVisibility(View.INVISIBLE);
                     progressBar.setVisibility(View.GONE);
                     recyclerView.setAdapter(mAdapter);
+
+                    if (notesList.size() == 0) {
+                        imgLoader.refreshDrawableState();
+                        imgLoader.setImageResource(R.drawable.ic_safebox);
+                        imgLoader.setVisibility(View.VISIBLE);
+                        txtLoader.setVisibility(View.VISIBLE);
+                        txtWait.setVisibility(View.VISIBLE);
+                        txtLoader.setText("Delivery Note is Empty!");
+                        txtWait.setText("No point in waiting!");
+                    }
                 }
             }
         });
