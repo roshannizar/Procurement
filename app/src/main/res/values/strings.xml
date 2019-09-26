@@ -7,7 +7,7 @@
     <string name="title_notification">Requisition</string>
     <string name="order_status_search">Search</string>
     <string name="create_order">Create Orders</string>
-
+    <string name="backBtn">Back Button</string>
     <!--Order Strings-->
     <string name="order_main_name">Orders</string>
     <string name="order_date_placeholder">DD/MM/YY</string>
@@ -40,7 +40,7 @@
     <string name="action_settings">Settings</string>
     <string name="title_requisition">Requisition</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <!-- TODO: Remove or change this placeholder text -->
+
     <string-array name="stock_array">
         <item>-- Please select a order --</item>
         <item>Bricks</item>
@@ -53,4 +53,10 @@
         <item>Cement Mixer</item>
     </string-array>
 
+    <string name="requisitionID">"Requisition ID : "</string>
+    <string name="orderID">"Order ID           : "</string>
+    <string name="orderName">"Order Name    : "</string>
+    <string name="description">"Description     : "</string>
+    <string name="deliveryDate">"Delivery Date  : "</string>
+    <string name="orderedDate">"Ordered Date  : "</string>
 </resources>

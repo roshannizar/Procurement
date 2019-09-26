@@ -22,7 +22,7 @@
             android:layout_height="wrap_content">
 
             <Button
-                android:id="@+id/btnGenerate"
+                android:id="@+id/btnUpdate"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:layout_marginStart="32dp"
@@ -31,7 +31,7 @@
                 android:layout_marginBottom="32dp"
                 android:background="@drawable/badge_placed"
                 android:padding="8dp"
-                android:text="Generate Order"
+                android:text="Update"
                 android:textAllCaps="false"
                 android:textColor="@color/colorWhiteSmoke"
                 android:textSize="16sp"
@@ -101,7 +101,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="16dp"
+                        android:layout_marginBottom="8dp"
                         android:text="Total"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView41" />
 
@@ -111,7 +113,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="24dp"
+                        android:layout_marginBottom="8dp"
                         android:text="150.00"
+                        app:layout_constraintBottom_toTopOf="@+id/divider5"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/txtSubTotal" />
 
@@ -200,7 +204,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
-                android:text="Generate Order"
+                android:text="Order Details"
                 android:textAlignment="viewStart"
                 android:textSize="24sp"
                 android:textStyle="bold"
@@ -249,7 +253,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="16dp"
-                        android:text="Requisition ID :"
+                        android:text="@string/requisitionID"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -261,7 +265,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="16dp"
-                        android:text="Order Name    :"
+                        android:text="@string/orderName"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/txtOrderId" />
@@ -273,7 +277,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="16dp"
-                        android:text="Order ID           :"
+                        android:text="@string/orderID"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/txtRequisitionId" />
@@ -285,7 +289,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="16dp"
-                        android:text="Description     :"
+                        android:text="@string/description"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/txtOrderName" />
@@ -298,8 +302,21 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="8dp"
-                        android:text="Delivery Date  :"
+                        android:text="@string/deliveryDate"
                         app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/txtOrderedDate" />
+
+                    <TextView
+                        android:id="@+id/txtOrderedDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:text="@string/orderedDate"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/txtDescription" />

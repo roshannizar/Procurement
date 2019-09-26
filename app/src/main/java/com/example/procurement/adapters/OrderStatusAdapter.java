@@ -63,15 +63,15 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
         if (mOrders != null) {
             final Order order = mOrders.get(position);
             final String orderName, orderStatus, orderKey, orderDescription, orderId;
-            orderName = order.getName();
+            orderName = order.getOrderName();
             orderKey = order.getKey();
             orderId = order.getOrderID();
             orderDescription = order.getDescription();
-            orderStatus = order.getStatus();
+            orderStatus = order.getOrderStatus();
 
             int statusColor, statusIcon, statusBackground;
 
-            switch (order.getStatus()) {
+            switch (orderStatus) {
                 case CommonConstants.ORDER_STATUS_APPROVED:
                     statusColor = color.orderStatusAccepted;
                     statusBackground = drawable.badge_approved;
@@ -193,8 +193,8 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
                 if (constraint != null && constraint.length() > 0) {
                     if (mOrdersOriginal != null && mOrdersOriginal.size() > 0) {
                         for (final Order order : mOrdersOriginal) {
-                            if (order.getName() != null) {
-                                if (order.getName().toLowerCase().contains(constraint.toString().toLowerCase()))
+                            if (order.getOrderName() != null) {
+                                if (order.getOrderName().toLowerCase().contains(constraint.toString().toLowerCase()))
                                     results.add(order);
                             }
                         }

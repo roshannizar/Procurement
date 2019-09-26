@@ -26,14 +26,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.procurement.R;
 import com.example.procurement.adapters.OrderStatusAdapter;
+import com.example.procurement.filterPattern.ApprovedOrderStatus;
+import com.example.procurement.filterPattern.DeclinedOrderStatus;
+import com.example.procurement.filterPattern.DraftOrderStatus;
+import com.example.procurement.filterPattern.HoldOrderStatus;
+import com.example.procurement.filterPattern.OrderStatus;
+import com.example.procurement.filterPattern.PendingOrderStatus;
+import com.example.procurement.filterPattern.PlacedOrderStatus;
 import com.example.procurement.models.Order;
-import com.example.procurement.status.ApprovedOrderStatus;
-import com.example.procurement.status.DeclinedOrderStatus;
-import com.example.procurement.status.DraftOrderStatus;
-import com.example.procurement.status.HoldOrderStatus;
-import com.example.procurement.status.OrderStatus;
-import com.example.procurement.status.PendingOrderStatus;
-import com.example.procurement.status.PlacedOrderStatus;
 import com.example.procurement.utils.CommonConstants;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -102,7 +102,7 @@ public class OrderStatusFragment extends Fragment {
         txtLoader = rootView.findViewById(R.id.txtLoader);
         imgLoader = rootView.findViewById(R.id.imgLoader);
 
-        //writeStatusData();
+       // writeStatusData();
         readStatusData();
 
         return rootView;
@@ -119,7 +119,17 @@ public class OrderStatusFragment extends Fragment {
     private void writeStatusData() {
 
         String key = orderDBRef.document().getId();
-        Order order = new Order("PO-02", "Praveen", "", CommonConstants.ORDER_STATUS_PENDING, "1-06-2019");
+        Order order = new Order();
+        order.setOrderID("PO.1");
+        order.setRequisitionID("RQ.1");
+        order.setOrderName("Bricks");
+        order.setCompany("VIP");
+        order.setVendor("Praveen");
+        order.setDeliveryDate("21-10-2019");
+        order.setOrderedDate("15-09-2019");
+        order.setDescription("Lorem LoremLoremLoremLoremLoremLoremLoremLorem ");
+        order.setOrderStatus("Pending");
+        order.setSubTotal(2500.00);
         order.setKey(key);
         orderDBRef.document(key)
                 .set(order)
@@ -148,20 +158,22 @@ public class OrderStatusFragment extends Fragment {
 
                 orders.clear();
 
-                for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                    Order order = document.toObject(Order.class);
-                    countStatus(order.getStatus());
-                    orders.add(order);
-                    CommonConstants.ORDER_ID = order.getOrderID();
-                }
+                if (queryDocumentSnapshots != null) {
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        Order order = document.toObject(Order.class);
+                        countStatus(order.getOrderStatus());
+                        orders.add(order);
+                        CommonConstants.ORDER_ID = order.getOrderID();
+                    }
 
-                if (orders != null) {
-                    adapter = new OrderStatusAdapter(mContext, orders);
-                    progressBar.setVisibility(View.GONE);
-                    imgLoader.setVisibility(View.INVISIBLE);
-                    txtLoader.setVisibility(View.INVISIBLE);
-                    txtWait.setVisibility(View.INVISIBLE);
-                    recyclerView.setAdapter(adapter);
+                    if (orders != null) {
+                        adapter = new OrderStatusAdapter(mContext, orders);
+                        progressBar.setVisibility(View.GONE);
+                        imgLoader.setVisibility(View.INVISIBLE);
+                        txtLoader.setVisibility(View.INVISIBLE);
+                        txtWait.setVisibility(View.INVISIBLE);
+                        recyclerView.setAdapter(adapter);
+                    }
                 }
 
                 if(orders.size()==0){

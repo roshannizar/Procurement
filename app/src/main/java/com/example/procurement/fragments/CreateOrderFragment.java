@@ -90,7 +90,7 @@ public class CreateOrderFragment extends Fragment implements AdapterView.OnItemS
     private void init() {
         getHashOrderName();
         getGenerateID();
-        placeOrder();
+       // placeOrder();
         setDate();
     }
 
@@ -105,73 +105,73 @@ public class CreateOrderFragment extends Fragment implements AdapterView.OnItemS
                 }
         );
     }
-
-    private void placeOrder() {
-        btnPlaceOrder.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        // Code refactoring will be done later
-                        if (!validationOrders()) {
-                            if (switchPlacement) {
-
-                                String key = orderDBRef.document().getId();
-                                Order order = new Order(txtOrderID.getText().toString(), txtOrderName.getText().toString(), txtDescription.getText().toString(), CommonConstants.ORDER_STATUS_PENDING, dtpArrivalDate.getText().toString());
-                                order.setKey(key);
-                                orderDBRef.document(key)
-                                        .set(order)
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                Toast.makeText(getActivity(), txtOrderName.getText().toString() + "Order has been placed successfully", Toast.LENGTH_LONG).show();
-                                            }
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Toast.makeText(getActivity(), "Ordering Failed", Toast.LENGTH_LONG).show();
-                                            }
-                                        });
-
-                                setGenerateID(txtOrderID.getText().toString());
-                            } else {
-
-                                String key = orderDBRef.document().getId();
-                                Order order = new Order(txtOrderID.getText().toString(), txtSpinnerStock, txtDescription.getText().toString(), CommonConstants.ORDER_STATUS_PENDING, dtpArrivalDate.getText().toString());
-                                order.setKey(key);
-                                orderDBRef.document(key)
-                                        .set(order)
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                Toast.makeText(getActivity(), "Order has been placed successfully", Toast.LENGTH_LONG).show();
-                                            }
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Toast.makeText(getActivity(), "Ordering Failed", Toast.LENGTH_LONG).show();
-                                            }
-                                        });
-
-                                setGenerateID(txtOrderID.getText().toString());
-                            }
-                        } else {
-                            new AlertDialog.Builder(getActivity())
-                                    .setTitle("ALERT")
-                                    .setMessage("Fill the required fields!")
-                                    .setCancelable(false)
-                                    .setPositiveButton("ok", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            // Whatever...
-                                        }
-                                    }).show();
-                        }
-                    }
-                }
-        );
-    }
+//
+//    private void placeOrder() {
+//        btnPlaceOrder.setOnClickListener(
+//                new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        // Code refactoring will be done later
+//                        if (!validationOrders()) {
+//                            if (switchPlacement) {
+//
+//                                String key = orderDBRef.document().getId();
+//                                Order order = new Order(txtOrderID.getText().toString(), txtOrderName.getText().toString(), txtDescription.getText().toString(), CommonConstants.ORDER_STATUS_PENDING, dtpArrivalDate.getText().toString());
+//                                order.setKey(key);
+//                                orderDBRef.document(key)
+//                                        .set(order)
+//                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                            @Override
+//                                            public void onSuccess(Void aVoid) {
+//                                                Toast.makeText(getActivity(), txtOrderName.getText().toString() + "Order has been placed successfully", Toast.LENGTH_LONG).show();
+//                                            }
+//                                        })
+//                                        .addOnFailureListener(new OnFailureListener() {
+//                                            @Override
+//                                            public void onFailure(@NonNull Exception e) {
+//                                                Toast.makeText(getActivity(), "Ordering Failed", Toast.LENGTH_LONG).show();
+//                                            }
+//                                        });
+//
+//                                setGenerateID(txtOrderID.getText().toString());
+//                            } else {
+//
+//                                String key = orderDBRef.document().getId();
+//                                Order order = new Order(txtOrderID.getText().toString(), txtSpinnerStock, txtDescription.getText().toString(), CommonConstants.ORDER_STATUS_PENDING, dtpArrivalDate.getText().toString());
+//                                order.setKey(key);
+//                                orderDBRef.document(key)
+//                                        .set(order)
+//                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                            @Override
+//                                            public void onSuccess(Void aVoid) {
+//                                                Toast.makeText(getActivity(), "Order has been placed successfully", Toast.LENGTH_LONG).show();
+//                                            }
+//                                        })
+//                                        .addOnFailureListener(new OnFailureListener() {
+//                                            @Override
+//                                            public void onFailure(@NonNull Exception e) {
+//                                                Toast.makeText(getActivity(), "Ordering Failed", Toast.LENGTH_LONG).show();
+//                                            }
+//                                        });
+//
+//                                setGenerateID(txtOrderID.getText().toString());
+//                            }
+//                        } else {
+//                            new AlertDialog.Builder(getActivity())
+//                                    .setTitle("ALERT")
+//                                    .setMessage("Fill the required fields!")
+//                                    .setCancelable(false)
+//                                    .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+//                                        @Override
+//                                        public void onClick(DialogInterface dialog, int which) {
+//                                            // Whatever...
+//                                        }
+//                                    }).show();
+//                        }
+//                    }
+//                }
+//        );
+//    }
 
     private void getHashOrderName() {
         stockSwitch.setOnClickListener(
