@@ -11,14 +11,11 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.procurement.PMS;
 import com.example.procurement.R;
 import com.example.procurement.activities.HomeActivity;
-import com.example.procurement.fragments.CreateOrderFragment;
 import com.example.procurement.fragments.OrderViewFragment;
 import com.example.procurement.models.Notification;
 import com.example.procurement.utils.CommonConstants;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.CollectionReference;
 
 import java.util.List;
@@ -52,7 +49,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.layout_notification, parent, false);
+                .inflate(R.layout.layout_notification_list, parent, false);
 
         return new MyViewHolder(itemView);
     }

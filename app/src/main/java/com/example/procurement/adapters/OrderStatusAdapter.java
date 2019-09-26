@@ -10,7 +10,6 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -52,7 +51,7 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
     @NonNull
     @Override
     public OrdersViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(layout.layout_order_status_item, parent, false);
+        View view = mInflater.inflate(layout.layout_order_status_list, parent, false);
         return new OrdersViewHolder(view);
     }
 
@@ -123,38 +122,19 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
                     }
                 });
 
-                holder.enquireOrSend.setText("ENQUIRE");
-                holder.enquireOrSend.setVisibility(View.VISIBLE);
-                holder.enquireOrSend.setOnClickListener(new View.OnClickListener() {
+            }
+
+            if (orderStatus.equals(CommonConstants.ORDER_STATUS_DRAFT)) {
+                holder.enquire.setVisibility(View.INVISIBLE);
+
+            }else{
+                holder.enquire.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new EnquireFragment(orderKey), null).commit();
                     }
                 });
             }
-
-            if (orderStatus.equals(CommonConstants.ORDER_STATUS_PENDING)) {
-                holder.enquireOrSend.setText("SEND");
-                holder.enquireOrSend.setVisibility(View.VISIBLE);
-                holder.enquireOrSend.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Toast.makeText(mContext, "Mail Sent !!!", Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
-
-//            if (orderStatus.equals(CommonConstants.ORDER_STATUS_APPROVED)) {
-//                holder.enquireOrSend.setText("RE-SEND");
-//                holder.enquireOrSend.setVisibility(View.VISIBLE);
-//                holder.enquireOrSend.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        Toast.makeText(mContext,"Mail Sent !!!",Toast.LENGTH_LONG).show();
-//                    }
-//                });
-//            }
-
 
             holder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -180,7 +160,7 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
     // Stores and recycles views as they are scrolled off screen
     class OrdersViewHolder extends RecyclerView.ViewHolder {
         // Hold views
-        final TextView name, status, enquireOrSend, note;
+        final TextView name, status, enquire, note;
         final ImageView orderIcon;
         final ImageView statusIcon;
         final TextView description;
@@ -194,11 +174,10 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
             statusIcon = view.findViewById(id.orderStatusIcon);
             description = view.findViewById(id.orderDescription);
             note = view.findViewById(id.note);
-            enquireOrSend = view.findViewById(id.enquireOrSend);
+            enquire = view.findViewById(id.enquire);
             cardView = view.findViewById(id.cardOrder);
 
             note.setVisibility(View.INVISIBLE);
-            enquireOrSend.setVisibility(View.INVISIBLE);
         }
 
     }
