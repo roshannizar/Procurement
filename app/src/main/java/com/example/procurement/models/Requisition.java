@@ -17,15 +17,10 @@ public class Requisition {
     private String key;
 
     public Requisition() {
-        requisitionNo = null;
-        itemNo = null;
-        description = null;
-        comment = null;
-        budget = null;
-        purpose = null;
+
     }
 
-    public Requisition(String requisitionNo, String comment, String purpose, String deliveryDate, String totalAmount, String requisitionStatus, String reason, String proposalDate, String proposedBy) {
+    public Requisition(String requisitionNo, String comment, String purpose, String deliveryDate, String totalAmount, String requisitionStatus, String reason, String proposalDate, String proposedBy, String budget) {
         this. requisitionNo = requisitionNo;
         this.comment = comment;
         this.purpose = purpose;
@@ -35,6 +30,7 @@ public class Requisition {
         this.reason = reason;
         this.proposalDate = proposalDate;
         this.proposedBy = proposedBy;
+        this.budget = budget;
     }
 
     public String getBudget() {

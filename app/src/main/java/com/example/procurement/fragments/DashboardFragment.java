@@ -145,7 +145,7 @@ public class DashboardFragment extends Fragment {
     @SuppressLint("SetTextI18n")
     private void updateUI(FirebaseUser currentUser) {
         if (currentUser != null) {
-            txtUserName.setText("Hello " + currentUser.getEmail() + "!");
+            txtUserName.setText("Hi " + currentUser.getEmail() + "!");
             //txtUserName.setText(currentUser.getEmail());
         }
     }

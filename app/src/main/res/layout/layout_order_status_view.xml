@@ -38,7 +38,7 @@
         android:id="@+id/txtLoader"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Fetching Orders"
+        android:text="Fetching Order(s)"
         android:textAlignment="center"
         android:textSize="24sp"
         android:textStyle="bold"

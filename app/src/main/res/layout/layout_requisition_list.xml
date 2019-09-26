@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardOrder"
+        android:id="@+id/cardRequisition"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -52,7 +52,7 @@
                 app:srcCompat="@drawable/order_ic_status_pending" />
 
             <TextView
-                android:id="@+id/orderDescription"
+                android:id="@+id/requisitionDescription"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
@@ -62,10 +62,10 @@
                 android:text="Contrary to popular belief, rature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin "
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/orderIcon"
-                app:layout_constraintTop_toBottomOf="@+id/orderName" />
+                app:layout_constraintTop_toBottomOf="@+id/requisitionName" />
 
             <TextView
-                android:id="@+id/orderName"
+                android:id="@+id/requisitionName"
                 android:layout_width="0dp"
                 android:layout_height="28dp"
                 android:layout_margin="@dimen/orderRowMarginSmall"
@@ -86,7 +86,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/orderStatus"
+                android:id="@+id/requisitionStatus"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -109,7 +109,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
             <TextView
-                android:id="@+id/enquireOrSend"
+                android:id="@+id/placeOrder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -125,12 +125,12 @@
                 android:textColor="@color/colorPrimary"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/note"
+                app:layout_constraintEnd_toStartOf="@+id/enquire"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
             <TextView
-                android:id="@+id/note"
+                android:id="@+id/enquire"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -145,7 +145,7 @@
                 android:textColor="@color/colorDarkGreen"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/enquireOrSend"
+                app:layout_constraintStart_toEndOf="@+id/placeOrder"
                 app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
             <View
@@ -156,7 +156,7 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginRight="5dp"
                 android:background="?android:attr/listDivider"
-                app:layout_constraintBottom_toBottomOf="@+id/orderDescription"
+                app:layout_constraintBottom_toBottomOf="@+id/requisitionDescription"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/orderIcon" />

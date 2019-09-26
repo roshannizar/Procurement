@@ -2,10 +2,14 @@ package com.example.procurement.fragments;
 
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,18 +17,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.procurement.R;
 import com.example.procurement.activities.RequisitionActivity;
+import com.example.procurement.adapters.InventoryAdapter;
+import com.example.procurement.adapters.SupplierAdapter;
+import com.example.procurement.models.Inventory;
 import com.example.procurement.models.Order;
 import com.example.procurement.models.Requisition;
+import com.example.procurement.models.Supplier;
 import com.example.procurement.utils.CommonConstants;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
@@ -32,11 +42,17 @@ import static com.example.procurement.activities.SignInActivity.siteManagerDBRef
 
 public class QuotationFragment extends Fragment {
 
+    private RecyclerView recyclerView;
+    private Supplier s;
+    private ArrayList<Supplier> iSupplier;
+    private SupplierAdapter supplierAdapter;
+    private Context context;
     private Button btnPlacedRequisition,btnBackRequisition;
     private EditText txtReason;
     private TextView txtProposalDate,txtProposedBy;
     private CollectionReference requisitionRef;
     private final Calendar c = Calendar.getInstance();
+    private ProgressBar createProgressBar;
 
     public QuotationFragment() {
 
@@ -53,12 +69,34 @@ public class QuotationFragment extends Fragment {
         txtReason = v.findViewById(R.id.txtReason);
         txtProposalDate = v.findViewById(R.id.txtProposalDate);
         txtProposedBy = v.findViewById(R.id.txtProposedBy);
+        createProgressBar = v.findViewById(R.id.createProgressBar);
+        createProgressBar.setVisibility(View.INVISIBLE);
+
         requisitionRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_REQUISITION);
+
+        recyclerView = v.findViewById(R.id.recyclerSupplier);
+        iSupplier = new ArrayList<>();
+        context = v.getContext();
+        supplierAdapter = new SupplierAdapter(context, iSupplier);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         PlaceOrder();
         GoToRequisition();
         setProposalDate();
+        WriteDataValues();
+
         return v;
+    }
+
+    private void WriteDataValues() {
+        for(int j=1;j<=2;j++) {
+            s = new Supplier(String.valueOf(j),"John Motta","12/12/2019","12,000",CommonConstants.ORDER_STATUS_PENDING);
+            iSupplier.add(s);
+        }
+
+        supplierAdapter = new SupplierAdapter(context, iSupplier);
+        recyclerView.setAdapter(supplierAdapter);
     }
 
     @SuppressLint("SetTextI18n")
@@ -67,8 +105,9 @@ public class QuotationFragment extends Fragment {
     }
 
     private void WriteStatus() {
+        createProgressBar.setVisibility(View.VISIBLE);
         String key = requisitionRef.document().getId();
-        Requisition requisition = new Requisition(RequisitionActivityFragment.REQUISITION_NO, RequisitionActivityFragment.COMMENTS, RequisitionActivityFragment.PURPOSE, RequisitionActivityFragment.DELIVERY_DATE, RequisitionActivityFragment.TOTAL_AMOUNT,CommonConstants.ORDER_STATUS_PENDING,txtReason.getText().toString(),txtProposalDate.getText().toString(),txtProposedBy.getText().toString());
+        Requisition requisition = new Requisition(RequisitionActivityFragment.REQUISITION_NO, RequisitionActivityFragment.COMMENTS, RequisitionActivityFragment.PURPOSE, RequisitionActivityFragment.DELIVERY_DATE, RequisitionActivityFragment.TOTAL_AMOUNT,CommonConstants.ORDER_STATUS_PENDING,txtReason.getText().toString(),txtProposalDate.getText().toString(),txtProposedBy.getText().toString(),RequisitionActivityFragment.RADIO);
         requisition.setKey(key);
         requisitionRef.document(key)
                 .set(requisition)
@@ -76,6 +115,7 @@ public class QuotationFragment extends Fragment {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Toast.makeText(getContext(),"Requisition placed successfully!",Toast.LENGTH_LONG).show();
+                        createProgressBar.setVisibility(View.INVISIBLE);
                         Log.d(TAG, "Requisition placed successfully!");
                     }
                 })

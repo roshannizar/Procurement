@@ -16,8 +16,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="15dp">
+            android:layout_height="wrap_content">
 
             <Button
                 android:id="@+id/btnPlaceRequisition2"
@@ -167,7 +166,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/txtDeliveryDate" />
 
             <TextView
-                android:id="@+id/textView25"
+                android:id="@+id/btnGenerateRequisition"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -188,7 +187,7 @@
                 android:text="Choose Supplier"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView25" />
+                app:layout_constraintTop_toBottomOf="@+id/btnGenerateRequisition" />
 
             <TextView
                 android:id="@+id/txtDeliveryDate"
@@ -208,10 +207,10 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
+                app:layout_constraintTop_toBottomOf="@+id/recyclerSupplier" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
+                android:id="@+id/recyclerSupplier"
                 android:layout_width="0dp"
                 android:layout_height="150dp"
                 android:layout_marginStart="16dp"
@@ -221,6 +220,19 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView27" />
+
+            <ProgressBar
+                android:id="@+id/createProgressBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:indeterminate="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnPlaceRequisition2" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
