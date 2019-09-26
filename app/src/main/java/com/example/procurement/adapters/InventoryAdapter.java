@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.procurement.R;
 import com.example.procurement.models.Inventory;
+import com.example.procurement.utils.CommonConstants;
 
 import java.util.ArrayList;
 
@@ -28,13 +29,13 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.requisition_inventory_list,parent,false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_requisition_inventory_list,parent,false);
 
         return new ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         Inventory i = iList.get(position);
 
         holder.txtNo.setText(i.getItemNo());
@@ -42,6 +43,15 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
         holder.txtQuantity.setText("Quantity: "+String.valueOf(i.getQuantity()));
         holder.txtUnitPrice.setText("Unit Price: "+String.valueOf(i.getUnitprice()));
         holder.txtTotalAmount.setText("Total Amount: "+String.valueOf(i.getQuantity()*i.getUnitprice()));
+
+        holder.btnClose.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                       CommonConstants.iInventory.remove(position);
+                    }
+                }
+        );
     }
 
     public int getItemCount() {

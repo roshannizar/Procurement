@@ -44,7 +44,6 @@ public class QuotationFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private Supplier s;
-    private ArrayList<Supplier> iSupplier;
     private SupplierAdapter supplierAdapter;
     private Context context;
     private Button btnPlacedRequisition,btnBackRequisition;
@@ -74,9 +73,8 @@ public class QuotationFragment extends Fragment {
         requisitionRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_REQUISITION);
 
         recyclerView = v.findViewById(R.id.recyclerSupplier);
-        iSupplier = new ArrayList<>();
         context = v.getContext();
-        supplierAdapter = new SupplierAdapter(context, iSupplier);
+        supplierAdapter = new SupplierAdapter(context, CommonConstants.iSupplier);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
@@ -89,13 +87,9 @@ public class QuotationFragment extends Fragment {
     }
 
     private void WriteDataValues() {
-        for(int j=1;j<=2;j++) {
-            s = new Supplier(String.valueOf(j),"John Motta","12/12/2019","12,000",CommonConstants.ORDER_STATUS_PENDING);
-            iSupplier.add(s);
-        }
-
-        supplierAdapter = new SupplierAdapter(context, iSupplier);
+        supplierAdapter = new SupplierAdapter(context, CommonConstants.iSupplier);
         recyclerView.setAdapter(supplierAdapter);
+        supplierAdapter.notifyDataSetChanged();
     }
 
     @SuppressLint("SetTextI18n")

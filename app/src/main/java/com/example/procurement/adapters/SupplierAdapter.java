@@ -11,8 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.procurement.R;
-import com.example.procurement.models.Inventory;
 import com.example.procurement.models.Supplier;
+import com.example.procurement.utils.CommonConstants;
 
 import java.util.ArrayList;
 
@@ -29,19 +29,28 @@ public class SupplierAdapter extends RecyclerView.Adapter<SupplierAdapter.ViewHo
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.requisition_supplier_list,parent,false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_requisition_supplier_list,parent,false);
 
         return new SupplierAdapter.ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(SupplierAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(SupplierAdapter.ViewHolder holder, final int position) {
         Supplier s = iSupplier.get(position);
 
         holder.txtSppNo.setText(s.getSupplierId());
         holder.txtSupplierName.setText(s.getSupplierName());
         holder.txtOffer.setText("Offer: "+s.getOffer());
         holder.txtDelivery.setText("Date: "+s.getExpectedDate());
+
+        holder.btnClose.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        CommonConstants.iSupplier.remove(position);
+                    }
+                }
+        );
 
     }
 

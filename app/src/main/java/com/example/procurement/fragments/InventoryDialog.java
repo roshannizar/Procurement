@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -17,12 +16,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.procurement.R;
-import com.example.procurement.activities.HomeActivity;
-import com.example.procurement.adapters.DialogAdapter;
+import com.example.procurement.activities.RequisitionActivity;
+import com.example.procurement.adapters.InventoryDialogAdapter;
 import com.example.procurement.models.InventoryData;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class InventoryDialog extends Fragment implements AdapterView.OnItemSelectedListener {
 
@@ -30,8 +28,8 @@ public class InventoryDialog extends Fragment implements AdapterView.OnItemSelec
     private ArrayList<InventoryData> listData;
     private TextView btnSave;
     private SeekBar skCount;
-    private InventoryData d;
-    private DialogAdapter dialogAdapter;
+    private InventoryData d,d1,d2,d3,d4;
+    private InventoryDialogAdapter inventoryDialogAdapter;
     private Context c;
 
     public InventoryDialog() {
@@ -47,7 +45,7 @@ public class InventoryDialog extends Fragment implements AdapterView.OnItemSelec
         skCount = v.findViewById(R.id.seekBar);
         c = v.getContext();
         listData = new ArrayList<>();
-        dialogAdapter = new DialogAdapter(c,listData);
+        inventoryDialogAdapter = new InventoryDialogAdapter(c,listData);
         btnSave = v.findViewById(R.id.btnSave);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -62,7 +60,7 @@ public class InventoryDialog extends Fragment implements AdapterView.OnItemSelec
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        HomeActivity.fm.beginTransaction().replace(R.id.fragment_container,new CreateOrderFragment(),null).commit();
+                        RequisitionActivity.fm2.beginTransaction().replace(R.id.fragment_container_requisition,new RequisitionActivityFragment(),null).commit();
                     }
                 }
         );
@@ -70,14 +68,20 @@ public class InventoryDialog extends Fragment implements AdapterView.OnItemSelec
 
     private void WriteDataValues() {
 
-        for(int i=0;i<5;i++) {
-            d = new InventoryData("Sand Heap","7","2");
-            listData.add(d);
-        }
+        d = new InventoryData("Sand Heap","7","22.0");
+        d1 = new InventoryData("Bricks","10","45.0");
+        d2 = new InventoryData("Cements","7","8.0");
+        d3 = new InventoryData("Wall Putty","12","140.0");
+        d4 = new InventoryData("Paint","8","0");
 
+        listData.add(d);
+        listData.add(d1);
+        listData.add(d2);
+        listData.add(d3);
+        listData.add(d4);
 
-        dialogAdapter = new DialogAdapter(c, listData);
-        recyclerView.setAdapter(dialogAdapter);
+        inventoryDialogAdapter = new InventoryDialogAdapter(c, listData);
+        recyclerView.setAdapter(inventoryDialogAdapter);
     }
 
     @Override

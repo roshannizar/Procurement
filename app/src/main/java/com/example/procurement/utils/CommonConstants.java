@@ -1,5 +1,10 @@
 package com.example.procurement.utils;
 
+import com.example.procurement.models.Inventory;
+import com.example.procurement.models.Supplier;
+
+import java.util.ArrayList;
+
 public class CommonConstants {
 
     public static final String COLLECTION_SITE_MANGER = "siteManagers";
@@ -23,6 +28,9 @@ public class CommonConstants {
     public static final String SAVE_STRING = "Save";
     public static final String UPDATE_STRING = "Update";
     public static final String CANCEL_STRING = "Cancel";
+
+    public static ArrayList<Inventory> iInventory = new ArrayList<>();
+    public static ArrayList<Supplier> iSupplier = new ArrayList<>();
 
     public static String ORDER_ID = "PO - 00";
     public static String REQUISITION_ID = "REQ-00";

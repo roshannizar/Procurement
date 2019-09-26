@@ -12,8 +12,7 @@ public class Supplier {
 
     }
 
-    public Supplier(String supplierId, String supplierName, String expectedDate, String offer, String status) {
-        this.supplierId = supplierId;
+    public Supplier(String supplierName, String expectedDate, String offer, String status) {
         this.supplierName = supplierName;
         this.expectedDate = expectedDate;
         this.offer = offer;
