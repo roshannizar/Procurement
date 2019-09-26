@@ -114,6 +114,7 @@ public class RequisitionViewFragment extends Fragment {
                         }
 
                         if(iRequisition.size()==0){
+                            imgLoader.refreshDrawableState();
                             imgLoader.setImageResource(R.drawable.ic_safebox);
                             imgLoader.setVisibility(View.VISIBLE);
                             txtLoader.setVisibility(View.VISIBLE);

@@ -165,6 +165,7 @@ public class OrderStatusFragment extends Fragment {
                 }
 
                 if(orders.size()==0){
+                    imgLoader.refreshDrawableState();
                     imgLoader.setImageResource(R.drawable.ic_safebox);
                     imgLoader.setVisibility(View.INVISIBLE);
                     txtLoader.setVisibility(View.INVISIBLE);
