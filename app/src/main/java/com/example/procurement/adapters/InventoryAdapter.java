@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.procurement.R;
@@ -24,6 +25,7 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
         this.iList = iList;
     }
 
+    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.requisition_inventory_list,parent,false);

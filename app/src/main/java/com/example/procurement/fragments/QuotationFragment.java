@@ -2,10 +2,14 @@ package com.example.procurement.fragments;
 
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,13 +22,18 @@ import android.widget.Toast;
 
 import com.example.procurement.R;
 import com.example.procurement.activities.RequisitionActivity;
+import com.example.procurement.adapters.InventoryAdapter;
+import com.example.procurement.adapters.SupplierAdapter;
+import com.example.procurement.models.Inventory;
 import com.example.procurement.models.Order;
 import com.example.procurement.models.Requisition;
+import com.example.procurement.models.Supplier;
 import com.example.procurement.utils.CommonConstants;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
@@ -32,6 +41,11 @@ import static com.example.procurement.activities.SignInActivity.siteManagerDBRef
 
 public class QuotationFragment extends Fragment {
 
+    private RecyclerView recyclerView;
+    private Supplier s;
+    private ArrayList<Supplier> iSupplier;
+    private SupplierAdapter supplierAdapter;
+    private Context context;
     private Button btnPlacedRequisition,btnBackRequisition;
     private EditText txtReason;
     private TextView txtProposalDate,txtProposedBy;
@@ -55,10 +69,29 @@ public class QuotationFragment extends Fragment {
         txtProposedBy = v.findViewById(R.id.txtProposedBy);
         requisitionRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_REQUISITION);
 
+        recyclerView = v.findViewById(R.id.recyclerSupplier);
+        iSupplier = new ArrayList<>();
+        context = v.getContext();
+        supplierAdapter = new SupplierAdapter(context, iSupplier);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+
         PlaceOrder();
         GoToRequisition();
         setProposalDate();
+        WriteDataValues();
+
         return v;
+    }
+
+    private void WriteDataValues() {
+        for(int j=1;j<=2;j++) {
+            s = new Supplier(String.valueOf(j),"John Motta","12/12/2019","12,000",CommonConstants.ORDER_STATUS_PENDING);
+            iSupplier.add(s);
+        }
+
+        supplierAdapter = new SupplierAdapter(context, iSupplier);
+        recyclerView.setAdapter(supplierAdapter);
     }
 
     @SuppressLint("SetTextI18n")
