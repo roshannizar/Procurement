@@ -39,8 +39,9 @@ public class RequisitionAdapter extends RecyclerView.Adapter<RequisitionAdapter.
 
         holder.txtRequisitionName.setText(requisition.getRequisitionNo());
         holder.txtRequisitionStatus.setText(requisition.getRequisitionStatus());
-        System.out.println("Status------------------- "+requisition.getRequisitionStatus());
-        holder.txtRequisitionDescription.setText(requisition.getBudget()+", "+requisition.getTotalAmount());
+        holder.txtwithInBudget.setText(requisition.getBudget());
+        holder.txtdeliveryDate.setText(requisition.getDeliveryDate());
+        holder.txtTotalAmount.setText("Rs: "+requisition.getTotalAmount());
     }
 
     public int getItemCount() {
@@ -53,15 +54,17 @@ public class RequisitionAdapter extends RecyclerView.Adapter<RequisitionAdapter.
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView txtRequisitionName, txtRequisitionDescription,txtRequisitionStatus,txtPlaceOrder,txtEnquire;
+        private TextView txtRequisitionName, txtRequisitionDescription,txtRequisitionStatus,txtPlaceOrder,txtEnquire,txtdeliveryDate,txtwithInBudget,txtTotalAmount;
         private ImageView txtRequisitionIcon,txtRequisitionStatusIcon;
 
         ViewHolder(View v) {
             super(v);
 
             txtRequisitionName = v.findViewById(R.id.requisitionName);
-            txtRequisitionDescription = v.findViewById(R.id.requisitionDescription);
             txtRequisitionStatus = v.findViewById(R.id.requisitionStatus);
+            txtTotalAmount = v.findViewById(R.id.totalAmount);
+            txtdeliveryDate = v.findViewById(R.id.deliveryDate);
+            txtwithInBudget = v.findViewById(R.id.withInBudget);
             txtPlaceOrder = v.findViewById(R.id.placeOrder);
             txtEnquire = v.findViewById(R.id.enquire);
             txtRequisitionIcon = v.findViewById(R.id.orderIcon);
