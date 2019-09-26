@@ -84,7 +84,7 @@ public class RequisitionActivityFragment extends Fragment {
         GenerateID();
         WriteDataValues();
         CheckRadio();
-        CheckValueInConstant();
+        //CheckValueInConstant();
 
         return v;
     }
@@ -182,9 +182,9 @@ public class RequisitionActivityFragment extends Fragment {
     }
 
     private void CheckValueInConstant() {
-        if(REQUISITION_NO.equals("REQ-00")) {
+        if(REQUISITION_NO.equals("REQ-00") || REQUISITION_NO == null) {
             setGenerateID(txtRequisitionNo.getText().toString());
-        } else if(PURPOSE.equals("")) {
+        } else if(PURPOSE.equals("") || PURPOSE == null) {
             txtRequisitionNo.setText(REQUISITION_NO);
             txtPurpose.setText("");
         } else if(COMMENTS.equals("")) {

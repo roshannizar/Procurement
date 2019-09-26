@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +52,7 @@ public class QuotationFragment extends Fragment {
     private TextView txtProposalDate,txtProposedBy;
     private CollectionReference requisitionRef;
     private final Calendar c = Calendar.getInstance();
+    private ProgressBar createProgressBar;
 
     public QuotationFragment() {
 
@@ -67,6 +69,9 @@ public class QuotationFragment extends Fragment {
         txtReason = v.findViewById(R.id.txtReason);
         txtProposalDate = v.findViewById(R.id.txtProposalDate);
         txtProposedBy = v.findViewById(R.id.txtProposedBy);
+        createProgressBar = v.findViewById(R.id.createProgressBar);
+        createProgressBar.setVisibility(View.INVISIBLE);
+
         requisitionRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_REQUISITION);
 
         recyclerView = v.findViewById(R.id.recyclerSupplier);
@@ -100,8 +105,9 @@ public class QuotationFragment extends Fragment {
     }
 
     private void WriteStatus() {
+        createProgressBar.setVisibility(View.VISIBLE);
         String key = requisitionRef.document().getId();
-        Requisition requisition = new Requisition(RequisitionActivityFragment.REQUISITION_NO, RequisitionActivityFragment.COMMENTS, RequisitionActivityFragment.PURPOSE, RequisitionActivityFragment.DELIVERY_DATE, RequisitionActivityFragment.TOTAL_AMOUNT,CommonConstants.ORDER_STATUS_PENDING,txtReason.getText().toString(),txtProposalDate.getText().toString(),txtProposedBy.getText().toString());
+        Requisition requisition = new Requisition(RequisitionActivityFragment.REQUISITION_NO, RequisitionActivityFragment.COMMENTS, RequisitionActivityFragment.PURPOSE, RequisitionActivityFragment.DELIVERY_DATE, RequisitionActivityFragment.TOTAL_AMOUNT,CommonConstants.ORDER_STATUS_PENDING,txtReason.getText().toString(),txtProposalDate.getText().toString(),txtProposedBy.getText().toString(),RequisitionActivityFragment.RADIO);
         requisition.setKey(key);
         requisitionRef.document(key)
                 .set(requisition)
@@ -109,6 +115,7 @@ public class QuotationFragment extends Fragment {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Toast.makeText(getContext(),"Requisition placed successfully!",Toast.LENGTH_LONG).show();
+                        createProgressBar.setVisibility(View.INVISIBLE);
                         Log.d(TAG, "Requisition placed successfully!");
                     }
                 })
