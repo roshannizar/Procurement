@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.procurement.R;
 import com.example.procurement.models.Enquire;
-import com.example.procurement.utils.CommonConstants;
 
 import java.util.List;
 
@@ -47,7 +46,7 @@ public class EnquireAdapter extends RecyclerView.Adapter<EnquireAdapter.MyViewHo
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.layout_enquire_item, parent, false);
+                .inflate(R.layout.layout_enquire_list, parent, false);
 
         return new MyViewHolder(itemView);
     }

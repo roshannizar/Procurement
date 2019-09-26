@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,6 +61,8 @@ public class EnquireFragment extends Fragment {
     private CollectionReference enquireDBRef;
     private ProgressBar progressBar;
     private String orderKey;
+    private ImageView imgLoader;
+    private TextView txtLoader,txtWait;
 
     public EnquireFragment(String orderKey) {
         this.orderKey = orderKey;
@@ -73,6 +76,9 @@ public class EnquireFragment extends Fragment {
         mContext = getContext();
         recyclerView = rootView.findViewById(R.id.rvLoading);
         progressBar = rootView.findViewById(R.id.progressBar);
+        txtWait = rootView.findViewById(R.id.txtWait);
+        txtLoader = rootView.findViewById(R.id.txtLoader);
+        imgLoader = rootView.findViewById(R.id.imgLoader);
 
         enquireDBRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_ORDER)
                 .document(orderKey)
@@ -198,6 +204,9 @@ public class EnquireFragment extends Fragment {
 
                 if (enquireList != null) {
                     mAdapter = new EnquireAdapter(mContext, enquireList);
+                    imgLoader.setVisibility(View.INVISIBLE);
+                    txtLoader.setVisibility(View.INVISIBLE);
+                    txtWait.setVisibility(View.INVISIBLE);
                     progressBar.setVisibility(View.GONE);
                     recyclerView.setAdapter(mAdapter);
                 }

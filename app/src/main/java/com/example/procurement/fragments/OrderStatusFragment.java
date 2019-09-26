@@ -4,7 +4,6 @@ package com.example.procurement.fragments;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,7 +25,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.procurement.R;
-import com.example.procurement.activities.HomeActivity;
 import com.example.procurement.adapters.OrderStatusAdapter;
 import com.example.procurement.models.Order;
 import com.example.procurement.status.ApprovedOrderStatus;
@@ -61,11 +59,10 @@ public class OrderStatusFragment extends Fragment {
     private ProgressBar progressBar;
     private Context mContext;
     private ImageView imgLoader;
-    private TextView txtLoader,txtWait;
+    private TextView txtLoader, txtWait;
     static int pendingStatus = 0, approvedStatus = 0, holdStatus = 0, placedStatus = 0, declinedStatus = 0, draftStatus = 0;
 
     public OrderStatusFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -188,8 +185,12 @@ public class OrderStatusFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if (!newText.equals("")) {
-                    adapter.getFilter().filter(newText);
+                if (!newText.equals("") && !newText.isEmpty()) {
+                    try {
+                        adapter.getFilter().filter(newText);
+                    } catch (NullPointerException e) {
+                        Log.w(TAG, "Caught NullPointerException");
+                    }
                 }
                 return true;
             }
