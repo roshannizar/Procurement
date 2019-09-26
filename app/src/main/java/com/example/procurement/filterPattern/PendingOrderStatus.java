@@ -1,4 +1,4 @@
-package com.example.procurement.status;
+package com.example.procurement.filterPattern;
 
 import com.example.procurement.models.Order;
 import com.example.procurement.utils.CommonConstants;
@@ -13,7 +13,7 @@ public class PendingOrderStatus implements OrderStatus {
         List<Order> pendingOrders = new ArrayList<>();
 
         for (Order order : orders) {
-            if (order.getStatus().equals(CommonConstants.ORDER_STATUS_PENDING)) {
+            if (order.getOrderStatus().equals(CommonConstants.ORDER_STATUS_PENDING)) {
                 pendingOrders.add(order);
             }
         }

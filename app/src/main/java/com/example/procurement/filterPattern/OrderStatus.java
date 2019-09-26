@@ -1,4 +1,4 @@
-package com.example.procurement.status;
+package com.example.procurement.filterPattern;
 
 import com.example.procurement.models.Order;
 

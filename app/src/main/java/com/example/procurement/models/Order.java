@@ -3,29 +3,18 @@ package com.example.procurement.models;
 
 public class Order {
     private String orderID;
-    private String name;
-    private String status;
-    private String date;
+    private String requisitionID;
+    private String vendor;
+    private String company;
+    private String orderName;
+    private String orderStatus;
+    private String deliveryDate;
+    private String orderedDate;
     private String description;
     private String key;
+    private double subTotal;
 
     public Order() {
-    }
-
-    public Order(String orderID, String name, String description, String status, String date) {
-        this.orderID = orderID;
-        this.name = name;
-        this.description = description;
-        this.status = status;
-        this.date = date;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String getOrderID() {
@@ -36,28 +25,68 @@ public class Order {
         this.orderID = orderID;
     }
 
-    public String getName() {
-        return name;
+    public String getRequisitionID() {
+        return requisitionID;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setRequisitionID(String requisitionID) {
+        this.requisitionID = requisitionID;
     }
 
-    public String getStatus() {
-        return status;
+    public String getVendor() {
+        return vendor;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setVendor(String vendor) {
+        this.vendor = vendor;
     }
 
-    public String getDate() {
-        return date;
+    public String getCompany() {
+        return company;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
+    public String getOrderName() {
+        return orderName;
+    }
+
+    public void setOrderName(String orderName) {
+        this.orderName = orderName;
+    }
+
+    public String getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(String orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
+    public String getDeliveryDate() {
+        return deliveryDate;
+    }
+
+    public void setDeliveryDate(String deliveryDate) {
+        this.deliveryDate = deliveryDate;
+    }
+
+    public String getOrderedDate() {
+        return orderedDate;
+    }
+
+    public void setOrderedDate(String orderedDate) {
+        this.orderedDate = orderedDate;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getKey() {
@@ -66,5 +95,13 @@ public class Order {
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public double getSubTotal() {
+        return subTotal;
+    }
+
+    public void setSubTotal(double subTotal) {
+        this.subTotal = subTotal;
     }
 }

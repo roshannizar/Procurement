@@ -21,7 +21,7 @@ public class Requisition {
     }
 
     public Requisition(String requisitionNo, String comment, String purpose, String deliveryDate, String totalAmount, String requisitionStatus, String reason, String proposalDate, String proposedBy, String budget) {
-        this. requisitionNo = requisitionNo;
+        this.requisitionNo = requisitionNo;
         this.comment = comment;
         this.purpose = purpose;
         this.deliveryDate = deliveryDate;
