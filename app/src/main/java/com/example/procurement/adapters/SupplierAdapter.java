@@ -28,7 +28,7 @@ public class SupplierAdapter extends RecyclerView.Adapter<SupplierAdapter.ViewHo
 
     @NonNull
     @Override
-    public SupplierAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.requisition_supplier_list,parent,false);
 
         return new SupplierAdapter.ViewHolder(v);
