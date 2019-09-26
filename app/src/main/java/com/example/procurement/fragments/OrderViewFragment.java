@@ -156,10 +156,12 @@ public class OrderViewFragment extends Fragment {
                             break;
                         case CommonConstants.ORDER_STATUS_HOLD:
                             txtStatusView.setBackgroundResource(R.drawable.badge_hold);
+                            btnUpdate.setText("Press To Change Status");
+                            btnUpdate.setBackgroundResource(R.drawable.badge_approved);
                             break;
                         case CommonConstants.ORDER_STATUS_DRAFT:
                             txtStatusView.setBackgroundResource(R.drawable.badge_draft);
-                            btnUpdate.setText("Edit");
+                            btnUpdate.setText("Press To Change Status");
                             btnUpdate.setBackgroundResource(R.drawable.badge_approved);
                             break;
                         default:
