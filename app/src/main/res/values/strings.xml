@@ -59,4 +59,5 @@
     <string name="description">"Description     : "</string>
     <string name="deliveryDate">"Delivery Date  : "</string>
     <string name="orderedDate">"Ordered Date  : "</string>
+    <string name="emptyString">"     "</string>
 </resources>

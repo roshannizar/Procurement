@@ -1,6 +1,8 @@
 package com.example.procurement.fragments;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,14 +19,21 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.procurement.R;
 import com.example.procurement.activities.HomeActivity;
+import com.example.procurement.adapters.InventoryAdapter;
+import com.example.procurement.models.Inventory;
 import com.example.procurement.models.Order;
 import com.example.procurement.utils.CommonConstants;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+
+import java.util.ArrayList;
 
 import static com.example.procurement.activities.SignInActivity.siteManagerDBRef;
 
@@ -35,10 +44,15 @@ public class OrderViewFragment extends Fragment {
     private Order order;
     private DocumentReference orderDBRef;
     private ImageView btnBack;
+    private RecyclerView productItemView;
     private EditText etCompany, etVendor;
     private TextView txtOrderId, txtRequisitionId, txtOrderName, txtDeliveryDate,
             txtDescription, txtStatusView, txtSubTotal, txtTax, txtTotal, txtOrderedDate;
     private Button btnUpdate;
+    private ArrayList<Inventory> iInventory;
+    private InventoryAdapter inventoryAdapter;
+    private Inventory i;
+
 
     public OrderViewFragment(String orderKey) {
         this.orderKey = orderKey;
@@ -74,14 +88,34 @@ public class OrderViewFragment extends Fragment {
         etCompany = rootView.findViewById(R.id.etCompany);
         etVendor = rootView.findViewById(R.id.etVendor);
         btnUpdate = rootView.findViewById(R.id.btnUpdate);
-        btnUpdate.setText("Delete");
-        btnUpdate.setBackgroundResource(R.drawable.badge_denied);
 
+        iInventory = new ArrayList<>();
+        inventoryAdapter = new InventoryAdapter(getActivity(),iInventory);
+
+        productItemView = rootView.findViewById(R.id.rvItemView);
+        productItemView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        productItemView.setItemAnimator(new DefaultItemAnimator());
+
+        DeleteOrder();
         readStatusData();
+        WriteDataValues();
         getBack();
 
         return rootView;
     }
+
+    private void WriteDataValues() {
+
+        for(int j=1;j<=5;j++) {
+            i = new Inventory(String.valueOf(j),"Sand Heap","",7,2);
+            iInventory.add(i);
+        }
+
+
+        inventoryAdapter = new InventoryAdapter(getActivity(), iInventory);
+        productItemView.setAdapter(inventoryAdapter);
+    }
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -124,24 +158,16 @@ public class OrderViewFragment extends Fragment {
 
                 if (order != null) {
 
-                    String orderID = getString(R.string.orderID) + order.getOrderID();
-                    String requisitionID = getString(R.string.requisitionID) + order.getRequisitionID();
-                    String vendor = order.getVendor();
-                    String company = order.getCompany();
-                    String orderName = getString(R.string.orderName) + order.getOrderName();
                     String orderStatus = order.getOrderStatus();
-                    String deliveryDate = getString(R.string.deliveryDate) + order.getDeliveryDate();
-                    String orderedDate = getString(R.string.orderedDate) + order.getOrderedDate();
-                    String description = getString(R.string.description) + order.getDescription();
 
-                    etVendor.setText(vendor);
-                    etCompany.setText(company);
-                    txtOrderId.setText(orderID);
-                    txtRequisitionId.setText(requisitionID);
-                    txtOrderName.setText(orderName);
-                    txtOrderedDate.setText(orderedDate);
-                    txtDeliveryDate.setText(deliveryDate);
-                    txtDescription.setText(description);
+                    etVendor.setText(order.getVendor());
+                    etCompany.setText(order.getCompany());
+                    txtOrderId.setText(order.getOrderID());
+                    txtRequisitionId.setText(order.getRequisitionID());
+                    txtOrderName.setText(order.getOrderName());
+                    txtOrderedDate.setText(order.getOrderedDate());
+                    txtDeliveryDate.setText(order.getDeliveryDate());
+                    txtDescription.setText(order.getDescription());
                     txtStatusView.setText(orderStatus);
 
                     switch (orderStatus) {
@@ -156,13 +182,11 @@ public class OrderViewFragment extends Fragment {
                             break;
                         case CommonConstants.ORDER_STATUS_HOLD:
                             txtStatusView.setBackgroundResource(R.drawable.badge_hold);
-                            btnUpdate.setText("Press To Change Status");
-                            btnUpdate.setBackgroundResource(R.drawable.badge_approved);
+                            EditOrder();
                             break;
                         case CommonConstants.ORDER_STATUS_DRAFT:
                             txtStatusView.setBackgroundResource(R.drawable.badge_draft);
-                            btnUpdate.setText("Press To Change Status");
-                            btnUpdate.setBackgroundResource(R.drawable.badge_approved);
+                            EditOrder();
                             break;
                         default:
                             txtStatusView.setBackgroundResource(R.drawable.badge_denied);
@@ -175,6 +199,28 @@ public class OrderViewFragment extends Fragment {
                     txtTax.setText(String.valueOf(tax));
                     txtTotal.setText(String.valueOf(total));
                 }
+            }
+        });
+    }
+
+    private void EditOrder() {
+        btnUpdate.setText("Edit");
+        btnUpdate.setBackgroundResource(R.drawable.badge_approved);
+        btnUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+    }
+
+    private void DeleteOrder() {
+        btnUpdate.setText("Delete");
+        btnUpdate.setBackgroundResource(R.drawable.badge_denied);
+        btnUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
             }
         });
     }
