@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.procurement.R;
 import com.example.procurement.fragments.DashboardFragment;
+import com.example.procurement.fragments.InventoryDialog;
 import com.example.procurement.fragments.OrderStatusFragment;
 import com.example.procurement.fragments.ProfileFragment;
 import com.example.procurement.fragments.RequisitionViewFragment;
@@ -81,6 +82,7 @@ public class HomeActivity extends AppCompatActivity {
             }
             FragmentTransaction ft = fm.beginTransaction();
             DashboardFragment df = new DashboardFragment();
+            //InventoryDialog df = new InventoryDialog();
             ft.add(R.id.fragment_container, df, null);
             ft.commit();
         }

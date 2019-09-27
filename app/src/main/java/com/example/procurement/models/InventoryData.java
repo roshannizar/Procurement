@@ -2,43 +2,59 @@ package com.example.procurement.models;
 
 public class InventoryData {
 
-    private String name;
-    private String progressLevel;
-    private String count;
+    private String iName;
+    private String quantity;
+    private String unitPrice;
+    private String totalAmount;
 
     public InventoryData() {
-        name = null;
-        progressLevel = null;
-        count =null;
+        iName = null;
+        quantity = null;
+        unitPrice =null;
     }
 
-    public InventoryData(String name, String progressLevel, String count) {
-        this.name = name;
-        this.progressLevel = progressLevel;
-        this.count = count;
+    public InventoryData(String iName, String quantity, String unitPrice) {
+        this.iName = iName;
+        this.quantity = quantity;
+        this.unitPrice = unitPrice;
     }
 
-    public String getCount() {
-        return count;
+    public InventoryData(String iName, String quantity, String unitPrice, String totalAmount) {
+        this.iName = iName;
+        this.quantity = quantity;
+        this.unitPrice = unitPrice;
+        this.totalAmount = totalAmount;
     }
 
-    public String getIName() {
-        return name;
+    public void setTotalAmount(String totalAmount) {
+        this.totalAmount = totalAmount;
     }
 
-    public String getProgressLevel() {
-        return progressLevel;
+    public String getTotalAmount() {
+        return totalAmount;
     }
 
-    public void setCount(String count) {
-        this.count = count;
+    public String getUnitPrice() {
+        return unitPrice;
     }
 
-    public void setIName(String name) {
-        this.name = name;
+    public String getiName() {
+        return iName;
     }
 
-    public void setProgressLevel(String progressLevel) {
-        this.progressLevel = progressLevel;
+    public String getQuantity() {
+        return quantity;
+    }
+
+    public void setUnitPrice(String unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
+    public void setiName(String iname) {
+        this.iName = iName;
+    }
+
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
     }
 }

@@ -20,7 +20,6 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.procurement.R;
 import com.example.procurement.activities.RequisitionActivity;
@@ -28,7 +27,6 @@ import com.example.procurement.adapters.InventoryAdapter;
 import com.example.procurement.models.Inventory;
 import com.example.procurement.utils.CommonConstants;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -39,7 +37,6 @@ import static com.example.procurement.utils.CommonConstants.REQUISITION_ID;
 public class RequisitionActivityFragment extends Fragment {
 
     private RecyclerView recyclerView;
-    private ArrayList<Inventory> iInventory;
     private Inventory i;
     private Context c;
     private RadioGroup radioGroup;
@@ -48,7 +45,7 @@ public class RequisitionActivityFragment extends Fragment {
     private DatePickerDialog picker;
     private Button btnQuotation;
     private EditText txtRequisitionNo,txtPurpose,txtComments;
-    private TextView txtDeliveryDate,txtTotalAmount,btnGenerate;
+    private TextView txtDeliveryDate,txtTotalAmount,btnGenerate,btnAddItems;
     static String REQUISITION_NO= REQUISITION_ID,PURPOSE,COMMENTS="",DELIVERY_DATE="",TOTAL_AMOUNT="",RADIO="";
 
     public RequisitionActivityFragment() {
@@ -70,11 +67,12 @@ public class RequisitionActivityFragment extends Fragment {
         radioGroup = v.findViewById(R.id.budgetRadio);
         radioNoButton = v.findViewById(R.id.radioNo);
         radioYesButton = v.findViewById(R.id.radioYes);
+        btnAddItems = v.findViewById(R.id.btnAddItems);
 
         recyclerView = v.findViewById(R.id.recyclerItems);
-        iInventory = new ArrayList<>();
+
         c= v.getContext();
-        inventoryAdapter = new InventoryAdapter(c,iInventory);
+        inventoryAdapter = new InventoryAdapter(c,CommonConstants.iInventory);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
@@ -85,8 +83,20 @@ public class RequisitionActivityFragment extends Fragment {
         WriteDataValues();
         CheckRadio();
         //CheckValueInConstant();
+        PopUpItems();
 
         return v;
+    }
+
+    private void PopUpItems() {
+        btnAddItems.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        RequisitionActivity.fm2.beginTransaction().replace(R.id.fragment_container_requisition,new InventoryDialog(),null).commit();
+                    }
+                }
+        );
     }
 
     private void CheckRadio() {
@@ -106,14 +116,8 @@ public class RequisitionActivityFragment extends Fragment {
     }
 
     private void WriteDataValues() {
-
-        for(int j=1;j<=5;j++) {
-            i = new Inventory(String.valueOf(j),"Sand Heap","",7,2);
-            iInventory.add(i);
-        }
-
-
-        inventoryAdapter = new InventoryAdapter(c, iInventory);
+        inventoryAdapter = new InventoryAdapter(c, CommonConstants.iInventory);
+        inventoryAdapter.notifyDataSetChanged();
         recyclerView.setAdapter(inventoryAdapter);
     }
 
@@ -273,7 +277,7 @@ public class RequisitionActivityFragment extends Fragment {
                     txtPurpose.setBackgroundResource(R.drawable.text_box);
                     txtComments.setBackgroundResource(R.drawable.text_box_empty);
                     value = false;
-                } else if(iInventory.size() == 0) {
+                } else if(CommonConstants.iInventory.size() == 0) {
                     txtComments.setBackgroundResource(R.drawable.text_box);
                     recyclerView.setBackgroundResource(R.drawable.text_box_empty);
                     value = false;
