@@ -35,12 +35,20 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 import static com.example.procurement.activities.SignInActivity.siteManagerDBRef;
+import static com.example.procurement.utils.CommonConstants.COLLECTION_REQUISITION;
+import static com.example.procurement.utils.CommonConstants.COLLECTION_REQUISITION_INVENTORY;
+import static com.example.procurement.utils.CommonConstants.COLLECTION_REQUISITION_SUPPLIER;
+import static com.example.procurement.utils.CommonConstants.COLLECTION_SITE_MANGER;
+import static com.example.procurement.utils.CommonConstants.iInventory;
+import static com.example.procurement.utils.CommonConstants.iSupplier;
 
 public class QuotationFragment extends Fragment {
 
@@ -51,7 +59,7 @@ public class QuotationFragment extends Fragment {
     private Button btnPlacedRequisition,btnBackRequisition;
     private EditText txtReason;
     private TextView txtProposalDate,txtProposedBy,btnAddSupplier;
-    private CollectionReference requisitionRef;
+    private CollectionReference requisitionRef,inventoryRef,supplierRef;
     private final Calendar c = Calendar.getInstance();
     private ProgressBar createProgressBar;
     private FirebaseAuth mAuth;
@@ -74,7 +82,7 @@ public class QuotationFragment extends Fragment {
         createProgressBar.setVisibility(View.INVISIBLE);
         btnAddSupplier = v.findViewById(R.id.btnAddSupplier);
         mAuth = FirebaseAuth.getInstance();
-        requisitionRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_REQUISITION);
+        requisitionRef = siteManagerDBRef.collection(COLLECTION_REQUISITION);
 
         recyclerView = v.findViewById(R.id.recyclerSupplier);
         context = v.getContext();
@@ -137,11 +145,8 @@ public class QuotationFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Toast.makeText(getContext(),"Requisition placed successfully!",Toast.LENGTH_LONG).show();
-                        createProgressBar.setVisibility(View.INVISIBLE);
+                        //Toast.makeText(getContext(),"Requisition placed successfully!",Toast.LENGTH_LONG).show();
                         Log.d(TAG, "Requisition placed successfully!");
-                        CommonConstants.iInventory.clear();
-                        CommonConstants.iSupplier.clear();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -151,6 +156,63 @@ public class QuotationFragment extends Fragment {
                         Log.w(TAG, "Error while placing the document", e);
                     }
                 });
+
+        //Add Inventory Bulk Insert
+        inventoryRef = siteManagerDBRef.collection(COLLECTION_REQUISITION).document(key).collection(COLLECTION_REQUISITION_INVENTORY);
+        supplierRef = siteManagerDBRef.collection(COLLECTION_REQUISITION).document(key).collection(COLLECTION_REQUISITION_SUPPLIER);
+
+        for(int i=0;i<iInventory.size();i++) {
+
+            Inventory inventoryList = iInventory.get(i);
+            String inventoryKey = inventoryRef.document().getId();
+            Inventory inventory = new Inventory(inventoryList.getItemNo(),inventoryList.getItemName(),"",inventoryList.getQuantity(),inventoryList.getUnitprice());
+            requisition.setKey(inventoryKey);
+            inventoryRef.document(inventoryKey)
+                    .set(inventory)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            //Toast.makeText(getContext(),"Inventory placed successfully!",Toast.LENGTH_LONG).show();
+                            Log.d(TAG, "Inventory placed successfully!");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getContext(),"Error while placing the inventory",Toast.LENGTH_LONG).show();
+                            Log.w(TAG, "Error while placing the document", e);
+                        }
+                    });
+        }
+
+        //Add Supplier Bulk Insert
+        for(int i =0;i<iSupplier.size();i++) {
+            Supplier supplierList = iSupplier.get(i);
+            String supplierKey = supplierRef.document().getId();
+            Supplier supplier = new Supplier(supplierList.getSupplierName(),supplierList.getExpectedDate(),supplierList.getOffer(),supplierList.getSupplierStatus());
+            requisition.setKey(supplierKey);
+            supplierRef.document(supplierKey)
+                    .set(supplier)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(getContext(),"Requisition placed successfully!",Toast.LENGTH_LONG).show();
+                            createProgressBar.setVisibility(View.INVISIBLE);
+                            Log.d(TAG, "Supplier placed successfully!");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getContext(),"Error while placing the inventory",Toast.LENGTH_LONG).show();
+                            Log.w(TAG, "Error while placing the document", e);
+                        }
+                    });
+        }
+
+        CommonConstants.iInventory.clear();
+        CommonConstants.iSupplier.clear();
+
     }
 
     private void PlaceOrder() {

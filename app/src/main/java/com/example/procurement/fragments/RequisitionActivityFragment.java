@@ -114,10 +114,10 @@ public class RequisitionActivityFragment extends Fragment {
         txtTotalAmount.setText(String.valueOf(value));
 
         if(value>100000.0) {
-            txtStatus.setText("Hold");
+            txtStatus.setText(R.string.hold);
             txtStatus.setBackgroundResource(R.drawable.badge_hold);
         } else {
-            txtStatus.setText("Pending");
+            txtStatus.setText(R.string.pending);
             txtStatus.setBackgroundResource(R.drawable.badge_pending);
         }
     }
