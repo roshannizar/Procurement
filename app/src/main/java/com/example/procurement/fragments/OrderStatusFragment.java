@@ -102,7 +102,6 @@ public class OrderStatusFragment extends Fragment {
         txtLoader = rootView.findViewById(R.id.txtLoader);
         imgLoader = rootView.findViewById(R.id.imgLoader);
 
-        //writeStatusData();
         readStatusData();
 
         return rootView;
@@ -116,36 +115,6 @@ public class OrderStatusFragment extends Fragment {
         this.checkedItem = checkedItem;
     }
 
-    private void writeStatusData() {
-
-        String key = orderDBRef.document().getId();
-        Order order = new Order();
-        order.setOrderID("PO.1");
-        order.setRequisitionID("RQ.1");
-        order.setOrderName("Bricks");
-        order.setCompany("VIP");
-        order.setVendor("Praveen");
-        order.setDeliveryDate("21-10-2019");
-        order.setOrderedDate("15-09-2019");
-        order.setDescription("Lorem LoremLoremLoremLoremLoremLoremLoremLorem ");
-        order.setOrderStatus("Pending");
-        order.setSubTotal(2500.00);
-        order.setOrderKey(key);
-        orderDBRef.document(key)
-                .set(order)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "DocumentSnapshot successfully written!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error writing document", e);
-                    }
-                });
-    }
 
     private void readStatusData() {
 
@@ -200,7 +169,7 @@ public class OrderStatusFragment extends Fragment {
 
         final MenuItem searchItem = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) searchItem.getActionView();
-        searchView.setQueryHint("Search by Order Name");
+        searchView.setQueryHint("Search by Order ID");
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

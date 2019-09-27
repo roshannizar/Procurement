@@ -1,17 +1,28 @@
 package com.example.procurement.fragments;
 
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,34 +31,52 @@ import com.example.procurement.R;
 import com.example.procurement.activities.HomeActivity;
 import com.example.procurement.models.Order;
 import com.example.procurement.models.Requisition;
+import com.example.procurement.models.Site;
+import com.example.procurement.models.Supplier;
 import com.example.procurement.utils.CommonConstants;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.Date;
+import java.time.Year;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.example.procurement.activities.SignInActivity.siteManagerDBRef;
+import static com.example.procurement.utils.CommonConstants.GENERATE_ORDER_FRAGMENT_TAG;
+import static com.example.procurement.utils.CommonConstants.ORDER_ID;
 
 public class CreatePurchaseOrderFragment extends Fragment {
 
     private Spinner spCompany, spVendor;
-    private TextView txtOrderId, txtRequisitionId, txtOrderName, txtDeliveryDate,
-            txtDescription, txtStatusView, txtSubTotal, txtTax, txtTotal, txtOrderedDate;
-    private Button btnUpdate;
+    private TextView txtOrderId, txtRequisitionId, txtDeliveryDate,
+            txtDescription, txtStatusView, txtSubTotal, txtTax, txtTotal, txtCurrentDate, btnAddItems;
     private CardView cvTotal;
     private RecyclerView productItem;
-    private TextView addProduct;
     private Button btnGenerate;
     private ImageView btnBack;
     private String requisitionKey;
     private DocumentReference requisitionRef;
-    private CollectionReference orderDbRef;
+    private CollectionReference orderDBRef, supplierDBRef, sitesDBRef;
     private Requisition requisition;
+    private DatePickerDialog picker;
+    private ArrayList<String> companyList, vendorList;
+    private Context mContext;
 
     public CreatePurchaseOrderFragment(String requisitionKey) {
         this.requisitionKey = requisitionKey;
+        companyList = new ArrayList<>();
+        vendorList = new ArrayList<>();
     }
 
 
@@ -63,7 +92,11 @@ public class CreatePurchaseOrderFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_create_purchase_order, container, false);
 
         requisitionRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_REQUISITION).document(requisitionKey);
-        orderDbRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_ORDER);
+        orderDBRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_ORDER);
+        supplierDBRef = FirebaseFirestore.getInstance().collection(CommonConstants.COLLECTION_SUPPLIERS);
+        sitesDBRef = FirebaseFirestore.getInstance().collection(CommonConstants.COLLECTION_SITES);
+
+        mContext = getContext();
 
         btnBack = rootView.findViewById(R.id.btnBack);
         spCompany = rootView.findViewById(R.id.spCompany);
@@ -71,8 +104,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
 
         txtOrderId = rootView.findViewById(R.id.txtOrderId);
         txtRequisitionId = rootView.findViewById(R.id.txtRequisitionId);
-        txtOrderName = rootView.findViewById(R.id.txtOrderName);
-        txtOrderedDate = rootView.findViewById(R.id.txtOrderedDate);
+        txtCurrentDate = rootView.findViewById(R.id.txtOrderedDate);
         txtDeliveryDate = rootView.findViewById(R.id.txtDeliveryDate);
         txtDescription = rootView.findViewById(R.id.txtDescription);
         txtStatusView = rootView.findViewById(R.id.txtStatusView);
@@ -85,10 +117,17 @@ public class CreatePurchaseOrderFragment extends Fragment {
         cvTotal.setVisibility(View.GONE);
 
         productItem = rootView.findViewById(R.id.rvItemView);
-        addProduct = rootView.findViewById(R.id.addProduct);
+        btnAddItems = rootView.findViewById(R.id.btnAddItems);
         btnGenerate = rootView.findViewById(R.id.btnGenerate);
-        //addProduct = rootView.findViewById(R.id.addProduct);
         getBack();
+        PopUpItems();
+        getGenerateID();
+        ShowDialog();
+        generateOrder();
+        readData();
+        setDate();
+        setDescriptionDialog();
+        setSpinnerData();
         return rootView;
     }
 
@@ -97,6 +136,56 @@ public class CreatePurchaseOrderFragment extends Fragment {
         menu.clear();
         inflater.inflate(R.menu.create_order_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    private void setSpinnerData() {
+        final String selectCompany = "Select Company";
+        final String selectVendor = "Select Vendor";
+
+        sitesDBRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(GENERATE_ORDER_FRAGMENT_TAG, "Listen failed.", e);
+                }
+
+                companyList.clear();
+                companyList.add(selectCompany);
+
+                if (queryDocumentSnapshots != null) {
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        Site site = document.toObject(Site.class);
+                        companyList.add(site.getSiteName());
+                    }
+                }
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(mContext,android.R.layout.simple_spinner_item, companyList);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spCompany.setAdapter(adapter);
+            }
+        });
+
+        supplierDBRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(GENERATE_ORDER_FRAGMENT_TAG, "Listen failed.", e);
+                }
+
+                vendorList.clear();
+                vendorList.add(selectVendor);
+
+                if (queryDocumentSnapshots != null) {
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        Supplier supplier = document.toObject(Supplier.class);
+                        vendorList.add(supplier.getSupplierName());
+                    }
+                }
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(mContext,android.R.layout.simple_spinner_item, vendorList);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spVendor.setAdapter(adapter);
+            }
+        });
+
     }
 
     private void getBack() {
@@ -110,7 +199,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
         );
     }
 
-    private void readStatusData() {
+    private void readData() {
         requisitionRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -119,13 +208,8 @@ public class CreatePurchaseOrderFragment extends Fragment {
 
                 if (requisition != null) {
 
-                 //   txtOrderId.setText(order.getOrderID());
                     txtRequisitionId.setText(requisition.getRequisitionNo());
-//                    txtOrderName.setText(order.getOrderName());
-                    txtOrderedDate.setText(new Date().toString());
                     txtDeliveryDate.setText(requisition.getDeliveryDate());
-//                    txtDescription.setText(order.getDescription());
-                   // txtStatusView.setText(orderStatus);
 
 //                    double subTotal = order.getSubTotal();
 //                    double tax = subTotal * 0.10;
@@ -138,14 +222,145 @@ public class CreatePurchaseOrderFragment extends Fragment {
         });
     }
 
-    private void EditOrder() {
-        btnUpdate.setText("Edit");
-        btnUpdate.setBackgroundResource(R.drawable.badge_approved);
-        btnUpdate.setOnClickListener(new View.OnClickListener() {
+    private void getGenerateID() {
+        Pattern p = Pattern.compile("\\d+");
+        String generateNo = null;
+        if (ORDER_ID != null) {
+            Matcher m = p.matcher(ORDER_ID);
+
+            while (m.find()) {
+                generateNo = m.group();
+            }
+            int value = Integer.parseInt(generateNo) + 1;
+            String temp = "PO-" + value;
+            txtOrderId.setText(temp);
+        }
+    }
+
+    private void PopUpItems() {
+        btnAddItems.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new InventoryDialog(), null).commit();
             }
         });
     }
+
+    private void ShowDialog() {
+        txtDeliveryDate.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        final Calendar c = Calendar.getInstance();
+                        int day = c.get(Calendar.DAY_OF_MONTH);
+                        int month = c.get(Calendar.MONTH);
+                        int year = c.get(Calendar.YEAR);
+                        picker = new DatePickerDialog(Objects.requireNonNull(getContext()),
+                                new DatePickerDialog.OnDateSetListener() {
+                                    @SuppressLint("SetTextI18n")
+                                    @Override
+                                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                        txtDeliveryDate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                                    }
+                                }, year, month, day);
+                        picker.show();
+                    }
+                }
+        );
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void setDate() {
+        int year, date, month;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            year = Year.now().getValue();
+        } else {
+            year = Calendar.getInstance().get(Calendar.YEAR);
+        }
+
+        date = Calendar.getInstance().get(Calendar.DATE);
+        month = Calendar.getInstance().get(Calendar.MONTH);
+        txtCurrentDate.setText(date + "-" + month + "-" + year);
+    }
+
+    private void setDescriptionDialog() {
+
+        txtDescription.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LayoutInflater layoutInflaterAndroid = LayoutInflater.from(mContext);
+                View dialogView = layoutInflaterAndroid.inflate(R.layout.layout_add_description, null);
+
+                AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(mContext);
+                alertDialogBuilderUserInput.setView(dialogView);
+
+                final EditText inputText = dialogView.findViewById(R.id.txtDescription);
+                inputText.setHint(R.string.hint_enter_description);
+
+                alertDialogBuilderUserInput
+                        .setCancelable(false)
+                        .setPositiveButton(CommonConstants.SAVE_STRING, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialogBox, int id) {
+                            }
+                        })
+                        .setNegativeButton(CommonConstants.CANCEL_STRING,
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialogBox, int id) {
+                                        dialogBox.cancel();
+                                    }
+                                });
+
+                final AlertDialog alertDialog = alertDialogBuilderUserInput.create();
+                alertDialog.show();
+
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        txtDescription.setText(inputText.getText().toString());
+                        alertDialog.dismiss();
+                    }
+                });
+            }
+        });
+
+
+    }
+
+    private void generateOrder() {
+        btnGenerate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String key = orderDBRef.document().getId();
+                Order order = new Order();
+                order.setOrderID(txtOrderId.getText().toString());
+                order.setRequisitionID(txtRequisitionId.getText().toString());
+                order.setCompany(spCompany.getSelectedItem().toString());
+                order.setVendor(spVendor.getSelectedItem().toString());
+                order.setDeliveryDate(txtDeliveryDate.getText().toString());
+                order.setOrderedDate(txtCurrentDate.getText().toString());
+                order.setDescription(txtDescription.getText().toString());
+                order.setOrderStatus(txtStatusView.getText().toString());
+                order.setSubTotal(2500.00);
+                order.setOrderKey(key);
+                orderDBRef.document(key)
+                        .set(order)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d(GENERATE_ORDER_FRAGMENT_TAG, "DocumentSnapshot successfully written!");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w(GENERATE_ORDER_FRAGMENT_TAG, "Error writing document", e);
+                            }
+                        });
+            }
+        });
+    }
+
+
 }

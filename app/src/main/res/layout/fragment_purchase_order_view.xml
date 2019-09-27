@@ -30,6 +30,8 @@
                 android:layout_marginEnd="32dp"
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/badge_placed"
+                android:clickable="true"
+                android:focusable="true"
                 android:padding="8dp"
                 android:text="Update"
                 android:textAllCaps="false"
@@ -212,7 +214,7 @@
                 android:id="@+id/textView4"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:text="Order Details"
                 android:textAlignment="viewStart"
@@ -299,16 +301,6 @@
                         app:layout_constraintTop_toBottomOf="@+id/txtRequisitionId" />
 
                     <TextView
-                        android:id="@+id/txtOrderName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="5dp"
-                        android:paddingBottom="5dp"
-                        android:text="@string/emptyString"
-                        app:layout_constraintStart_toEndOf="@+id/textView46"
-                        app:layout_constraintTop_toBottomOf="@+id/txtOrderId" />
-
-                    <TextView
                         android:id="@+id/txtDescription"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -330,7 +322,7 @@
                         android:paddingBottom="5dp"
                         android:text="@string/emptyString"
                         app:layout_constraintStart_toEndOf="@+id/textView47"
-                        app:layout_constraintTop_toBottomOf="@+id/txtOrderName" />
+                        app:layout_constraintTop_toBottomOf="@+id/txtOrderId" />
 
                     <TextView
                         android:id="@+id/textView43"
@@ -376,20 +368,6 @@
                         app:layout_constraintTop_toBottomOf="@+id/textView44" />
 
                     <TextView
-                        android:id="@+id/textView46"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:paddingLeft="10dp"
-                        android:paddingTop="5dp"
-                        android:paddingRight="10dp"
-                        android:paddingBottom="5dp"
-                        android:text="@string/orderName"
-                        android:textStyle="bold"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView45" />
-
-                    <TextView
                         android:id="@+id/textView47"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -401,7 +379,7 @@
                         android:text="@string/orderedDate"
                         android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView46" />
+                        app:layout_constraintTop_toBottomOf="@+id/textView45" />
 
                     <TextView
                         android:id="@+id/textView48"

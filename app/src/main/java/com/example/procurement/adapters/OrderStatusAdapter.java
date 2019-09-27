@@ -193,8 +193,8 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
                 if (constraint != null && constraint.length() > 0) {
                     if (mOrdersOriginal != null && mOrdersOriginal.size() > 0) {
                         for (final Order order : mOrdersOriginal) {
-                            if (order.getOrderName() != null) {
-                                if (order.getOrderName().toLowerCase().contains(constraint.toString().toLowerCase()))
+                            if (order.getOrderID() != null) {
+                                if (order.getOrderID().toLowerCase().contains(constraint.toString().toLowerCase()))
                                     results.add(order);
                             }
                         }

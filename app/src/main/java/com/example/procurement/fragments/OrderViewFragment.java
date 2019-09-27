@@ -33,7 +33,6 @@ import com.example.procurement.utils.CommonConstants;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
@@ -49,7 +48,7 @@ public class OrderViewFragment extends Fragment {
     private ImageView btnBack;
     private RecyclerView productItemView;
     private EditText etCompany, etVendor;
-    private TextView txtOrderId, txtRequisitionId, txtOrderName, txtDeliveryDate,
+    private TextView txtOrderId, txtRequisitionId, txtDeliveryDate,
             txtDescription, txtStatusView, txtSubTotal, txtTax, txtTotal, txtOrderedDate;
     private Button btnUpdate;
     private ArrayList<Inventory> iInventory;
@@ -80,7 +79,6 @@ public class OrderViewFragment extends Fragment {
         btnBack = rootView.findViewById(R.id.btnBack);
         txtOrderId = rootView.findViewById(R.id.txtOrderId);
         txtRequisitionId = rootView.findViewById(R.id.txtRequisitionId);
-        txtOrderName = rootView.findViewById(R.id.txtOrderName);
         txtOrderedDate = rootView.findViewById(R.id.txtOrderedDate);
         txtDeliveryDate = rootView.findViewById(R.id.txtDeliveryDate);
         txtDescription = rootView.findViewById(R.id.txtDescription);
@@ -93,11 +91,14 @@ public class OrderViewFragment extends Fragment {
         btnUpdate = rootView.findViewById(R.id.btnUpdate);
 
         iInventory = new ArrayList<>();
-        inventoryAdapter = new InventoryAdapter(getActivity(),iInventory);
+        inventoryAdapter = new InventoryAdapter(getActivity(), iInventory);
 
         productItemView = rootView.findViewById(R.id.rvItemView);
         productItemView.setLayoutManager(new LinearLayoutManager(getActivity()));
         productItemView.setItemAnimator(new DefaultItemAnimator());
+
+        btnUpdate.setText("Delete");
+        btnUpdate.setBackgroundResource(R.drawable.badge_denied);
 
         DeleteOrder();
         readStatusData();
@@ -109,8 +110,8 @@ public class OrderViewFragment extends Fragment {
 
     private void WriteDataValues() {
 
-        for(int j=1;j<=5;j++) {
-            i = new Inventory(String.valueOf(j),"Sand Heap","",7,2);
+        for (int j = 1; j <= 5; j++) {
+            i = new Inventory(String.valueOf(j), "Sand Heap", "", 7, 2);
             iInventory.add(i);
         }
 
@@ -166,7 +167,6 @@ public class OrderViewFragment extends Fragment {
                     etCompany.setText(order.getCompany());
                     txtOrderId.setText(order.getOrderID());
                     txtRequisitionId.setText(order.getRequisitionID());
-                    txtOrderName.setText(order.getOrderName());
                     txtOrderedDate.setText(order.getOrderedDate());
                     txtDeliveryDate.setText(order.getDeliveryDate());
                     txtDescription.setText(order.getDescription());
@@ -217,28 +217,45 @@ public class OrderViewFragment extends Fragment {
     }
 
     private void DeleteOrder() {
-        btnUpdate.setText("Delete");
-        btnUpdate.setBackgroundResource(R.drawable.badge_denied);
-        btnUpdate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // deleting the note from db
+        if (btnUpdate.getText().equals("Delete")) {
 
-                orderDBRef.document(orderKey)
-                        .delete()
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Log.d(TAG, "DocumentSnapshot successfully deleted!");
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.w(TAG, "Error deleting document", e);
-                            }
-                        });
-            }
-        });
+            btnUpdate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setMessage("Are you sure you want to Delete order?")
+                            .setCancelable(false)
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    orderDBRef.document(orderKey)
+                                            .delete()
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new OrderStatusFragment(), null).commit();
+                                                    Toast.makeText(getActivity(), "Order Deleted Successfully", Toast.LENGTH_LONG).show();
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Log.w(TAG, "Error deleting document", e);
+                                                }
+                                            });
+                                }
+                            })
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+
+                }
+            });
+        }
+
     }
 }
