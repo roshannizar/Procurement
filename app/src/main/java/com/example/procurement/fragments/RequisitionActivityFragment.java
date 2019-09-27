@@ -116,10 +116,10 @@ public class RequisitionActivityFragment extends Fragment {
 
         if(value>100000.0) {
             txtStatus.setText("Hold");
-            txtStatus.setBackgroundColor(Color.parseColor(String.valueOf(R.color.orderStatusHold)));
+            txtStatus.setBackgroundColor(Color.parseColor("C2185B"));
         } else {
             txtStatus.setText("Pending");
-            txtStatus.setBackgroundColor(Color.parseColor(String.valueOf(R.color.orderStatusPending)));
+            txtStatus.setBackgroundColor(Color.parseColor("#F1C40F"));
         }
     }
 

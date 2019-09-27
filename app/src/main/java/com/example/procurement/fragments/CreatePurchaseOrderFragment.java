@@ -30,6 +30,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.procurement.R;
 import com.example.procurement.activities.HomeActivity;
+import com.example.procurement.models.Inventory;
 import com.example.procurement.models.Order;
 import com.example.procurement.models.Requisition;
 import com.example.procurement.models.Site;
@@ -73,11 +74,15 @@ public class CreatePurchaseOrderFragment extends Fragment {
     private DatePickerDialog picker;
     private ArrayList<String> companyList, vendorList;
     private Context mContext;
+    private final String selectCompany = "Select Company";
+    private final String selectVendor = "Select Vendor";
+    private ArrayList<Inventory> inventoryList;
 
     public CreatePurchaseOrderFragment(String requisitionKey) {
         this.requisitionKey = requisitionKey;
         companyList = new ArrayList<>();
         vendorList = new ArrayList<>();
+        inventoryList = new ArrayList<>();
     }
 
 
@@ -177,8 +182,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
     }
 
     private void setSpinnerData() {
-        final String selectCompany = "Select Company";
-        final String selectVendor = "Select Vendor";
+
 
         sitesDBRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -387,37 +391,74 @@ public class CreatePurchaseOrderFragment extends Fragment {
         btnGenerate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (Validation()) {
 
-                String key = orderDBRef.document().getId();
-                Order order = new Order();
-                order.setOrderID(txtOrderId.getText().toString());
-                order.setRequisitionID(txtRequisitionId.getText().toString());
-                order.setCompany(spCompany.getSelectedItem().toString());
-                order.setVendor(spVendor.getSelectedItem().toString());
-                order.setDeliveryDate(txtDeliveryDate.getText().toString());
-                order.setOrderedDate(txtCurrentDate.getText().toString());
-                order.setDescription(txtDescription.getText().toString());
-                order.setOrderStatus(txtStatusView.getText().toString());
-                order.setSubTotal(2500.00);
-                order.setOrderKey(key);
-                orderDBRef.document(key)
-                        .set(order)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new OrderStatusFragment(), null).commit();
-                                Log.d(GENERATE_ORDER_FRAGMENT_TAG, "DocumentSnapshot successfully written!");
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.w(GENERATE_ORDER_FRAGMENT_TAG, "Error writing document", e);
-                            }
-                        });
+                    String key = orderDBRef.document().getId();
+                    Order order = new Order();
+                    order.setOrderID(txtOrderId.getText().toString());
+                    order.setRequisitionID(txtRequisitionId.getText().toString());
+                    order.setCompany(spCompany.getSelectedItem().toString());
+                    order.setVendor(spVendor.getSelectedItem().toString());
+                    order.setDeliveryDate(txtDeliveryDate.getText().toString());
+                    order.setOrderedDate(txtCurrentDate.getText().toString());
+                    order.setDescription(txtDescription.getText().toString());
+                    order.setOrderStatus(txtStatusView.getText().toString());
+                    order.setSubTotal(2500.00);
+                    order.setOrderKey(key);
+                    orderDBRef.document(key)
+                            .set(order)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new OrderStatusFragment(), null).commit();
+                                    Log.d(GENERATE_ORDER_FRAGMENT_TAG, "DocumentSnapshot successfully written!");
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w(GENERATE_ORDER_FRAGMENT_TAG, "Error writing document", e);
+                                }
+                            });
+                } else {
+                    new AlertDialog.Builder(Objects.requireNonNull(getActivity()))
+                            .setTitle("ALERT")
+                            .setMessage("Fill the required fields!")
+                            .setCancelable(false)
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            }).show();
+                }
+
             }
         });
     }
 
+    private boolean Validation() {
 
+        boolean value = true;
+        if (spVendor.getSelectedItem().toString().equals(selectVendor)) {
+            spVendor.setBackgroundResource(R.drawable.text_box_empty);
+            value = false;
+        } else if (spCompany.getSelectedItem().toString().equals(selectCompany)) {
+            spVendor.setBackgroundResource(R.drawable.text_box);
+            spCompany.setBackgroundResource(R.drawable.text_box_empty);
+            value = false;
+        } else if (txtDescription.getText().toString().equals("")) {
+            spCompany.setBackgroundResource(R.drawable.text_box);
+            txtDescription.setBackgroundResource(R.drawable.text_box_empty);
+            value = false;
+        } else if (inventoryList.size() == 0) {
+            txtDescription.setBackgroundResource(R.drawable.text_box);
+            productItem.setBackgroundResource(R.drawable.text_box_empty);
+            value = true;
+        } else {
+            productItem.setBackgroundResource(R.drawable.text_box);
+            value = true;
+        }
+
+        return value;
+    }
 }
