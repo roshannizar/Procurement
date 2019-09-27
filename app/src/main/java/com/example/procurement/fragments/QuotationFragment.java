@@ -32,6 +32,8 @@ import com.example.procurement.models.Supplier;
 import com.example.procurement.utils.CommonConstants;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 
 import java.util.ArrayList;
@@ -52,6 +54,7 @@ public class QuotationFragment extends Fragment {
     private CollectionReference requisitionRef;
     private final Calendar c = Calendar.getInstance();
     private ProgressBar createProgressBar;
+    private FirebaseAuth mAuth;
 
     public QuotationFragment() {
 
@@ -70,13 +73,13 @@ public class QuotationFragment extends Fragment {
         createProgressBar = v.findViewById(R.id.createProgressBar);
         createProgressBar.setVisibility(View.INVISIBLE);
         btnAddSupplier = v.findViewById(R.id.btnAddSupplier);
-
+        mAuth = FirebaseAuth.getInstance();
         requisitionRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_REQUISITION);
 
         recyclerView = v.findViewById(R.id.recyclerSupplier);
         context = v.getContext();
         supplierAdapter = new SupplierAdapter(context, CommonConstants.iSupplier);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL,false));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         PlaceOrder();
@@ -88,6 +91,19 @@ public class QuotationFragment extends Fragment {
         return v;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        updateUI(currentUser);
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void updateUI(FirebaseUser currentUser) {
+        if (currentUser != null) {
+            txtProposedBy.setText(currentUser.getEmail());
+        }
+    }
 
     private void AddSupplier() {
         btnAddSupplier.setOnClickListener(
@@ -124,6 +140,8 @@ public class QuotationFragment extends Fragment {
                         Toast.makeText(getContext(),"Requisition placed successfully!",Toast.LENGTH_LONG).show();
                         createProgressBar.setVisibility(View.INVISIBLE);
                         Log.d(TAG, "Requisition placed successfully!");
+                        CommonConstants.iInventory.clear();
+                        CommonConstants.iSupplier.clear();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
