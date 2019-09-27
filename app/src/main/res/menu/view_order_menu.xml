@@ -2,9 +2,5 @@
     <item
         android:id="@+id/menu_download"
         android:orderInCategory="100"
-        android:title="Download" />
-    <item
-        android:id="@+id/menu_share"
-        android:orderInCategory="200"
-        android:title="Share" />
+        android:title="Download as PDF" />
 </menu>

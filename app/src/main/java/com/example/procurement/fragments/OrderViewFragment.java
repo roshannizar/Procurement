@@ -5,8 +5,6 @@ import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -54,7 +52,6 @@ import com.itextpdf.text.pdf.draw.LineSeparator;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URLConnection;
 import java.util.ArrayList;
 
 import static com.example.procurement.activities.SignInActivity.siteManagerDBRef;
@@ -153,45 +150,13 @@ public class OrderViewFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        final String destinationPDF = FileUtils.getAppPath(mContext) + order.getOrderID() + ".pdf";
-        final String destinationWORD = FileUtils.getAppPath(mContext) + order.getOrderID() + ".docx";
 
-        switch (item.getItemId()) {
-            case R.id.menu_download:
-                try {
-                    CharSequence options[] = new CharSequence[]{"PDF", "Word"};
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                    builder.setTitle("Choose options");
-                    builder.setItems(options, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            try {
-                                if (which == 0) {
-                                    createPdf(order, destinationPDF);
-                                    FileUtils.openFile(mContext, new File(destinationPDF));
-                                } else {
-                                    createPdf(order, destinationWORD);
-                                    FileUtils.openFile(mContext, new File(destinationWORD));
-                                }
-                            } catch (ActivityNotFoundException e) {
-                                Log.w(GENERATE_ORDER_FRAGMENT_TAG, "Error writing document", e);
-
-                            }
-                        }
-                    });
-                    builder.show();
-                } catch (IllegalArgumentException e) {
-                    Log.w(GENERATE_ORDER_FRAGMENT_TAG, "Error writing document", e);
-                }
-                break;
-            case R.id.menu_share:
-                File file = new File(destinationPDF);
-                Intent intentShareFile = new Intent(Intent.ACTION_SEND);
-                intentShareFile.setType(URLConnection.guessContentTypeFromName(file.getName()));
-                intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + file.getAbsolutePath()));
-                startActivity(Intent.createChooser(intentShareFile, "Share File"));
-                break;
+        if (item.getItemId() == R.id.menu_download) {
+            try {
+                createPdf(order, FileUtils.getAppPath(mContext) + order.getOrderID() + ".pdf");
+            } catch (IllegalArgumentException e) {
+                Log.w(GENERATE_ORDER_FRAGMENT_TAG, "Error writing document", e);
+            }
         }
 
         return super.onOptionsItemSelected(item);
@@ -341,7 +306,7 @@ public class OrderViewFragment extends Fragment {
         }
     }
 
-    public void createPdf(Order order, String dest) {
+    private void createPdf(Order order, String dest) {
 
         if (new File(dest).exists()) {
             new File(dest).delete();
@@ -414,6 +379,7 @@ public class OrderViewFragment extends Fragment {
 
 
             document.close();
+            FileUtils.openFile(mContext, new File(dest));
 
             Toast.makeText(mContext, "Created... :)", Toast.LENGTH_SHORT).show();
 
