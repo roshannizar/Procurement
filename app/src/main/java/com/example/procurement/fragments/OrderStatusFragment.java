@@ -169,7 +169,7 @@ public class OrderStatusFragment extends Fragment {
 
         final MenuItem searchItem = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) searchItem.getActionView();
-        searchView.setQueryHint("Search by Order ID");
+        searchView.setQueryHint("Search by ID");
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
