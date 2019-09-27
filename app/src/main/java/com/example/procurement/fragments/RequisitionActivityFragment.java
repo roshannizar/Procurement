@@ -98,6 +98,7 @@ public class RequisitionActivityFragment extends Fragment {
         );
     }
 
+    @SuppressLint("SetTextI18n")
     private void setTotalAmountBadge() {
         double value = 0.0;
         boolean checkEmptyUnitPrice = false;
@@ -113,7 +114,7 @@ public class RequisitionActivityFragment extends Fragment {
             }
         }
 
-        txtTotalAmount.setText("Rs: "+String.valueOf(value));
+        txtTotalAmount.setText("Rs: "+ value);
 
         if(value>100000.0 || checkEmptyUnitPrice) {
             txtStatus.setText(R.string.hold);
