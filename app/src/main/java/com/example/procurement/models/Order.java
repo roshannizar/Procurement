@@ -6,13 +6,11 @@ public class Order {
     private String requisitionID;
     private String vendor;
     private String company;
-    private String orderName;
     private String orderStatus;
     private String deliveryDate;
     private String orderedDate;
     private String description;
     private String orderKey;
-    private String requisitionKey;
     private double subTotal;
 
     public Order() {
@@ -48,14 +46,6 @@ public class Order {
 
     public void setCompany(String company) {
         this.company = company;
-    }
-
-    public String getOrderName() {
-        return orderName;
-    }
-
-    public void setOrderName(String orderName) {
-        this.orderName = orderName;
     }
 
     public String getOrderStatus() {
@@ -97,15 +87,7 @@ public class Order {
     public void setOrderKey(String orderKey) {
         this.orderKey = orderKey;
     }
-
-    public String getRequisitionKey() {
-        return requisitionKey;
-    }
-
-    public void setRequisitionKey(String requisitionKey) {
-        this.requisitionKey = requisitionKey;
-    }
-
+    
     public double getSubTotal() {
         return subTotal;
     }
