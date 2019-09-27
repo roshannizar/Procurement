@@ -28,6 +28,7 @@ public class CommonConstants {
     public static final String NOTE_FRAGMENT_TAG = "Note Fragment";
     public static final String ENQUIRE_FRAGMENT_TAG = "Enquire Fragment";
     public static final String ORDER_VIEW_FRAGMENT_TAG = "OrderView Fragment";
+    public static final String ORDER_EDIT_FRAGMENT_TAG = "Edit Order Fragment";
     public static final String GENERATE_ORDER_FRAGMENT_TAG = "Generate Order Fragment";
     public static final String SAVE_STRING = "Save";
     public static final String UPDATE_STRING = "Update";
