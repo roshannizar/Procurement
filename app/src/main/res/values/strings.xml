@@ -34,6 +34,7 @@
     <string name="lbl_new_enquiry_title">New Enquiry</string>
     <string name="lbl_edit_enquiry_title">Edit Enquiry</string>
     <string name="hint_enter_enquiry">Enter your enquiry!</string>
+    <string name="hint_enter_description">Enter your description!</string>
 
 
     <string name="title_activity_requisition">Requisition Form</string>
