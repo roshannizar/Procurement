@@ -211,7 +211,7 @@ public class OrderViewFragment extends Fragment {
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new EditOrderFragment(order), null).commit();
             }
         });
     }

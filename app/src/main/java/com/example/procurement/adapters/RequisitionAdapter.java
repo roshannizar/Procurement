@@ -12,8 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.procurement.R;
 import com.example.procurement.activities.HomeActivity;
-import com.example.procurement.fragments.CreatePurchaseOrderFragment;
-import com.example.procurement.fragments.NoteFragment;
+import com.example.procurement.fragments.CreateOrderFragment;
 import com.example.procurement.models.Requisition;
 
 import java.util.ArrayList;
@@ -49,7 +48,7 @@ public class RequisitionAdapter extends RecyclerView.Adapter<RequisitionAdapter.
         holder.txtPlaceOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new CreatePurchaseOrderFragment(requisition.getKey()), null).commit();
+                HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new CreateOrderFragment(requisition.getKey()), null).commit();
             }
         });
     }

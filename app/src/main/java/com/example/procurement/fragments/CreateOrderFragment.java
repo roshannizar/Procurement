@@ -58,7 +58,7 @@ import static com.example.procurement.activities.SignInActivity.siteManagerDBRef
 import static com.example.procurement.utils.CommonConstants.GENERATE_ORDER_FRAGMENT_TAG;
 import static com.example.procurement.utils.CommonConstants.ORDER_ID;
 
-public class CreatePurchaseOrderFragment extends Fragment {
+public class CreateOrderFragment extends Fragment {
 
     private Spinner spCompany, spVendor;
     private TextView txtOrderId, txtRequisitionId, txtDeliveryDate,
@@ -78,7 +78,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
     private final String selectVendor = "Select Vendor";
     private ArrayList<Inventory> inventoryList;
 
-    public CreatePurchaseOrderFragment(String requisitionKey) {
+    public CreateOrderFragment(String requisitionKey) {
         this.requisitionKey = requisitionKey;
         companyList = new ArrayList<>();
         vendorList = new ArrayList<>();
