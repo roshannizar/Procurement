@@ -2,6 +2,8 @@ package com.example.procurement.fragments;
 
 
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,14 +32,30 @@ import com.example.procurement.adapters.InventoryAdapter;
 import com.example.procurement.models.Inventory;
 import com.example.procurement.models.Order;
 import com.example.procurement.utils.CommonConstants;
+import com.example.procurement.utils.FileUtils;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.draw.LineSeparator;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import static com.example.procurement.activities.SignInActivity.siteManagerDBRef;
+import static com.example.procurement.utils.CommonConstants.GENERATE_ORDER_FRAGMENT_TAG;
 import static com.example.procurement.utils.CommonConstants.ORDER_EDIT_FRAGMENT_TAG;
 
 public class OrderViewFragment extends Fragment {
@@ -55,7 +73,9 @@ public class OrderViewFragment extends Fragment {
     private ArrayList<Inventory> iInventory;
     private InventoryAdapter inventoryAdapter;
     private Inventory i;
-
+    private Font titleFont, blueFont, blackFont;
+    private Document document;
+    private Context mContext;
 
     public OrderViewFragment(String orderKey) {
         this.orderKey = orderKey;
@@ -75,7 +95,7 @@ public class OrderViewFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_purchase_order_view, container, false);
 
         orderDBRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_ORDER);
-
+        mContext = getActivity();
 
         btnBack = rootView.findViewById(R.id.btnBack);
         txtOrderId = rootView.findViewById(R.id.txtOrderId);
@@ -102,8 +122,8 @@ public class OrderViewFragment extends Fragment {
         btnUpdate.setBackgroundResource(R.drawable.badge_denied);
 
         DeleteOrder();
-        readStatusData();
-        WriteDataValues();
+        readData();
+        //WriteDataValues();
         getBack();
 
         return rootView;
@@ -121,22 +141,22 @@ public class OrderViewFragment extends Fragment {
         productItemView.setAdapter(inventoryAdapter);
     }
 
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
+        inflater.inflate(R.menu.view_order_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
-        switch (item.getItemId()) {
-            case R.id.menu_edit:
-                break;
-            case R.id.menu_delete:
-                Toast.makeText(getActivity(), "Order Delete !!!", Toast.LENGTH_LONG).show();
-                break;
+        if (item.getItemId() == R.id.menu_download) {
+            try {
+                createPdf(order, FileUtils.getAppPath(mContext) + order.getOrderID() + ".pdf");
+            } catch (IllegalArgumentException e) {
+                Log.w(GENERATE_ORDER_FRAGMENT_TAG, "Error writing document", e);
+            }
         }
 
         return super.onOptionsItemSelected(item);
@@ -153,7 +173,7 @@ public class OrderViewFragment extends Fragment {
         );
     }
 
-    private void readStatusData() {
+    private void readData() {
         orderDBRef.document(orderKey).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -284,6 +304,115 @@ public class OrderViewFragment extends Fragment {
                 }
             });
         }
+    }
 
+    private void createPdf(Order order, String dest) {
+
+        if (new File(dest).exists()) {
+            new File(dest).delete();
+        }
+
+        try {
+            /**
+             * Creating Document
+             */
+            document = new Document();
+            // Location to save
+            PdfWriter.getInstance(document, new FileOutputStream(dest));
+
+            // Open to write
+            document.open();
+
+            // Document Settings
+            document.setPageSize(PageSize.A4);
+            document.addCreationDate();
+            document.addAuthor("S.Praveenkumar");
+            document.addCreator("S.Praveenkumar");
+
+            // LINE SEPARATOR
+            LineSeparator lineSeparator = new LineSeparator();
+            lineSeparator.setLineColor(new BaseColor(0, 0, 0, 68));
+
+
+            /***
+             * Variables for further use....
+             */
+            BaseColor mColorAccent = new BaseColor(0, 153, 204, 255);
+            float mTitleFontSize = 30.0f;
+            float mHeadingFontSize = 20.0f;
+            float mValueFontSize = 24.0f;
+
+            BaseFont urName = BaseFont.createFont("assets/fonts/brandon_medium.otf", "UTF-8", BaseFont.EMBEDDED);
+
+            titleFont = new Font(urName, mTitleFontSize, Font.NORMAL, BaseColor.BLACK);
+            blueFont = new Font(urName, mHeadingFontSize, Font.NORMAL, mColorAccent);
+            blackFont = new Font(urName, mValueFontSize, Font.NORMAL, BaseColor.BLACK);
+
+            Paragraph emptyParagraph = new Paragraph("");
+            // Title Order Details...
+            Paragraph titleParagraph = new Paragraph(new Chunk("Purchase Order Details", titleFont));
+            titleParagraph.setAlignment(Element.ALIGN_CENTER);
+            document.add(titleParagraph);
+            document.add(emptyParagraph);
+
+            getLeftParagraph("Vendor : ", order.getVendor());
+            getCenterParagraph("Company : ", order.getCompany());
+
+            document.add(emptyParagraph);
+            document.add(new Chunk(lineSeparator));
+            document.add(emptyParagraph);
+
+            getLeftParagraph("Order ID : ", order.getOrderID());
+            document.add(emptyParagraph);
+
+            getLeftParagraph("Requisition ID : ", order.getRequisitionID());
+            document.add(emptyParagraph);
+
+            getLeftParagraph("Ordered Date : ", order.getOrderedDate());
+            getCenterParagraph("Delivery Date : ", order.getDeliveryDate());
+            document.add(emptyParagraph);
+
+            getLeftParagraph("Description : ", order.getDescription());
+            document.add(emptyParagraph);
+            document.add(new Chunk(lineSeparator));
+            document.add(emptyParagraph);
+
+
+            document.close();
+            FileUtils.openFile(mContext, new File(dest));
+
+            Toast.makeText(mContext, "Created... :)", Toast.LENGTH_SHORT).show();
+
+        } catch (IOException | DocumentException ie) {
+            Log.w(GENERATE_ORDER_FRAGMENT_TAG, "Error writing document", ie);
+        } catch (ActivityNotFoundException ae) {
+            Toast.makeText(mContext, "No application found to open this file.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void getLeftParagraph(String p1Value, String p2Value) {
+        try {
+
+            Paragraph p1 = new Paragraph(new Chunk(p1Value + p2Value, blueFont));
+            Paragraph p2 = new Paragraph(new Chunk(p2Value, blackFont));
+            p1.add(p2);
+            p1.setAlignment(Element.ALIGN_LEFT);
+            document.add(p1);
+        } catch (DocumentException e) {
+            Log.w(GENERATE_ORDER_FRAGMENT_TAG, "Error writing document", e);
+        }
+    }
+
+    private void getCenterParagraph(String p1Value, String p2Value) {
+        try {
+
+            Paragraph p1 = new Paragraph(new Chunk(p1Value, blueFont));
+            Paragraph p2 = new Paragraph(new Chunk(p2Value, blackFont));
+            p1.add(p2);
+            p1.setAlignment(Element.ALIGN_MIDDLE);
+            document.add(p1);
+        } catch (DocumentException e) {
+            Log.w(GENERATE_ORDER_FRAGMENT_TAG, "Error writing document", e);
+        }
     }
 }

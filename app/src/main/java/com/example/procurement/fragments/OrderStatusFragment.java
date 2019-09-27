@@ -35,8 +35,6 @@ import com.example.procurement.filterPattern.PendingOrderStatus;
 import com.example.procurement.filterPattern.PlacedOrderStatus;
 import com.example.procurement.models.Order;
 import com.example.procurement.utils.CommonConstants;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -167,7 +165,7 @@ public class OrderStatusFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
 
-        inflater.inflate(R.menu.order_menu, menu);
+        inflater.inflate(R.menu.order_status_menu, menu);
 
         final MenuItem searchItem = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) searchItem.getActionView();
