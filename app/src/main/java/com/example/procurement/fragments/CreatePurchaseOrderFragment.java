@@ -274,25 +274,23 @@ public class CreatePurchaseOrderFragment extends Fragment {
                         Order order = document.toObject(Order.class);
                         ORDER_ID = order.getOrderID();
                     }
+
+                    Pattern p = Pattern.compile("\\d+");
+                    String generateNo = null;
+                    if (ORDER_ID != null) {
+                        Matcher m = p.matcher(ORDER_ID);
+
+                        while (m.find()) {
+                            generateNo = m.group();
+                        }
+                        int value = Integer.parseInt(generateNo) + 1;
+                        String temp = "PO-" + value;
+                        txtOrderId.setText(temp);
+                        ORDER_ID = "";
+                    }
                 }
             }
         });
-
-
-        Pattern p = Pattern.compile("\\d+");
-        String generateNo = null;
-        if (ORDER_ID != null) {
-            Matcher m = p.matcher(ORDER_ID);
-
-            while (m.find()) {
-                generateNo = m.group();
-            }
-            int value = Integer.parseInt(generateNo) + 1;
-            String temp = "PO-" + value;
-            txtOrderId.setText(temp);
-            ORDER_ID = "";
-        }
-
     }
 
     private void PopUpItems() {
