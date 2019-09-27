@@ -410,6 +410,15 @@ public class CreateOrderFragment extends Fragment {
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
+                                    new AlertDialog.Builder(Objects.requireNonNull(getActivity()))
+                                            .setTitle("ALERT")
+                                            .setMessage("Successfully Generated the Purchase Order !")
+                                            .setCancelable(false)
+                                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                }
+                                            }).show();
                                     HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new OrderStatusFragment(), null).commit();
                                     Log.d(GENERATE_ORDER_FRAGMENT_TAG, "DocumentSnapshot successfully written!");
                                 }
