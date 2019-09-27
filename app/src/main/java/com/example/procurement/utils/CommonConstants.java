@@ -36,7 +36,7 @@ public class CommonConstants {
     public static ArrayList<Inventory> iInventory = new ArrayList<>();
     public static ArrayList<Supplier> iSupplier = new ArrayList<>();
 
-    public static String ORDER_ID = "PO - 00";
+    public static String ORDER_ID = "PO-0";
     public static String REQUISITION_ID = "REQ-00";
 
 //    public static final int ORDER_STATUS_DECLINED = -1;

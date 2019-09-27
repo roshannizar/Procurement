@@ -261,6 +261,24 @@ public class CreatePurchaseOrderFragment extends Fragment {
     }
 
     private void getGenerateID() {
+
+        orderDBRef.orderBy("orderID").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(GENERATE_ORDER_FRAGMENT_TAG, "Listen failed.", e);
+                }
+
+                if (queryDocumentSnapshots != null) {
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        Order order = document.toObject(Order.class);
+                        ORDER_ID = order.getOrderID();
+                    }
+                }
+            }
+        });
+
+
         Pattern p = Pattern.compile("\\d+");
         String generateNo = null;
         if (ORDER_ID != null) {
@@ -272,7 +290,9 @@ public class CreatePurchaseOrderFragment extends Fragment {
             int value = Integer.parseInt(generateNo) + 1;
             String temp = "PO-" + value;
             txtOrderId.setText(temp);
+            ORDER_ID = "";
         }
+
     }
 
     private void PopUpItems() {
