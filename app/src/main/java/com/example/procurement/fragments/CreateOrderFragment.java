@@ -78,6 +78,7 @@ public class CreateOrderFragment extends Fragment {
     private final String selectVendor = "Select Vendor";
     private ArrayList<Inventory> inventoryList;
 
+
     public CreateOrderFragment(String requisitionKey) {
         this.requisitionKey = requisitionKey;
         companyList = new ArrayList<>();
@@ -388,13 +389,25 @@ public class CreateOrderFragment extends Fragment {
     }
 
     private void generateOrder() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setMessage("Are you sure you want to exit?")
+                .setTitle("ALERT")
+                .setMessage("Successfully Generated the Purchase Order !")
+                .setCancelable(false)
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                });
+        final AlertDialog alert = builder.create();
+
         btnGenerate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (Validation()) {
 
-                    String key = orderDBRef.document().getId();
-                    Order order = new Order();
+                    final String key = orderDBRef.document().getId();
+                    final Order order = new Order();
                     order.setOrderID(txtOrderId.getText().toString());
                     order.setRequisitionID(txtRequisitionId.getText().toString());
                     order.setCompany(spCompany.getSelectedItem().toString());
@@ -410,16 +423,8 @@ public class CreateOrderFragment extends Fragment {
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
-                                    new AlertDialog.Builder(Objects.requireNonNull(getActivity()))
-                                            .setTitle("ALERT")
-                                            .setMessage("Successfully Generated the Purchase Order !")
-                                            .setCancelable(false)
-                                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                }
-                                            }).show();
-                                    HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new OrderStatusFragment(), null).commit();
+                                    alert.show();
+                                    HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new OrderViewFragment(key), null).commit();
                                     Log.d(GENERATE_ORDER_FRAGMENT_TAG, "DocumentSnapshot successfully written!");
                                 }
                             })
@@ -470,4 +475,5 @@ public class CreateOrderFragment extends Fragment {
 
         return value;
     }
+
 }
