@@ -44,6 +44,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import static com.example.procurement.activities.SignInActivity.siteManagerDBRef;
 
@@ -118,7 +119,7 @@ public class OrderStatusFragment extends Fragment {
 
     private void readStatusData() {
 
-        orderDBRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        orderDBRef.orderBy("orderID").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
@@ -132,9 +133,10 @@ public class OrderStatusFragment extends Fragment {
                         Order order = document.toObject(Order.class);
                         countStatus(order.getOrderStatus());
                         orders.add(order);
-                        CommonConstants.ORDER_ID = order.getOrderID();
                     }
 
+                    Collections.reverse(orders);
+                    
                     if (orders != null) {
                         adapter = new OrderStatusAdapter(mContext, orders);
                         progressBar.setVisibility(View.GONE);

@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -138,6 +139,43 @@ public class CreatePurchaseOrderFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        if (item.getItemId() == R.id.menu_draft) {
+            String key = orderDBRef.document().getId();
+            Order order = new Order();
+            order.setOrderID(txtOrderId.getText().toString());
+            order.setRequisitionID(txtRequisitionId.getText().toString());
+            order.setCompany(spCompany.getSelectedItem().toString());
+            order.setVendor(spVendor.getSelectedItem().toString());
+            order.setDeliveryDate(txtDeliveryDate.getText().toString());
+            order.setOrderedDate(txtCurrentDate.getText().toString());
+            order.setDescription(txtDescription.getText().toString());
+            order.setOrderStatus(getString(R.string.draft));
+            order.setSubTotal(2500.00);
+            order.setOrderKey(key);
+            orderDBRef.document(key)
+                    .set(order)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new OrderStatusFragment(), null).commit();
+                            Log.d(GENERATE_ORDER_FRAGMENT_TAG, "DocumentSnapshot successfully written!");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(GENERATE_ORDER_FRAGMENT_TAG, "Error writing document", e);
+                        }
+                    });
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     private void setSpinnerData() {
         final String selectCompany = "Select Company";
         final String selectVendor = "Select Vendor";
@@ -158,7 +196,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
                         companyList.add(site.getSiteName());
                     }
                 }
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(mContext,android.R.layout.simple_spinner_item, companyList);
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(mContext, android.R.layout.simple_spinner_item, companyList);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spCompany.setAdapter(adapter);
             }
@@ -180,7 +218,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
                         vendorList.add(supplier.getSupplierName());
                     }
                 }
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(mContext,android.R.layout.simple_spinner_item, vendorList);
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(mContext, android.R.layout.simple_spinner_item, vendorList);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spVendor.setAdapter(adapter);
             }
@@ -223,18 +261,36 @@ public class CreatePurchaseOrderFragment extends Fragment {
     }
 
     private void getGenerateID() {
-        Pattern p = Pattern.compile("\\d+");
-        String generateNo = null;
-        if (ORDER_ID != null) {
-            Matcher m = p.matcher(ORDER_ID);
 
-            while (m.find()) {
-                generateNo = m.group();
+        orderDBRef.orderBy("orderID").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(GENERATE_ORDER_FRAGMENT_TAG, "Listen failed.", e);
+                }
+
+                if (queryDocumentSnapshots != null) {
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        Order order = document.toObject(Order.class);
+                        ORDER_ID = order.getOrderID();
+                    }
+
+                    Pattern p = Pattern.compile("\\d+");
+                    String generateNo = null;
+                    if (ORDER_ID != null) {
+                        Matcher m = p.matcher(ORDER_ID);
+
+                        while (m.find()) {
+                            generateNo = m.group();
+                        }
+                        int value = Integer.parseInt(generateNo) + 1;
+                        String temp = "PO-" + value;
+                        txtOrderId.setText(temp);
+                        ORDER_ID = "";
+                    }
+                }
             }
-            int value = Integer.parseInt(generateNo) + 1;
-            String temp = "PO-" + value;
-            txtOrderId.setText(temp);
-        }
+        });
     }
 
     private void PopUpItems() {
@@ -349,6 +405,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
+                                HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new OrderStatusFragment(), null).commit();
                                 Log.d(GENERATE_ORDER_FRAGMENT_TAG, "DocumentSnapshot successfully written!");
                             }
                         })

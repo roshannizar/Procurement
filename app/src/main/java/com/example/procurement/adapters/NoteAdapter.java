@@ -25,11 +25,12 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        final TextView note, timestamp;
+        final TextView note, timestamp , invoiceNo;
 
         MyViewHolder(View view) {
             super(view);
             note = view.findViewById(R.id.note);
+            invoiceNo = view.findViewById(R.id.invoiceNo);
             timestamp = view.findViewById(R.id.timestamp);
         }
     }
@@ -47,6 +48,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Note note = noteList.get(position);
         holder.note.setText(note.getNote());
+        holder.invoiceNo.setText(note.getInvoiceNo());
         holder.timestamp.setText(note.getTimestamp());
 
     }
