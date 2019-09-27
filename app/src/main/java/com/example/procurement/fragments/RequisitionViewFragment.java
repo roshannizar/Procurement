@@ -36,6 +36,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import static com.example.procurement.activities.SignInActivity.siteManagerDBRef;
 
@@ -81,7 +82,7 @@ public class RequisitionViewFragment extends Fragment {
     }
 
     private void readStatus() {
-        requisitionRef.addSnapshotListener(
+        requisitionRef.orderBy("requisitionNo").addSnapshotListener(
                 new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
@@ -97,6 +98,7 @@ public class RequisitionViewFragment extends Fragment {
                             iRequisition.add(requisition);
                             CommonConstants.REQUISITION_ID = requisition.getRequisitionNo();
                         }
+                        Collections.reverse(iRequisition);
 
                         if (iRequisition != null) {
                             requisitionAdapter = new RequisitionAdapter(c, iRequisition);
