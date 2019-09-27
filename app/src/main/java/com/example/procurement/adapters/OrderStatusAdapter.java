@@ -62,7 +62,7 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
         // check if any data is available
         if (mOrders != null) {
             final Order order = mOrders.get(position);
-            final String orderStatus, orderKey, orderDescription, orderId,reqId;
+            final String orderStatus, orderKey, orderDescription, orderId, reqId;
             orderKey = order.getOrderKey();
             orderId = order.getOrderID();
             reqId = order.getRequisitionID();
@@ -127,7 +127,7 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
             if (orderStatus.equals(CommonConstants.ORDER_STATUS_DRAFT)) {
                 holder.enquire.setVisibility(View.INVISIBLE);
 
-            }else{
+            } else {
                 holder.enquire.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -193,9 +193,11 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
                 if (constraint != null && constraint.length() > 0) {
                     if (mOrdersOriginal != null && mOrdersOriginal.size() > 0) {
                         for (final Order order : mOrdersOriginal) {
-                            if (order.getOrderID() != null) {
-                                if (order.getOrderID().toLowerCase().contains(constraint.toString().toLowerCase()))
+                            if (order.getOrderID() != null || order.getRequisitionID() != null) {
+                                if (order.getOrderID().toLowerCase().contains(constraint.toString().toLowerCase())
+                                        || order.getRequisitionID().toLowerCase().contains(constraint.toString().toLowerCase())) {
                                     results.add(order);
+                                }
                             }
                         }
                     }

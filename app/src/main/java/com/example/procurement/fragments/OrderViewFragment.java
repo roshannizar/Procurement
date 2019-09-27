@@ -73,7 +73,7 @@ public class OrderViewFragment extends Fragment {
     private ArrayList<Inventory> iInventory;
     private InventoryAdapter inventoryAdapter;
     private Inventory i;
-    private Font titleFont, blueFont, blackFont;
+    private Font titleFont, blackFont;
     private Document document;
     private Context mContext;
 
@@ -153,7 +153,8 @@ public class OrderViewFragment extends Fragment {
 
         if (item.getItemId() == R.id.menu_download) {
             try {
-                createPdf(order, FileUtils.getAppPath(mContext) + order.getOrderID() + ".pdf");
+                String destinationPath = FileUtils.getAppPath(mContext) + order.getOrderID() + "--> " + order.getRequisitionID() + ".pdf";
+                createPdf(order, destinationPath);
             } catch (IllegalArgumentException e) {
                 Log.w(GENERATE_ORDER_FRAGMENT_TAG, "Error writing document", e);
             }
@@ -338,14 +339,12 @@ public class OrderViewFragment extends Fragment {
              * Variables for further use....
              */
             BaseColor mColorAccent = new BaseColor(0, 153, 204, 255);
-            float mTitleFontSize = 30.0f;
-            float mHeadingFontSize = 20.0f;
-            float mValueFontSize = 24.0f;
+            float mTitleFontSize = 18.0f;
+            float mValueFontSize = 14.0f;
 
             BaseFont urName = BaseFont.createFont("assets/fonts/brandon_medium.otf", "UTF-8", BaseFont.EMBEDDED);
 
             titleFont = new Font(urName, mTitleFontSize, Font.NORMAL, BaseColor.BLACK);
-            blueFont = new Font(urName, mHeadingFontSize, Font.NORMAL, mColorAccent);
             blackFont = new Font(urName, mValueFontSize, Font.NORMAL, BaseColor.BLACK);
 
             Paragraph emptyParagraph = new Paragraph("");
@@ -355,24 +354,26 @@ public class OrderViewFragment extends Fragment {
             document.add(titleParagraph);
             document.add(emptyParagraph);
 
-            getLeftParagraph("Vendor : ", order.getVendor());
-            getCenterParagraph("Company : ", order.getCompany());
+            createParagraph("Vendor : " + order.getVendor());
+            createParagraph("Company : " + order.getCompany());
 
             document.add(emptyParagraph);
             document.add(new Chunk(lineSeparator));
             document.add(emptyParagraph);
 
-            getLeftParagraph("Order ID : ", order.getOrderID());
+            createParagraph("Order ID : " + order.getOrderID());
             document.add(emptyParagraph);
 
-            getLeftParagraph("Requisition ID : ", order.getRequisitionID());
+            createParagraph("Requisition ID : " + order.getRequisitionID());
+            document.add(emptyParagraph);
             document.add(emptyParagraph);
 
-            getLeftParagraph("Ordered Date : ", order.getOrderedDate());
-            getCenterParagraph("Delivery Date : ", order.getDeliveryDate());
+            createParagraph("Ordered Date : " + order.getOrderedDate());
+            createParagraph("Delivery Date : " + order.getDeliveryDate());
+            document.add(emptyParagraph);
             document.add(emptyParagraph);
 
-            getLeftParagraph("Description : ", order.getDescription());
+            createParagraph("Description : " + order.getDescription());
             document.add(emptyParagraph);
             document.add(new Chunk(lineSeparator));
             document.add(emptyParagraph);
@@ -381,7 +382,7 @@ public class OrderViewFragment extends Fragment {
             document.close();
             FileUtils.openFile(mContext, new File(dest));
 
-            Toast.makeText(mContext, "Created... :)", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, "PDF Created Successfully... :)", Toast.LENGTH_SHORT).show();
 
         } catch (IOException | DocumentException ie) {
             Log.w(GENERATE_ORDER_FRAGMENT_TAG, "Error writing document", ie);
@@ -390,29 +391,13 @@ public class OrderViewFragment extends Fragment {
         }
     }
 
-    private void getLeftParagraph(String p1Value, String p2Value) {
+    private void createParagraph(String value) {
         try {
-
-            Paragraph p1 = new Paragraph(new Chunk(p1Value + p2Value, blueFont));
-            Paragraph p2 = new Paragraph(new Chunk(p2Value, blackFont));
-            p1.add(p2);
-            p1.setAlignment(Element.ALIGN_LEFT);
-            document.add(p1);
+            Paragraph paragraph = new Paragraph(new Chunk(value, blackFont));
+            document.add(paragraph);
         } catch (DocumentException e) {
             Log.w(GENERATE_ORDER_FRAGMENT_TAG, "Error writing document", e);
         }
     }
 
-    private void getCenterParagraph(String p1Value, String p2Value) {
-        try {
-
-            Paragraph p1 = new Paragraph(new Chunk(p1Value, blueFont));
-            Paragraph p2 = new Paragraph(new Chunk(p2Value, blackFont));
-            p1.add(p2);
-            p1.setAlignment(Element.ALIGN_MIDDLE);
-            document.add(p1);
-        } catch (DocumentException e) {
-            Log.w(GENERATE_ORDER_FRAGMENT_TAG, "Error writing document", e);
-        }
-    }
 }
