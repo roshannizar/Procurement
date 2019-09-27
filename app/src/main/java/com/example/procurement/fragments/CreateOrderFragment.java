@@ -342,7 +342,7 @@ public class CreateOrderFragment extends Fragment {
 
         date = Calendar.getInstance().get(Calendar.DATE);
         month = Calendar.getInstance().get(Calendar.MONTH);
-        txtCurrentDate.setText(date + "-" + month + "-" + year);
+        txtCurrentDate.setText(date + "/" + month + "/" + year);
     }
 
     private void setDescriptionDialog() {
