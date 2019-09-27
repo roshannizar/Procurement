@@ -381,7 +381,7 @@ public class OrderViewFragment extends Fragment {
             document.close();
             FileUtils.openFile(mContext, new File(dest));
 
-            Toast.makeText(mContext, "Created... :)", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, "PDF Created Successfully... :)", Toast.LENGTH_SHORT).show();
 
         } catch (IOException | DocumentException ie) {
             Log.w(GENERATE_ORDER_FRAGMENT_TAG, "Error writing document", ie);
