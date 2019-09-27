@@ -2,14 +2,18 @@ package com.example.procurement.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,20 +21,37 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.procurement.R;
 import com.example.procurement.activities.RequisitionActivity;
+import com.example.procurement.adapters.InventoryAdapter;
 import com.example.procurement.adapters.InventoryDialogAdapter;
+import com.example.procurement.adapters.RequisitionAdapter;
+import com.example.procurement.models.Inventory;
 import com.example.procurement.models.InventoryData;
+import com.example.procurement.models.Requisition;
+import com.example.procurement.utils.CommonConstants;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
+
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class InventoryDialog extends Fragment implements AdapterView.OnItemSelectedListener {
 
     private RecyclerView recyclerView;
-    private ArrayList<InventoryData> listData;
-    private TextView btnSave;
+    private ArrayList<Inventory> listData;
+    private TextView btnSave,txtLoader;
     private SeekBar skCount;
     private InventoryData d,d1,d2,d3,d4;
     private InventoryDialogAdapter inventoryDialogAdapter;
     private Context c;
+    private ImageView imgLoader;
+    private ProgressBar progressBar;
+    private CollectionReference inventoryRef;
 
     public InventoryDialog() {
 
@@ -49,8 +70,12 @@ public class InventoryDialog extends Fragment implements AdapterView.OnItemSelec
         btnSave = v.findViewById(R.id.btnSave);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+        inventoryRef = FirebaseFirestore.getInstance().collection(CommonConstants.COLLECTION_INVENTORY);
+        imgLoader = v.findViewById(R.id.imgInvLoader);
+        txtLoader = v.findViewById(R.id.txtInvLoader);
+        progressBar = v.findViewById(R.id.progressBar6);
 
-        WriteDataValues();
+        readInventoryData();
         DialogChooser();
         return v;
     }
@@ -66,22 +91,44 @@ public class InventoryDialog extends Fragment implements AdapterView.OnItemSelec
         );
     }
 
-    private void WriteDataValues() {
+    private void readInventoryData() {
+        inventoryRef.orderBy("itemNo").addSnapshotListener(
+                new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
 
-        d = new InventoryData("Sand Heap","7","22.0");
-        d1 = new InventoryData("Bricks","10","45.0");
-        d2 = new InventoryData("Cements","7","8.0");
-        d3 = new InventoryData("Wall Putty","12","140.0");
-        d4 = new InventoryData("Paint","8","0");
+                        if (e != null) {
+                            Log.v(TAG, "Listen Failed", e);
+                        }
 
-        listData.add(d);
-        listData.add(d1);
-        listData.add(d2);
-        listData.add(d3);
-        listData.add(d4);
+                        listData.clear();
 
-        inventoryDialogAdapter = new InventoryDialogAdapter(c, listData);
-        recyclerView.setAdapter(inventoryDialogAdapter);
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            Inventory inventory = document.toObject(Inventory.class);
+                            listData.add(inventory);
+                            //CommonConstants.REQUISITION_ID = inventory.getRequisitionNo();
+                        }
+                        Collections.reverse(listData);
+
+                        if (listData != null) {
+                            inventoryDialogAdapter = new InventoryDialogAdapter(c, listData);
+                            progressBar.setVisibility(View.GONE);
+                            imgLoader.setVisibility(View.INVISIBLE);
+                            txtLoader.setVisibility(View.INVISIBLE);
+                            recyclerView.setAdapter(inventoryDialogAdapter);
+
+                            if (listData.size() == 0) {
+                                imgLoader.refreshDrawableState();
+                                imgLoader.setImageResource(R.drawable.ic_white_box);
+                                imgLoader.setVisibility(View.VISIBLE);
+                                txtLoader.setVisibility(View.VISIBLE);
+                                txtLoader.setText("Inventory is empty!");
+                            }
+                        }
+
+                    }
+                }
+        );
     }
 
     @Override

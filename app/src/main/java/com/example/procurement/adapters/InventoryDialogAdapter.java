@@ -1,5 +1,6 @@
 package com.example.procurement.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,10 +24,10 @@ import java.util.ArrayList;
 
 public class InventoryDialogAdapter extends RecyclerView.Adapter<InventoryDialogAdapter.ViewHolder> {
 
-    private ArrayList<InventoryData> listData;
+    private ArrayList<Inventory> listData;
     private Context c;
 
-    public InventoryDialogAdapter(Context c, ArrayList<InventoryData> listData) {
+    public InventoryDialogAdapter(Context c, ArrayList<Inventory> listData) {
         this.c = c;
         this.listData = listData;
     }
@@ -39,13 +40,14 @@ public class InventoryDialogAdapter extends RecyclerView.Adapter<InventoryDialog
         return new ViewHolder(itemView);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        final InventoryData inventoryData = listData.get(position);
-        final double sum = Double.parseDouble(inventoryData.getUnitPrice()) * Integer.parseInt(inventoryData.getQuantity());
-        holder.checkBox.setText(inventoryData.getiName());
-        holder.seekBar.setProgress(Integer.parseInt(inventoryData.getQuantity()));
-        holder.textView.setText("Rs: "+inventoryData.getUnitPrice());
+        final Inventory inventoryData = listData.get(position);
+        final double sum = inventoryData.getUnitprice() * inventoryData.getQuantity();
+        holder.checkBox.setText(inventoryData.getItemName());
+        holder.seekBar.setProgress(inventoryData.getQuantity());
+        holder.textView.setText("Rs: "+inventoryData.getUnitprice());
 
         holder.checkBox.setOnCheckedChangeListener(
                 new CheckBox.OnCheckedChangeListener() {
@@ -53,8 +55,7 @@ public class InventoryDialogAdapter extends RecyclerView.Adapter<InventoryDialog
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
                         if(compoundButton.isChecked()) {
-                            Toast.makeText(c, inventoryData.getiName() + ", " + inventoryData.getQuantity() + ", " + inventoryData.getUnitPrice() + ", Total Amount: " + String.valueOf(sum), Toast.LENGTH_SHORT).show();
-                            CommonConstants.iInventory.add(new Inventory(String.valueOf(position),inventoryData.getiName(),"",Integer.parseInt(inventoryData.getQuantity()),Double.parseDouble(inventoryData.getUnitPrice())));
+                            CommonConstants.iInventory.add(new Inventory(String.valueOf(position),inventoryData.getItemName(),"",inventoryData.getQuantity(),inventoryData.getUnitprice()));
                         } else {
                             CommonConstants.iInventory.remove(position);
                         }
@@ -77,7 +78,6 @@ public class InventoryDialogAdapter extends RecyclerView.Adapter<InventoryDialog
         private SeekBar seekBar;
         private TextView textView;
         private CheckBox checkBox;
-        private ProgressBar progressBar;
 
         ViewHolder(View view) {
             super(view);
