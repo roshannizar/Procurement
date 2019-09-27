@@ -24,19 +24,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.procurement.R;
 import com.example.procurement.adapters.NoteAdapter;
-import com.example.procurement.adapters.OrderStatusAdapter;
 import com.example.procurement.models.Note;
-import com.example.procurement.models.Order;
 import com.example.procurement.utils.CommonConstants;
 import com.example.procurement.utils.RecyclerTouchListener;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -61,7 +54,7 @@ public class NoteFragment extends Fragment {
     private ProgressBar progressBar;
     private String orderKey;
     private ImageView imgLoader;
-    private TextView txtLoader,txtWait;
+    private TextView txtLoader, txtWait;
 
     public NoteFragment(String orderKey) {
         this.orderKey = orderKey;
@@ -141,9 +134,9 @@ public class NoteFragment extends Fragment {
      * Inserting new note in db
      * and refreshing the list
      */
-    private void createNote(String note) {
+    private void createNote(String invoiceNo, String note) {
         String key = notesDBRef.document().getId();
-        Note noteItem = new Note(key, note, DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date()));
+        Note noteItem = new Note(key, invoiceNo, note, DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date()));
 
         notesDBRef.document(key)
                 .set(noteItem)
@@ -165,9 +158,9 @@ public class NoteFragment extends Fragment {
      * Updating note in db and updating
      * item in the list by its position
      */
-    private void updateNote(String noteText, int position) {
+    private void updateNote(String invoiceNo, String noteText, int position) {
         String key = notesList.get(position).getKey();
-        Note noteItem = new Note(key, noteText, DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date()));
+        Note noteItem = new Note(key, invoiceNo, noteText, DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date()));
 
         notesDBRef.document(key)
                 .set(noteItem)
@@ -256,10 +249,12 @@ public class NoteFragment extends Fragment {
      */
     private void showBubbleDialog(final boolean shouldUpdate, final Note note, final int position) {
         LayoutInflater layoutInflaterAndroid = LayoutInflater.from(mContext);
-        View view = layoutInflaterAndroid.inflate(R.layout.layout_add_dialog, null);
+        View view = layoutInflaterAndroid.inflate(R.layout.layout_note_dialog, null);
 
         AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(mContext);
         alertDialogBuilderUserInput.setView(view);
+
+        final EditText invoiceNo = view.findViewById(R.id.invoiceNo);
 
         final EditText inputText = view.findViewById(R.id.note);
         inputText.setHint(R.string.hint_enter_enquiry);
@@ -269,6 +264,7 @@ public class NoteFragment extends Fragment {
                 : getString(R.string.lbl_edit_note_title));
 
         if (shouldUpdate && note != null) {
+            invoiceNo.setText(note.getInvoiceNo());
             inputText.setText(note.getNote());
         }
 
@@ -297,6 +293,9 @@ public class NoteFragment extends Fragment {
                 if (TextUtils.isEmpty(inputText.getText().toString())) {
                     Toast.makeText(mContext, "Enter note!", Toast.LENGTH_SHORT).show();
                     return;
+                }else if (TextUtils.isEmpty(invoiceNo.getText().toString())) {
+                    Toast.makeText(mContext, "Enter invoice number!", Toast.LENGTH_SHORT).show();
+                    return;
                 } else {
                     alertDialog.dismiss();
                 }
@@ -304,10 +303,10 @@ public class NoteFragment extends Fragment {
                 // check if user updating note
                 if (shouldUpdate && note != null) {
                     // update note by it's id
-                    updateNote(inputText.getText().toString().trim(), position);
+                    updateNote(invoiceNo.getText().toString().trim(), inputText.getText().toString().trim(), position);
                 } else {
                     // create new note
-                    createNote(inputText.getText().toString().trim());
+                    createNote(invoiceNo.getText().toString().trim(), inputText.getText().toString().trim());
                 }
             }
         });

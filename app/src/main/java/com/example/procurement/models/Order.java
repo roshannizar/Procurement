@@ -87,7 +87,7 @@ public class Order {
     public void setOrderKey(String orderKey) {
         this.orderKey = orderKey;
     }
-    
+
     public double getSubTotal() {
         return subTotal;
     }

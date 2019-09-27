@@ -10,15 +10,30 @@
     android:paddingBottom="@dimen/dimen_10">
 
     <TextView
-        android:id="@+id/note"
-        android:layout_width="300dp"
+        android:id="@+id/invoiceNo"
+        android:layout_width="317dp"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="16dp"
+        android:textStyle="bold"
         android:textColor="@color/white"
-        android:layout_marginEnd="16dp"
+        android:textSize="@dimen/note_list_text"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="69dp" />
+
+    <TextView
+        android:id="@+id/note"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/invoiceNo"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="38dp"
+        android:textColor="@color/white"
         android:textSize="@dimen/note_list_text" />
 
     <TextView
@@ -28,10 +43,11 @@
         android:layout_below="@id/note"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="10dp"
-        android:textColor="@color/timestamp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="27dp"
         android:gravity="bottom|end"
+        android:textColor="@color/timestamp"
         android:textSize="@dimen/timestamp" />
 
 </RelativeLayout>
