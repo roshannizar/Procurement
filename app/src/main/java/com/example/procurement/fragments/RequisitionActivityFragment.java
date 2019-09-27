@@ -10,6 +10,7 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,7 +47,7 @@ public class RequisitionActivityFragment extends Fragment {
     private DatePickerDialog picker;
     private Button btnQuotation;
     private EditText txtRequisitionNo,txtPurpose,txtComments;
-    private TextView txtDeliveryDate,txtTotalAmount,btnGenerate,btnAddItems;
+    private TextView txtDeliveryDate,txtTotalAmount,btnGenerate,btnAddItems,txtStatus;
     static String REQUISITION_NO= REQUISITION_ID,PURPOSE,COMMENTS="",DELIVERY_DATE="",TOTAL_AMOUNT="",RADIO="";
 
     public RequisitionActivityFragment() {
@@ -69,6 +70,7 @@ public class RequisitionActivityFragment extends Fragment {
         radioNoButton = v.findViewById(R.id.radioNo);
         radioYesButton = v.findViewById(R.id.radioYes);
         btnAddItems = v.findViewById(R.id.btnAddItems);
+        txtStatus = v.findViewById(R.id.txtStatus);
 
         recyclerView = v.findViewById(R.id.recyclerItems);
 
@@ -111,6 +113,14 @@ public class RequisitionActivityFragment extends Fragment {
         }
 
         txtTotalAmount.setText(String.valueOf(value));
+
+        if(value>100000.0) {
+            txtStatus.setText("Hold");
+            txtStatus.setBackgroundColor(Color.parseColor(String.valueOf(R.color.orderStatusHold)));
+        } else {
+            txtStatus.setText("Pending");
+            txtStatus.setBackgroundColor(Color.parseColor(String.valueOf(R.color.orderStatusPending)));
+        }
     }
 
     private void CheckRadio() {
