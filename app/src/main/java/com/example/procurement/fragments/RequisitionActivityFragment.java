@@ -71,12 +71,11 @@ public class RequisitionActivityFragment extends Fragment {
         radioYesButton = v.findViewById(R.id.radioYes);
         btnAddItems = v.findViewById(R.id.btnAddItems);
         txtStatus = v.findViewById(R.id.txtStatus);
-
         recyclerView = v.findViewById(R.id.recyclerItems);
 
         c= v.getContext();
         inventoryAdapter = new InventoryAdapter(c,CommonConstants.iInventory);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         GoToQuotation();
@@ -116,10 +115,10 @@ public class RequisitionActivityFragment extends Fragment {
 
         if(value>100000.0) {
             txtStatus.setText("Hold");
-            txtStatus.setBackgroundColor(Color.parseColor("C2185B"));
+            txtStatus.setBackgroundResource(R.drawable.badge_hold);
         } else {
             txtStatus.setText("Pending");
-            txtStatus.setBackgroundColor(Color.parseColor("#F1C40F"));
+            txtStatus.setBackgroundResource(R.drawable.badge_pending);
         }
     }
 
