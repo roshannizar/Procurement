@@ -48,7 +48,7 @@ public class QuotationFragment extends Fragment {
     private Context context;
     private Button btnPlacedRequisition,btnBackRequisition;
     private EditText txtReason;
-    private TextView txtProposalDate,txtProposedBy;
+    private TextView txtProposalDate,txtProposedBy,btnAddSupplier;
     private CollectionReference requisitionRef;
     private final Calendar c = Calendar.getInstance();
     private ProgressBar createProgressBar;
@@ -69,6 +69,7 @@ public class QuotationFragment extends Fragment {
         txtProposedBy = v.findViewById(R.id.txtProposedBy);
         createProgressBar = v.findViewById(R.id.createProgressBar);
         createProgressBar.setVisibility(View.INVISIBLE);
+        btnAddSupplier = v.findViewById(R.id.btnAddSupplier);
 
         requisitionRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_REQUISITION);
 
@@ -82,8 +83,21 @@ public class QuotationFragment extends Fragment {
         GoToRequisition();
         setProposalDate();
         WriteDataValues();
+        AddSupplier();
 
         return v;
+    }
+
+
+    private void AddSupplier() {
+        btnAddSupplier.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        RequisitionActivity.fm2.beginTransaction().replace(R.id.fragment_container_requisition,new SupplierDialogFragment(),null).commit();
+                    }
+                }
+        );
     }
 
     private void WriteDataValues() {

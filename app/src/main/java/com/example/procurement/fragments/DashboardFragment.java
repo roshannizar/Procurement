@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -53,9 +54,10 @@ public class DashboardFragment extends Fragment {
     private CollectionReference notificationDbRef;
     private Context mContext;
     private ProgressBar progressBar;
-    private TextView txtUserName;
+    private TextView txtUserName,txtNoti;
     private TextView txtMonthDate;
     private FirebaseAuth mAuth;
+    private ImageView imgNoti;
 
     public DashboardFragment() {
 
@@ -73,6 +75,8 @@ public class DashboardFragment extends Fragment {
         txtUserName = view.findViewById(R.id.txtUserName);
         txtMonthDate = view.findViewById(R.id.txtMonthData);
         progressBar = view.findViewById(R.id.progressBar2);
+        txtNoti = view.findViewById(R.id.txtnoti);
+        imgNoti = view.findViewById(R.id.imgnoti);
         TextView txtApprovedCount = view.findViewById(R.id.txtApprovedCount);
         TextView txtHoldCount = view.findViewById(R.id.txtHoldCount);
         TextView txtPendingCount = view.findViewById(R.id.txtPendingCount);
@@ -88,7 +92,6 @@ public class DashboardFragment extends Fragment {
         notificationDbRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_NOTIFICATION);
 
         notifications = new ArrayList<>();
-
         recyclerView = view.findViewById(R.id.rvNotification);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -129,7 +132,16 @@ public class DashboardFragment extends Fragment {
                     Collections.reverse(notifications);
                     adapter = new NotificationAdapter(mContext, notifications);
                     progressBar.setVisibility(View.GONE);
+                    txtNoti.setVisibility(View.INVISIBLE);
+                    imgNoti.setVisibility(View.INVISIBLE);
                     recyclerView.setAdapter(adapter);
+                }
+
+                if(notifications.size() == 0) {
+                    imgNoti.setImageResource(R.drawable.ic_email);
+                    imgNoti.setVisibility(View.VISIBLE);
+                    txtNoti.setVisibility(View.VISIBLE);
+                    txtNoti.setText("Wohoo! No Notifications");
                 }
             }
         });

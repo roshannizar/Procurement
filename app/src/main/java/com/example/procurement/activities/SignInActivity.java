@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.procurement.R;
@@ -32,6 +33,7 @@ public class SignInActivity extends AppCompatActivity {
     CheckBox cbShowPassword;
     EditText txtEmail, txtPassword;
     private FirebaseAuth mAuth;
+    private ProgressBar progressBar;
     public static DocumentReference siteManagerDBRef;
 
     @Override
@@ -44,6 +46,8 @@ public class SignInActivity extends AppCompatActivity {
         txtEmail = findViewById(R.id.txtEmail);
         txtPassword = findViewById(R.id.txtPassword);
         cbShowPassword = findViewById(R.id.cbShowPassword);
+        progressBar = findViewById(R.id.progressBar5);
+        progressBar.setVisibility(View.INVISIBLE);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -59,6 +63,7 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     public void SignIn(String email, String password) {
+        progressBar.setVisibility(View.VISIBLE);
         mAuth.signInWithEmailAndPassword(email,password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -68,6 +73,7 @@ public class SignInActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             getCurrentUser();
                             updateUI(user);
+                            progressBar.setVisibility(View.INVISIBLE);
                             Intent i = new Intent(SignInActivity.this, HomeActivity.class);
                             startActivity(i);
                             finish();

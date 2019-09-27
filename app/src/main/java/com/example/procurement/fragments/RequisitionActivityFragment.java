@@ -40,6 +40,7 @@ public class RequisitionActivityFragment extends Fragment {
     private Inventory i;
     private Context c;
     private RadioGroup radioGroup;
+    private Inventory inventory;
     private RadioButton radioYesButton,radioNoButton;
     private InventoryAdapter inventoryAdapter;
     private DatePickerDialog picker;
@@ -82,6 +83,7 @@ public class RequisitionActivityFragment extends Fragment {
         GenerateID();
         WriteDataValues();
         CheckRadio();
+        setTotalAmountBadge();
         //CheckValueInConstant();
         PopUpItems();
 
@@ -97,6 +99,18 @@ public class RequisitionActivityFragment extends Fragment {
                     }
                 }
         );
+    }
+
+    private void setTotalAmountBadge() {
+        double value = 0.0;
+
+
+        for(int i=0;i<CommonConstants.iInventory.size();i++) {
+            inventory = CommonConstants.iInventory.get(i);
+            value = value + inventory.getUnitprice()*inventory.getQuantity();
+        }
+
+        txtTotalAmount.setText(String.valueOf(value));
     }
 
     private void CheckRadio() {

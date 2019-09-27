@@ -75,7 +75,7 @@ public class SupplierAdapter extends RecyclerView.Adapter<SupplierAdapter.ViewHo
             txtSupplierName = v.findViewById(R.id.txtSupplierName);
             txtDelivery = v.findViewById(R.id.txtDelivery);
             txtOffer = v.findViewById(R.id.txtOffer);
-            btnClose = v.findViewById(R.id.btnClose);
+            btnClose = v.findViewById(R.id.btnSupplierClose);
         }
     }
 }

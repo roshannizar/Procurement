@@ -1,11 +1,14 @@
 package com.example.procurement.adapters;
 
+import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -17,9 +20,14 @@ import com.example.procurement.models.Supplier;
 import com.example.procurement.utils.CommonConstants;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Objects;
+
+import static java.security.AccessController.getContext;
 
 public class SupplierDialogAdapter extends RecyclerView.Adapter<SupplierDialogAdapter.ViewHolder>{
 
+    private DatePickerDialog picker;
     private ArrayList<Supplier> iSupp;
     private Context c;
 
@@ -40,9 +48,12 @@ public class SupplierDialogAdapter extends RecyclerView.Adapter<SupplierDialogAd
     public void onBindViewHolder(SupplierDialogAdapter.ViewHolder holder, final int position) {
         final Supplier supplier = iSupp.get(position);
 
+        holder.checkBox.setText(supplier.getSupplierName());
         holder.txtExpectedDate.setText(supplier.getExpectedDate());
         holder.txtStatus.setText(supplier.getSupplierStatus());
         holder.txtOffer.setText(supplier.getOffer());
+
+        final String offer = holder.txtOffer.getText().toString();
 
         holder.checkBox.setOnCheckedChangeListener(
                 new CheckBox.OnCheckedChangeListener() {
@@ -50,7 +61,7 @@ public class SupplierDialogAdapter extends RecyclerView.Adapter<SupplierDialogAd
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
                         if(compoundButton.isChecked()) {
-                            CommonConstants.iSupplier.add(new Supplier(supplier.getSupplierName(),supplier.getExpectedDate(),supplier.getOffer(),supplier.getSupplierStatus()));
+                            CommonConstants.iSupplier.add(new Supplier(supplier.getSupplierName(),supplier.getExpectedDate(),offer,supplier.getSupplierStatus()));
                         } else {
                             CommonConstants.iSupplier.remove(position);
                         }
@@ -79,8 +90,8 @@ public class SupplierDialogAdapter extends RecyclerView.Adapter<SupplierDialogAd
 
             txtOffer = view.findViewById(R.id.txtOffer);
             txtExpectedDate = view.findViewById(R.id.dtpExpectedDate);
-            txtStatus = view.findViewById(R.id.txtStatus);
-            checkBox = view.findViewById(R.id.cbItem);
+            txtStatus = view.findViewById(R.id.txtSupplierStatus);
+            checkBox = view.findViewById(R.id.cbItemSupplier);
         }
     }
 }

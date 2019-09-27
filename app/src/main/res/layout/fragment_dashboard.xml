@@ -421,13 +421,12 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="8dp"
                         android:layout_marginEnd="16dp"
                         android:indeterminate="true"
-                        app:layout_constraintBottom_toBottomOf="@+id/rvNotification"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView18" />
+                        app:layout_constraintTop_toTopOf="@+id/rvNotification" />
 
                     <TextView
                         android:id="@+id/textView18"
@@ -453,6 +452,7 @@
                         android:layout_margin="@dimen/dimen_10"
                         android:layout_marginTop="8dp"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.526"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView18" />
 
@@ -495,6 +495,30 @@
                         android:text="10,000 out of 100,000"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/imgnoti"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginEnd="16dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_notification"
+                        app:layout_constraintEnd_toEndOf="@+id/rvNotification"
+                        app:layout_constraintStart_toStartOf="@+id/rvNotification"
+                        app:layout_constraintTop_toTopOf="@+id/rvNotification" />
+
+                    <TextView
+                        android:id="@+id/txtnoti"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Looking for notifications"
+                        android:textAlignment="center"
+                        app:layout_constraintEnd_toEndOf="@+id/rvNotification"
+                        app:layout_constraintStart_toStartOf="@+id/rvNotification"
+                        app:layout_constraintTop_toBottomOf="@+id/imgnoti" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </ScrollView>
 
