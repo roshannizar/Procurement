@@ -38,6 +38,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import java.util.ArrayList;
 
 import static com.example.procurement.activities.SignInActivity.siteManagerDBRef;
+import static com.example.procurement.utils.CommonConstants.ORDER_EDIT_FRAGMENT_TAG;
 
 public class OrderViewFragment extends Fragment {
     private static final String TAG = "OrderViewFragment";
@@ -175,6 +176,7 @@ public class OrderViewFragment extends Fragment {
                     switch (orderStatus) {
                         case CommonConstants.ORDER_STATUS_APPROVED:
                             txtStatusView.setBackgroundResource(R.drawable.badge_approved);
+                            changeStatusOrder();
                             break;
                         case CommonConstants.ORDER_STATUS_PENDING:
                             txtStatusView.setBackgroundResource(R.drawable.badge_pending);
@@ -201,6 +203,32 @@ public class OrderViewFragment extends Fragment {
                     txtTax.setText(String.valueOf(tax));
                     txtTotal.setText(String.valueOf(total));
                 }
+            }
+        });
+    }
+
+    private void changeStatusOrder() {
+        btnUpdate.setText("Mark As Placed");
+        btnUpdate.setBackgroundResource(R.drawable.badge_placed);
+        btnUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                order.setOrderStatus(getString(R.string.placed));
+                orderDBRef.document(order.getOrderKey())
+                        .set(order)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new OrderViewFragment(order.getOrderKey()), null).commit();
+                                Log.d(ORDER_EDIT_FRAGMENT_TAG, "DocumentSnapshot successfully updated!");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w(ORDER_EDIT_FRAGMENT_TAG, "Error writing document", e);
+                            }
+                        });
             }
         });
     }

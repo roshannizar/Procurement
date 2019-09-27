@@ -31,7 +31,6 @@ import com.example.procurement.R;
 import com.example.procurement.activities.HomeActivity;
 import com.example.procurement.models.Inventory;
 import com.example.procurement.models.Order;
-import com.example.procurement.models.Requisition;
 import com.example.procurement.models.Site;
 import com.example.procurement.models.Supplier;
 import com.example.procurement.utils.CommonConstants;
@@ -187,7 +186,7 @@ public class EditOrderFragment extends Fragment {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new RequisitionViewFragment(), null).commit();
+                        HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new OrderViewFragment(order.getOrderKey()), null).commit();
                     }
                 }
         );
@@ -323,6 +322,15 @@ public class EditOrderFragment extends Fragment {
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
+                                    new AlertDialog.Builder(Objects.requireNonNull(getActivity()))
+                                            .setTitle("ALERT")
+                                            .setMessage("Successfully Generated the Purchase Order !")
+                                            .setCancelable(false)
+                                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                }
+                                            }).show();
                                     HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new OrderViewFragment(order.getOrderKey()), null).commit();
                                     Log.d(ORDER_EDIT_FRAGMENT_TAG, "DocumentSnapshot successfully updated!");
                                 }
