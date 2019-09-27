@@ -106,7 +106,11 @@ public class RequisitionActivityFragment extends Fragment {
             Inventory inventory = CommonConstants.iInventory.get(i);
             value = value + inventory.getUnitprice()* inventory.getQuantity();
 
-            checkEmptyUnitPrice = inventory.getUnitprice() == 0;
+            System.out.println(inventory.getUnitprice());
+
+            if(inventory.getUnitprice()==0) {
+                checkEmptyUnitPrice=true;
+            }
         }
 
         txtTotalAmount.setText("Rs: "+String.valueOf(value));
