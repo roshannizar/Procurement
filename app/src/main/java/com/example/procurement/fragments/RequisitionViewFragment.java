@@ -59,8 +59,8 @@ public class RequisitionViewFragment extends Fragment {
     private ProgressBar progressBar;
     private TextView txtLoader, txtWait;
     private ImageView imgLoader;
-    private RequisitionStatus approvedStatus,declinedStatus,holdStatus,pendingStatus;
-    private int approvedCount,delinedCount,holdCount,pendingCount;
+    private RequisitionStatus approvedStatus, declinedStatus, holdStatus, pendingStatus;
+    private int approvedCount, delinedCount, holdCount, pendingCount;
 
     public RequisitionViewFragment() {
 
@@ -69,10 +69,10 @@ public class RequisitionViewFragment extends Fragment {
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate((bundle));
-        approvedCount=0;
-        delinedCount=0;
-        holdCount=0;
-        pendingCount=0;
+        approvedCount = 0;
+        delinedCount = 0;
+        holdCount = 0;
+        pendingCount = 0;
     }
 
     @Override
@@ -82,7 +82,7 @@ public class RequisitionViewFragment extends Fragment {
         setHasOptionsMenu(true);
 
         iRequisition = new ArrayList<>();
-        c=v.getContext();
+        c = v.getContext();
         progressBar = v.findViewById(R.id.progressBar3);
         txtLoader = v.findViewById(R.id.txtLoader2);
         txtWait = v.findViewById(R.id.txtWait2);
@@ -92,7 +92,7 @@ public class RequisitionViewFragment extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         approvedStatus = new ApprovedRequisitionStatus();
-        declinedStatus= new DeclineRequisitionStatus();
+        declinedStatus = new DeclineRequisitionStatus();
         holdStatus = new HoldRequisitionStatus();
         pendingStatus = new PendingRequisitionStatus();
 
@@ -172,8 +172,12 @@ public class RequisitionViewFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if (!newText.equals("")) {
-                    requisitionAdapter.getFilter().filter(newText);
+                if (!newText.equals("") && !newText.isEmpty()) {
+                    try {
+                        requisitionAdapter.getFilter().filter(newText);
+                    } catch (NullPointerException e) {
+                        Log.w(TAG, "Caught NullPointerException");
+                    }
                 }
                 return true;
             }
