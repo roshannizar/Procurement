@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.procurement.R;
 import com.example.procurement.activities.HomeActivity;
 import com.example.procurement.fragments.OrderViewFragment;
+import com.example.procurement.fragments.RequisitionViewFragment;
 import com.example.procurement.models.Notification;
 import com.example.procurement.utils.CommonConstants;
 import com.google.firebase.firestore.CollectionReference;
@@ -56,40 +57,56 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         final Notification notification = notificationsList.get(position);
 
         notificationDbRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_NOTIFICATION);
 
+        String status = notification.getStatus();
+        holder.notificationOrderID.setText(notification.getID());
+        holder.notificationStatus.setText("Status : " + status);
 
-        holder.notificationOrderID.setText("Order ID : " +  notification.getOrderID());
-        holder.notificationStatus.setText("Status : " + notification.getOrderStatus());
+        if (notification.getOrderKey() != null) {
+            holder.notificationOrderID.setText("Order ID : " + notification.getID());
+        }
+
+        if (notification.getRequisitionKey() != null) {
+            holder.notificationOrderID.setText("Requisition ID : " + notification.getID());
+        }
 
         int statusColor;
 
-        switch (notification.getOrderStatus()) {
+        switch (status) {
             case CommonConstants.ORDER_STATUS_APPROVED:
                 statusColor = R.color.orderStatusAccepted;
-                break;
-            case CommonConstants.ORDER_STATUS_PENDING:
-                statusColor = R.color.orderStatusPending;
-                break;
-            case CommonConstants.ORDER_STATUS_PLACED:
-                statusColor = R.color.orderStatusPlaced;
                 break;
             case CommonConstants.ORDER_STATUS_HOLD:
                 statusColor = R.color.orderStatusHold;
                 break;
             default:
                 statusColor = R.color.orderStatusDenied;
+                holder.cvNotification.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        notificationDbRef.document(notification.getNotificationKey()).delete();
+                    }
+                });
+                break;
         }
 
         holder.cvNotification.setBackgroundResource(statusColor);
+
         holder.cvNotification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 notificationDbRef.document(notification.getNotificationKey()).delete();
-                HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new OrderViewFragment(notification.getOrderKey()), null).commit();
+                if (notification.getOrderKey() != null) {
+                    HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new OrderViewFragment(notification.getOrderKey()), null).commit();
+                }
+
+                if (notification.getRequisitionKey() != null) {
+                    HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new RequisitionViewFragment(), null).commit();
+                }
             }
         });
     }

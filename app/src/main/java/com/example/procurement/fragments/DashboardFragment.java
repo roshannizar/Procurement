@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.procurement.R;
 import com.example.procurement.adapters.NotificationAdapter;
+import com.example.procurement.models.Inventory;
 import com.example.procurement.models.Notification;
 import com.example.procurement.models.Order;
 import com.example.procurement.models.Requisition;
@@ -29,6 +30,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -48,14 +50,15 @@ public class DashboardFragment extends Fragment {
     private ArrayList<Requisition> iRequisition;
     private ArrayList<Order> orders;
 
-    private ArrayList<Notification> notifications;
+    private ArrayList<Notification> notificationList;
     private NotificationAdapter adapter;
     private RecyclerView recyclerView;
-    private CollectionReference notificationDbRef, requisitionRef, orderDBRef;
+    private CollectionReference notificationDbRef, requisitionRef, orderDBRef, inventoryDBRef;
+
     private Context mContext;
     private ProgressBar progressBar;
     private TextView txtUserName, txtNoti, txtMonthDate, txtApproved, txtApprovedCount, txtHold, txtDeclined,
-            txtDeclinedCount, txtPendingCount, txtPending,  txtDraftCount , txtPlacedCount;
+            txtDeclinedCount, txtPendingCount, txtPending, txtDraftCount, txtPlacedCount;
     private FirebaseAuth mAuth;
     private ImageView imgNoti;
 
@@ -94,10 +97,11 @@ public class DashboardFragment extends Fragment {
         notificationDbRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_NOTIFICATION);
         requisitionRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_REQUISITION);
         orderDBRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_ORDER);
+        inventoryDBRef = FirebaseFirestore.getInstance().collection(CommonConstants.COLLECTION_INVENTORIES);
 
         iRequisition = new ArrayList<>();
         orders = new ArrayList<>();
-        notifications = new ArrayList<>();
+        notificationList = new ArrayList<>();
 
         recyclerView = view.findViewById(R.id.rvNotification);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
@@ -106,17 +110,27 @@ public class DashboardFragment extends Fragment {
         ReadData();
         ReadRequisitionStatusCount();
         ReadOrderStatusCount();
-
+        //writeData();
         return view;
     }
 
-//    private void writeData() {
-//        String key = notificationDbRef.document().getId();
-//        Notification notification = new Notification("PO-01", "3L22ABg6ttMLkzKEeSIm", CommonConstants.ORDER_STATUS_APPROVED);
-//        notification.setNotificationKey(key);
-//        notificationDbRef.document(key).set(notification);
-//    }
+    private void writeData() {
+        String key1 = notificationDbRef.document().getId();
+        Notification notification1 = new Notification();
+        notification1.setOrderKey("PKpB6EXFjb9JL11veL7x");
+        notification1.setID("PO-1");
+        notification1.setStatus(CommonConstants.ORDER_STATUS_APPROVED);
+        notification1.setNotificationKey(key1);
+        notificationDbRef.document(key1).set(notification1);
 
+        String key2 = notificationDbRef.document().getId();
+        Notification notification2 = new Notification();
+        notification2.setRequisitionKey("V0mx632Hx2fWDk4svs7m");
+        notification2.setID("REQ-1");
+        notification2.setStatus(CommonConstants.ORDER_STATUS_APPROVED);
+        notification2.setNotificationKey(key2);
+        notificationDbRef.document(key2).set(notification2);
+    }
 
 
     private void ReadData() {
@@ -129,26 +143,26 @@ public class DashboardFragment extends Fragment {
                     Log.w(TAG, "Listen failed.", e);
                 }
 
-                notifications.clear();
+                notificationList.clear();
 
                 assert queryDocumentSnapshots != null;
                 for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                     Notification notification = document.toObject(Notification.class);
-                    notifications.add(notification);
+                    notificationList.add(notification);
                 }
 
 
-                if (notifications != null) {
-                    Collections.reverse(notifications);
-                    adapter = new NotificationAdapter(mContext, notifications);
+                if (notificationList != null) {
+                    Collections.reverse(notificationList);
+                    adapter = new NotificationAdapter(mContext, notificationList);
                     progressBar.setVisibility(View.GONE);
                     txtNoti.setVisibility(View.INVISIBLE);
                     imgNoti.setVisibility(View.INVISIBLE);
                     recyclerView.setAdapter(adapter);
                 }
 
-                assert notifications != null;
-                if (notifications.size() == 0) {
+                assert notificationList != null;
+                if (notificationList.size() == 0) {
                     imgNoti.setImageResource(R.drawable.ic_email);
                     imgNoti.setVisibility(View.VISIBLE);
                     txtNoti.setVisibility(View.VISIBLE);
@@ -246,7 +260,7 @@ public class DashboardFragment extends Fragment {
                         for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                             Requisition requisition = document.toObject(Requisition.class);
 
-                            //reqTotalAmount = sum+Integer.parseInt(requisition.getTotalAmount());
+                           // reqTotalAmount = sum + Integer.parseInt(requisition.getTotalAmount());
 
                             switch (requisition.getRequisitionStatus()) {
                                 case CommonConstants.REQUISITION_STATUS_APPROVED:
@@ -294,7 +308,7 @@ public class DashboardFragment extends Fragment {
                             switch (ordersCount.getOrderStatus()) {
                                 case CommonConstants.ORDER_STATUS_APPROVED:
                                     orderApproved++;
-                                    txtPendingCount.setText(orderApproved + " Order(s) Approved");
+                                    txtApprovedCount.setText(orderApproved + " Order(s) Approved");
                                     break;
                                 case CommonConstants.ORDER_STATUS_PENDING:
                                     orderPending++;
