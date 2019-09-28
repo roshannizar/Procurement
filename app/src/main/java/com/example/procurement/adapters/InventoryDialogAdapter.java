@@ -2,6 +2,8 @@ package com.example.procurement.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +22,7 @@ import com.example.procurement.R;
 import com.example.procurement.fragments.RequisitionActivityFragment;
 import com.example.procurement.models.Inventory;
 import com.example.procurement.models.InventoryData;
+import com.example.procurement.models.Supplier;
 import com.example.procurement.utils.CommonConstants;
 
 import java.util.ArrayList;
@@ -51,6 +54,41 @@ public class InventoryDialogAdapter extends RecyclerView.Adapter<InventoryDialog
         holder.txtQty.setText("0");
         holder.txtunitprice.setText(String.valueOf(inventoryData.getUnitprice()));
 
+        holder.txtQty.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if(holder.txtQty.getText().toString() != "0" || holder.txtQty.getText().toString() != null) {
+
+                    holder.checkBox.setClickable(true);
+                    holder.checkBox.setOnCheckedChangeListener(
+                            new CheckBox.OnCheckedChangeListener() {
+                                @Override
+                                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                                    if (compoundButton.isChecked()) {
+                                        int quantity = Integer.parseInt(holder.txtQty.getText().toString());
+                                        CommonConstants.iInventory.add(new Inventory(String.valueOf(position), inventoryData.getItemName(), "", quantity, inventoryData.getUnitprice()));
+                                    } else {
+                                        CommonConstants.iInventory.remove(position);
+                                        notifyDataSetChanged();
+                                    }
+                                }
+                            }
+                    );
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
         holder.txtIncrease.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -80,26 +118,6 @@ public class InventoryDialogAdapter extends RecyclerView.Adapter<InventoryDialog
                     }
                 }
         );
-
-        if(holder.txtQty.getText().toString() != "0" || holder.txtQty.getText().toString() != null) {
-
-            holder.checkBox.setClickable(true);
-            holder.checkBox.setOnCheckedChangeListener(
-                    new CheckBox.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
-                            if (compoundButton.isChecked()) {
-                                int quantity = Integer.parseInt(holder.txtQty.getText().toString());
-                                CommonConstants.iInventory.add(new Inventory(String.valueOf(position), inventoryData.getItemName(), "", quantity, inventoryData.getUnitprice()));
-                            } else {
-                                CommonConstants.iInventory.remove(position);
-                                notifyDataSetChanged();
-                            }
-                        }
-                    }
-            );
-        }
     }
 
     public int getItemCount() {
