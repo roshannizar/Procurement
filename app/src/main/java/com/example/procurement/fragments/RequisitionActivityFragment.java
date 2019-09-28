@@ -41,8 +41,6 @@ public class RequisitionActivityFragment extends Fragment {
     private Inventory i;
     private Context c;
     private RadioGroup radioGroup;
-    private Inventory inventory;
-    private RadioButton radioYesButton,radioNoButton;
     private InventoryAdapter inventoryAdapter;
     private DatePickerDialog picker;
     private Button btnQuotation;
@@ -67,8 +65,6 @@ public class RequisitionActivityFragment extends Fragment {
         txtTotalAmount = v.findViewById(R.id.txtTotalAmount);
         btnGenerate = v.findViewById(R.id.btnGenerateRequisition);
         radioGroup = v.findViewById(R.id.budgetRadio);
-        radioNoButton = v.findViewById(R.id.radioNo);
-        radioYesButton = v.findViewById(R.id.radioYes);
         btnAddItems = v.findViewById(R.id.btnAddItems);
         txtStatus = v.findViewById(R.id.txtStatus);
         recyclerView = v.findViewById(R.id.recyclerItems);
@@ -102,24 +98,32 @@ public class RequisitionActivityFragment extends Fragment {
         );
     }
 
+    @SuppressLint("SetTextI18n")
     private void setTotalAmountBadge() {
         double value = 0.0;
-
+        boolean checkEmptyUnitPrice = false;
 
         for(int i=0;i<CommonConstants.iInventory.size();i++) {
-            inventory = CommonConstants.iInventory.get(i);
-            value = value + inventory.getUnitprice()*inventory.getQuantity();
+            Inventory inventory = CommonConstants.iInventory.get(i);
+            value = value + inventory.getUnitprice()* inventory.getQuantity();
+
+            System.out.println(inventory.getUnitprice());
+
+            if(inventory.getUnitprice()==0) {
+                checkEmptyUnitPrice=true;
+            }
         }
 
-        txtTotalAmount.setText(String.valueOf(value));
+        txtTotalAmount.setText("Rs: "+ value);
 
-        if(value>100000.0) {
+        if(value>100000.0 || checkEmptyUnitPrice) {
             txtStatus.setText(R.string.hold);
             txtStatus.setBackgroundResource(R.drawable.badge_hold);
         } else {
             txtStatus.setText(R.string.pending);
             txtStatus.setBackgroundResource(R.drawable.badge_pending);
         }
+        
     }
 
     private void CheckRadio() {
@@ -155,6 +159,7 @@ public class RequisitionActivityFragment extends Fragment {
         );
     }
 
+    @SuppressLint("SetTextI18n")
     private void GetGenerateID() {
         Pattern p = Pattern.compile("\\d+");
         String generateNo = null;
@@ -164,6 +169,7 @@ public class RequisitionActivityFragment extends Fragment {
             while (m.find()) {
                 generateNo = m.group();
             }
+            assert generateNo != null;
             int value = Integer.parseInt(generateNo) + 1;
             txtRequisitionNo.setText("REQ-" + value);
         }
@@ -209,9 +215,9 @@ public class RequisitionActivityFragment extends Fragment {
     }
 
     private void CheckValueInConstant() {
-        if(REQUISITION_NO.equals("REQ-00") || REQUISITION_NO == null) {
+        if(REQUISITION_NO.equals("REQ-00")) {
             setGenerateID(txtRequisitionNo.getText().toString());
-        } else if(PURPOSE.equals("") || PURPOSE == null) {
+        } else if(PURPOSE.equals("")) {
             txtRequisitionNo.setText(REQUISITION_NO);
             txtPurpose.setText("");
         } else if(COMMENTS.equals("")) {
@@ -256,7 +262,7 @@ public class RequisitionActivityFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
 
-                        if(Valdiation()) {
+                        if(Validation()) {
 
                             REQUISITION_NO = txtRequisitionNo.getText().toString();
                             PURPOSE = txtPurpose.getText().toString();
@@ -282,7 +288,7 @@ public class RequisitionActivityFragment extends Fragment {
         );
     }
 
-    private boolean Valdiation() {
+    private boolean Validation() {
 
         boolean value = true;
 
@@ -310,9 +316,6 @@ public class RequisitionActivityFragment extends Fragment {
                         recyclerView.setBackgroundResource(R.drawable.text_box);
                         radioGroup.setBackgroundResource(R.drawable.text_box_empty);
                         value = false;
-                    }
-                    else {
-                        value = true;
                     }
                 }
             }

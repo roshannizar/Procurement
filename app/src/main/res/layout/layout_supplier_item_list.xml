@@ -23,7 +23,7 @@
         android:layout_marginEnd="16dp"
         android:text="@string/description"
         app:layout_constraintEnd_toStartOf="@+id/reduce"
-        app:layout_constraintStart_toEndOf="@+id/itemName"
+        app:layout_constraintStart_toEndOf="@+id/cbItem"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -35,37 +35,42 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:text="unitPrice"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/divider3"
         app:layout_constraintEnd_toStartOf="@+id/reduce"
-        app:layout_constraintStart_toEndOf="@+id/itemName"
+        app:layout_constraintStart_toEndOf="@+id/cbItem"
         app:layout_constraintTop_toBottomOf="@+id/description"
         app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/increase"
         android:layout_width="25dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         android:background="@drawable/badge_hold"
-        android:text="+"
         android:gravity="center"
+        android:text="+"
         android:textColor="@color/white"
         android:textSize="36sp"
+        app:layout_constraintBottom_toTopOf="@+id/divider3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/reduce"
         android:layout_width="25dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
         android:background="@drawable/badge_hold"
         android:gravity="center"
         android:text="-"
         android:textColor="@color/white"
         android:textSize="36sp"
+        app:layout_constraintBottom_toTopOf="@+id/divider3"
         app:layout_constraintEnd_toStartOf="@+id/qty"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -83,7 +88,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <CheckBox
-        android:id="@+id/itemName"
+        android:id="@+id/cbItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
