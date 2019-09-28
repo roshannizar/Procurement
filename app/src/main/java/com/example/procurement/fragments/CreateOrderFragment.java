@@ -24,7 +24,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -33,7 +32,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.procurement.R;
 import com.example.procurement.activities.HomeActivity;
 import com.example.procurement.adapters.InventoryAdapter;
-import com.example.procurement.adapters.OrderStatusAdapter;
 import com.example.procurement.models.Inventory;
 import com.example.procurement.models.Order;
 import com.example.procurement.models.Requisition;
@@ -55,15 +53,12 @@ import java.text.DecimalFormat;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static android.content.ContentValues.TAG;
-import static com.example.procurement.activities.SignInActivity.SignOutUserFirebase;
 import static com.example.procurement.activities.SignInActivity.siteManagerDBRef;
-import static com.example.procurement.utils.CommonConstants.GENERATE_ORDER_FRAGMENT_TAG;
 import static com.example.procurement.utils.CommonConstants.ORDER_ID;
 
 public class CreateOrderFragment extends Fragment {
@@ -71,15 +66,13 @@ public class CreateOrderFragment extends Fragment {
     private Spinner spCompany, spVendor;
     private TextView txtOrderId, txtRequisitionId, txtDeliveryDate,
             txtDescription, txtStatusView, txtSubTotal, txtTax, txtTotal, txtCurrentDate;
-    private CardView cvTotal;
     private RecyclerView productItem;
     private Button btnGenerate;
     private ImageView btnBack;
     private String requisitionKey;
     private DocumentReference requisitionRef;
-    private CollectionReference orderDBRef, supplierDBRef, sitesDBRef,inventoryRef;
+    private CollectionReference orderDBRef, supplierDBRef, sitesDBRef, inventoryRef;
     private Requisition requisition;
-    private Inventory inventory;
     private DatePickerDialog picker;
     private InventoryAdapter adapter;
     private ArrayList<String> companyList, vendorList;
@@ -104,7 +97,7 @@ public class CreateOrderFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_create_purchase_order, container, false);
 
@@ -129,15 +122,11 @@ public class CreateOrderFragment extends Fragment {
         txtSubTotal = rootView.findViewById(R.id.txtSubTotal);
         txtTax = rootView.findViewById(R.id.txtTax);
         txtTotal = rootView.findViewById(R.id.txtTotal);
-
-
-        cvTotal = rootView.findViewById(R.id.cvTotal);
-
         productItem = rootView.findViewById(R.id.rvItemView);
         btnGenerate = rootView.findViewById(R.id.btnGenerate);
 
-        adapter = new InventoryAdapter(mContext,CommonConstants.iInventory,"Order");
-        productItem.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
+        adapter = new InventoryAdapter(mContext, CommonConstants.iInventory, "Order");
+        productItem.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         productItem.setItemAnimator(new DefaultItemAnimator());
 
 
@@ -153,7 +142,7 @@ public class CreateOrderFragment extends Fragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         menu.clear();
         inflater.inflate(R.menu.create_order_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
@@ -181,13 +170,13 @@ public class CreateOrderFragment extends Fragment {
                         @Override
                         public void onSuccess(Void aVoid) {
                             HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new OrderStatusFragment(), null).commit();
-                            Log.d(GENERATE_ORDER_FRAGMENT_TAG, "DocumentSnapshot successfully written!");
+                            Log.d(TAG, "Purchase order successfully drafted!");
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Log.w(GENERATE_ORDER_FRAGMENT_TAG, "Error writing document", e);
+                            Log.w(TAG, "Error writing document", e);
                         }
                     });
 
@@ -203,7 +192,7 @@ public class CreateOrderFragment extends Fragment {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
-                    Log.w(GENERATE_ORDER_FRAGMENT_TAG, "Listen failed.", e);
+                    Log.w(TAG, "Listen failed.", e);
                 }
 
                 companyList.clear();
@@ -225,7 +214,7 @@ public class CreateOrderFragment extends Fragment {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
-                    Log.w(GENERATE_ORDER_FRAGMENT_TAG, "Listen failed.", e);
+                    Log.w(TAG, "Listen failed.", e);
                 }
 
                 vendorList.clear();
@@ -298,7 +287,7 @@ public class CreateOrderFragment extends Fragment {
 
 
                     if (inventoryList != null) {
-                        adapter= new InventoryAdapter(mContext, inventoryList,"Order");
+                        adapter = new InventoryAdapter(mContext, inventoryList, "Order");
 //                        progressBar.setVisibility(View.GONE);
 //                        imgLoader.setVisibility(View.INVISIBLE);
 //                        txtLoader.setVisibility(View.INVISIBLE);
@@ -327,7 +316,7 @@ public class CreateOrderFragment extends Fragment {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
-                    Log.w(GENERATE_ORDER_FRAGMENT_TAG, "Listen failed.", e);
+                    Log.w(TAG, "Listen failed.", e);
                 }
 
                 if (queryDocumentSnapshots != null) {
@@ -472,13 +461,13 @@ public class CreateOrderFragment extends Fragment {
                                 public void onSuccess(Void aVoid) {
                                     alert.show();
                                     HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new OrderViewFragment(key), null).commit();
-                                    Log.d(GENERATE_ORDER_FRAGMENT_TAG, "DocumentSnapshot successfully written!");
+                                    Log.d(TAG, "DocumentSnapshot successfully written!");
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    Log.w(GENERATE_ORDER_FRAGMENT_TAG, "Error writing document", e);
+                                    Log.w(TAG, "Error writing document", e);
                                 }
                             });
                 } else {
@@ -499,7 +488,8 @@ public class CreateOrderFragment extends Fragment {
 
     private boolean Validation() {
 
-        boolean value = true;
+        boolean value;
+
         if (spVendor.getSelectedItem().toString().equals(selectVendor)) {
             spVendor.setBackgroundResource(R.drawable.text_box_empty);
             value = false;
@@ -511,12 +501,8 @@ public class CreateOrderFragment extends Fragment {
             spCompany.setBackgroundResource(R.drawable.text_box);
             txtDescription.setBackgroundResource(R.drawable.text_box_empty);
             value = false;
-        } else if (inventoryList.size() == 0) {
-            txtDescription.setBackgroundResource(R.drawable.text_box);
-            productItem.setBackgroundResource(R.drawable.text_box_empty);
-            value = true;
         } else {
-            productItem.setBackgroundResource(R.drawable.text_box);
+            txtDescription.setBackgroundResource(R.drawable.text_box);
             value = true;
         }
 

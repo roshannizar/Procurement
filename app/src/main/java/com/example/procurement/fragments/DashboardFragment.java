@@ -23,8 +23,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.procurement.R;
 import com.example.procurement.adapters.NoteAdapter;
 import com.example.procurement.adapters.NotificationAdapter;
+import com.example.procurement.models.Note;
 import com.example.procurement.models.Notification;
 import com.example.procurement.utils.CommonConstants;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -33,10 +36,12 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.DateFormat;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 
 import static com.example.procurement.activities.SignInActivity.siteManagerDBRef;
 
@@ -92,20 +97,16 @@ public class DashboardFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         readData();
-        // writeData();
+        //writeData();
         return view;
     }
 
-//    private void writeData() {
-//        DatabaseReference reference = notificationDbRef.push();
-//        String key = reference.getKey();
-//
-//        if (key != null) {
-//            Notification notification = new Notification("PO-01", "-LovkdDnlrX7ikscLBUl", CommonConstants.ORDER_STATUS_PLACED);
-//            notification.setNotificationKey(key);
-//            notificationDbRef.child(key).setValue(notification);
-//        }
-//    }
+    private void writeData() {
+        String key = notificationDbRef.document().getId();
+        Notification notification = new Notification("PO-01", "3L22ABg6ttMLkzKEeSIm", CommonConstants.ORDER_STATUS_APPROVED);
+        notification.setNotificationKey(key);
+        notificationDbRef.document(key).set(notification);
+    }
 
     private void readData() {
 

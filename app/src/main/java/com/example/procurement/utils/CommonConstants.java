@@ -15,6 +15,7 @@ public class CommonConstants {
     public static final String COLLECTION_REQUISITION = "requisitions";
     public static final String COLLECTION_SUPPLIERS = "suppliers";
     public static final String COLLECTION_SITES = "sites";
+    public static final String COLLECTION_ORDER_PRODUCT = "products";
     public static final String COLLECTION_REQUISITION_INVENTORY = "inventory";
     public static final String COLLECTION_REQUISITION_SUPPLIER = "supplier";
     public static final String COLLECTION_INVENTORY ="inventories";
@@ -31,12 +32,6 @@ public class CommonConstants {
     public static final String REQUISITION_STATUS_APPROVED = "Approved";
     public static final String REQUISITION_STATUS_HOLD = "Hold";
 
-
-    public static final String NOTE_FRAGMENT_TAG = "Note Fragment";
-    public static final String ENQUIRE_FRAGMENT_TAG = "Enquire Fragment";
-    public static final String ORDER_VIEW_FRAGMENT_TAG = "OrderView Fragment";
-    public static final String ORDER_EDIT_FRAGMENT_TAG = "Edit Order Fragment";
-    public static final String GENERATE_ORDER_FRAGMENT_TAG = "Generate Order Fragment";
     public static final String SAVE_STRING = "Save";
     public static final String UPDATE_STRING = "Update";
     public static final String CANCEL_STRING = "Cancel";

@@ -48,9 +48,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Objects;
 
+import static androidx.constraintlayout.widget.Constraints.TAG;
 import static com.example.procurement.activities.SignInActivity.siteManagerDBRef;
-import static com.example.procurement.utils.CommonConstants.GENERATE_ORDER_FRAGMENT_TAG;
-import static com.example.procurement.utils.CommonConstants.ORDER_EDIT_FRAGMENT_TAG;
 
 public class EditOrderFragment extends Fragment {
 
@@ -139,7 +138,7 @@ public class EditOrderFragment extends Fragment {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
-                    Log.w(GENERATE_ORDER_FRAGMENT_TAG, "Listen failed.", e);
+                    Log.w(TAG, "Listen failed.", e);
                 }
 
                 companyList.clear();
@@ -161,7 +160,7 @@ public class EditOrderFragment extends Fragment {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
-                    Log.w(GENERATE_ORDER_FRAGMENT_TAG, "Listen failed.", e);
+                    Log.w(TAG, "Listen failed.", e);
                 }
 
                 vendorList.clear();
@@ -332,13 +331,13 @@ public class EditOrderFragment extends Fragment {
                                                 }
                                             }).show();
                                     HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new OrderViewFragment(order.getOrderKey()), null).commit();
-                                    Log.d(ORDER_EDIT_FRAGMENT_TAG, "DocumentSnapshot successfully updated!");
+                                    Log.d(TAG, "DocumentSnapshot successfully updated!");
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    Log.w(ORDER_EDIT_FRAGMENT_TAG, "Error writing document", e);
+                                    Log.w(TAG, "Error writing document", e);
                                 }
                             });
 

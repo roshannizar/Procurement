@@ -55,8 +55,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import static com.example.procurement.activities.SignInActivity.siteManagerDBRef;
-import static com.example.procurement.utils.CommonConstants.GENERATE_ORDER_FRAGMENT_TAG;
-import static com.example.procurement.utils.CommonConstants.ORDER_EDIT_FRAGMENT_TAG;
 
 public class OrderViewFragment extends Fragment {
     private static final String TAG = "OrderViewFragment";
@@ -156,7 +154,7 @@ public class OrderViewFragment extends Fragment {
                 String destinationPath = FileUtils.getAppPath(mContext) + order.getOrderID() + "--> " + order.getRequisitionID() + ".pdf";
                 createPdf(order, destinationPath);
             } catch (IllegalArgumentException e) {
-                Log.w(GENERATE_ORDER_FRAGMENT_TAG, "Error writing document", e);
+                Log.w(TAG, "Error writing document", e);
             }
         }
 
@@ -241,13 +239,13 @@ public class OrderViewFragment extends Fragment {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new OrderViewFragment(order.getOrderKey()), null).commit();
-                                Log.d(ORDER_EDIT_FRAGMENT_TAG, "DocumentSnapshot successfully updated!");
+                                Log.d(TAG, "DocumentSnapshot successfully updated!");
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Log.w(ORDER_EDIT_FRAGMENT_TAG, "Error writing document", e);
+                                Log.w(TAG, "Error writing document", e);
                             }
                         });
             }
@@ -385,7 +383,7 @@ public class OrderViewFragment extends Fragment {
             Toast.makeText(mContext, "PDF Created Successfully... :)", Toast.LENGTH_SHORT).show();
 
         } catch (IOException | DocumentException ie) {
-            Log.w(GENERATE_ORDER_FRAGMENT_TAG, "Error writing document", ie);
+            Log.w(TAG, "Error writing document", ie);
         } catch (ActivityNotFoundException ae) {
             Toast.makeText(mContext, "No application found to open this file.", Toast.LENGTH_SHORT).show();
         }
@@ -396,7 +394,7 @@ public class OrderViewFragment extends Fragment {
             Paragraph paragraph = new Paragraph(new Chunk(value, blackFont));
             document.add(paragraph);
         } catch (DocumentException e) {
-            Log.w(GENERATE_ORDER_FRAGMENT_TAG, "Error writing document", e);
+            Log.w(TAG, "Error writing document", e);
         }
     }
 
