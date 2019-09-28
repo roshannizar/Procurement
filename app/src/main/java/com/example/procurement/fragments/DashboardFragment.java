@@ -38,23 +38,24 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 
+import static androidx.constraintlayout.widget.Constraints.TAG;
 import static com.example.procurement.activities.SignInActivity.siteManagerDBRef;
 
 
 public class DashboardFragment extends Fragment {
 
-    private int reqApproved=0,reqHold=0,reqPending=0,reqDeclined=0,orderApproved=0,orderDraft=0,orderPending=0,orderDeclined=0,orderPlaced=0,reqTotalAmount;
+    private int reqApproved = 0, reqHold = 0, reqPending = 0, reqDeclined = 0, orderApproved = 0, orderDraft = 0, orderPending = 0, orderDeclined = 0, orderPlaced = 0, reqTotalAmount;
     private ArrayList<Requisition> iRequisition;
     private ArrayList<Order> orders;
 
-    private static final String TAG = "DashboardFragment";
     private ArrayList<Notification> notifications;
     private NotificationAdapter adapter;
     private RecyclerView recyclerView;
-    private CollectionReference notificationDbRef,requisitionRef,orderDBRef;
+    private CollectionReference notificationDbRef, requisitionRef, orderDBRef;
     private Context mContext;
     private ProgressBar progressBar;
-    private TextView txtUserName,txtNoti,txtMonthDate,txtApprovedCount,txtHoldCount,txtDeclinedCount,txtPendingCount,txtPending,txtDecline,txtDraft,txtTotalOrder,txtPlacedCount;
+    private TextView txtUserName, txtNoti, txtMonthDate, txtApproved, txtApprovedCount, txtHold, txtDeclined,
+            txtDeclinedCount, txtPendingCount, txtPending,  txtDraftCount , txtPlacedCount;
     private FirebaseAuth mAuth;
     private ImageView imgNoti;
 
@@ -72,22 +73,20 @@ public class DashboardFragment extends Fragment {
 
         mAuth = FirebaseAuth.getInstance();
 
-
-
         txtUserName = view.findViewById(R.id.txtUserName);
         txtMonthDate = view.findViewById(R.id.txtMonthData);
         progressBar = view.findViewById(R.id.progressBar2);
         txtNoti = view.findViewById(R.id.txtnoti);
         imgNoti = view.findViewById(R.id.imgnoti);
 
-        txtApprovedCount = view.findViewById(R.id.txtApprovedCount);
-        txtHoldCount = view.findViewById(R.id.txtHoldCount);
-        txtDeclinedCount = view.findViewById(R.id.txtDeniedCount);
-        txtPendingCount = view.findViewById(R.id.txtPendingCount);
+        txtApproved = view.findViewById(R.id.txtApproved);
+        txtHold = view.findViewById(R.id.txtHold);
+        txtDeclined = view.findViewById(R.id.txtDenied);
         txtPending = view.findViewById(R.id.txtPending);
-        txtDecline = view.findViewById(R.id.txtDecline);
-        txtDraft = view.findViewById(R.id.txtDraftCount);
-        txtTotalOrder = view.findViewById(R.id.txtTotalOrders);
+        txtPendingCount = view.findViewById(R.id.txtPendingCount);
+        txtDeclinedCount = view.findViewById(R.id.txtDeclineCount);
+        txtDraftCount = view.findViewById(R.id.txtDraftCount);
+        txtApprovedCount = view.findViewById(R.id.txtApproveCount);
         txtPlacedCount = view.findViewById(R.id.txtPlacedCounts);
 
         setDate();
@@ -108,8 +107,6 @@ public class DashboardFragment extends Fragment {
         ReadRequisitionStatusCount();
         ReadOrderStatusCount();
 
-        //SetCount();
-        System.out.println("Check pending: "+reqPending);
         return view;
     }
 
@@ -120,19 +117,7 @@ public class DashboardFragment extends Fragment {
 //        notificationDbRef.document(key).set(notification);
 //    }
 
-    @SuppressLint("SetTextI18n")
-    private void SetCount() {
-        txtPendingCount.setText(String.valueOf(reqPending));
-        txtApprovedCount.setText(String.valueOf(reqApproved));
-        txtHoldCount.setText(String.valueOf(reqHold));
-        txtDeclinedCount.setText(String.valueOf(reqDeclined));
-        //progressBar.setProgress(StatusCountUtil.reqTotalAmount);
-        txtPlacedCount.setText(orderPlaced+ " Order(s) Placed");
-        txtTotalOrder.setText(orderPending+" Order(s) Pending");
-        txtPending.setText(orderApproved+" Order(s) Approved");
-        txtDecline.setText(orderDeclined+" Order(s) Declined");
-        txtDraft.setText(orderDraft+" Orders(s) Drafted");
-    }
+
 
     private void ReadData() {
 
@@ -163,7 +148,7 @@ public class DashboardFragment extends Fragment {
                 }
 
                 assert notifications != null;
-                if(notifications.size() == 0) {
+                if (notifications.size() == 0) {
                     imgNoti.setImageResource(R.drawable.ic_email);
                     imgNoti.setVisibility(View.VISIBLE);
                     txtNoti.setVisibility(View.VISIBLE);
@@ -266,20 +251,22 @@ public class DashboardFragment extends Fragment {
                             switch (requisition.getRequisitionStatus()) {
                                 case CommonConstants.REQUISITION_STATUS_APPROVED:
                                     reqApproved++;
-                                    txtApprovedCount.setText(String.valueOf(reqApproved));
+                                    txtApproved.setText(String.valueOf(reqApproved));
                                     break;
                                 case CommonConstants.REQUISITION_STATUS_PENDING:
                                     reqPending++;
-                                    txtPendingCount.setText(String.valueOf(reqPending));
+                                    txtPending.setText(String.valueOf(reqPending));
                                     break;
                                 case CommonConstants.REQUISITION_STATUS_DECLINED:
                                     reqDeclined++;
-                                    txtDeclinedCount.setText(String.valueOf(reqDeclined));
+                                    txtDeclined.setText(String.valueOf(reqDeclined));
                                     break;
                                 case CommonConstants.REQUISITION_STATUS_HOLD:
                                     reqHold++;
+                                    txtHold.setText(String.valueOf(reqHold));
                                     break;
-                                    default: System.out.println("Nothing");
+                                default:
+                                    System.out.println("Nothing");
                             }
                         }
                     }
@@ -307,25 +294,26 @@ public class DashboardFragment extends Fragment {
                             switch (ordersCount.getOrderStatus()) {
                                 case CommonConstants.ORDER_STATUS_APPROVED:
                                     orderApproved++;
-                                    txtPending.setText(orderApproved+" Order(s) Approved");
+                                    txtPendingCount.setText(orderApproved + " Order(s) Approved");
                                     break;
                                 case CommonConstants.ORDER_STATUS_PENDING:
                                     orderPending++;
-                                    txtTotalOrder.setText(orderPending+" Order(s) Pending");
+                                    txtPendingCount.setText(orderPending + " Order(s) Pending");
                                     break;
                                 case CommonConstants.ORDER_STATUS_DECLINED:
                                     orderDeclined++;
-                                    txtDecline.setText(orderDeclined+" Order(s) Declined");
+                                    txtDeclinedCount.setText(orderDeclined + " Order(s) Declined");
                                     break;
                                 case CommonConstants.ORDER_STATUS_DRAFT:
                                     orderDraft++;
-                                    txtDraft.setText(orderDraft+" Orders(s) Drafted");
+                                    txtDraftCount.setText(orderDraft + " Orders(s) Drafted");
                                     break;
                                 case CommonConstants.ORDER_STATUS_PLACED:
                                     orderPlaced++;
-                                    txtPlacedCount.setText(orderPlaced+ " Order(s) Placed");
+                                    txtPlacedCount.setText(orderPlaced + " Order(s) Placed");
                                     break;
-                                    default: System.out.println("Nothing");
+                                default:
+                                    System.out.println("Nothing");
                             }
                         }
                     }
