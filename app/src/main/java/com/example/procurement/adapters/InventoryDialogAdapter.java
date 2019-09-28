@@ -40,7 +40,7 @@ public class InventoryDialogAdapter extends RecyclerView.Adapter<InventoryDialog
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         final Inventory inventoryData = listData.get(position);
-        final double sum = inventoryData.getUnitprice() * inventoryData.getQuantity();
+        //final double sum = inventoryData.getUnitprice() * inventoryData.getQuantity();
         holder.checkBox.setText(inventoryData.getItemName());
         holder.txtQty.setText("0");
         holder.txtunitprice.setText(String.valueOf(inventoryData.getUnitprice()));
@@ -53,7 +53,7 @@ public class InventoryDialogAdapter extends RecyclerView.Adapter<InventoryDialog
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (!holder.txtQty.getText().toString().equals("0")) {
+                if(!holder.txtQty.getText().toString().equals("0")) {
                     holder.checkBox.setClickable(true);
                     holder.checkBox.setEnabled(true);
                     holder.checkBox.setOnCheckedChangeListener(
@@ -84,11 +84,11 @@ public class InventoryDialogAdapter extends RecyclerView.Adapter<InventoryDialog
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (holder.txtQty.getText().toString().equals("0")) {
+                        if(holder.txtQty.getText().toString().equals("0")) {
                             holder.txtQty.setText("1");
                         } else {
                             int value = Integer.parseInt(holder.txtQty.getText().toString());
-                            int total = value + 1;
+                            int total = value +1;
                             holder.txtQty.setText(String.valueOf(total));
                         }
                     }
@@ -99,11 +99,11 @@ public class InventoryDialogAdapter extends RecyclerView.Adapter<InventoryDialog
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (holder.txtQty.getText().toString().equals("0")) {
+                        if(holder.txtQty.getText().toString().equals("0")) {
                             holder.txtQty.setText("0");
                         } else {
                             int value = Integer.parseInt(holder.txtQty.getText().toString());
-                            int total = value - 1;
+                            int total = value -1;
                             holder.txtQty.setText(String.valueOf(total));
                         }
                     }
@@ -122,7 +122,7 @@ public class InventoryDialogAdapter extends RecyclerView.Adapter<InventoryDialog
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView txtDescription, txtunitprice, txtReduce, txtIncrease;
+        private TextView txtDescription,txtunitprice,txtReduce,txtIncrease;
         private EditText txtQty;
         private CheckBox checkBox;
 

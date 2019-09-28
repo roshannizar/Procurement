@@ -85,7 +85,7 @@ public class QuotationFragment extends Fragment {
 
         recyclerView = v.findViewById(R.id.recyclerSupplier);
         context = v.getContext();
-        supplierAdapter = new SupplierAdapter(context, CommonConstants.iSupplier);
+        supplierAdapter = new SupplierAdapter(CommonConstants.iSupplier);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL,false));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
@@ -144,7 +144,7 @@ public class QuotationFragment extends Fragment {
     }
 
     private void WriteDataValues() {
-        supplierAdapter = new SupplierAdapter(context, CommonConstants.iSupplier);
+        supplierAdapter = new SupplierAdapter(CommonConstants.iSupplier);
         recyclerView.setAdapter(supplierAdapter);
         supplierAdapter.notifyDataSetChanged();
     }

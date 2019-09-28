@@ -1,6 +1,6 @@
 package com.example.procurement.adapters;
 
-import android.content.Context;
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,23 +19,22 @@ import java.util.ArrayList;
 public class SupplierAdapter extends RecyclerView.Adapter<SupplierAdapter.ViewHolder> {
 
     private ArrayList<Supplier> iSupplier;
-    private Context c;
 
-    public SupplierAdapter(Context c, ArrayList<Supplier> iSupplier) {
-        this. c = c;
+    public SupplierAdapter(ArrayList<Supplier> iSupplier) {
         this.iSupplier = iSupplier;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_requisition_supplier_list,parent,false);
 
         return new SupplierAdapter.ViewHolder(v);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(SupplierAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull SupplierAdapter.ViewHolder holder, final int position) {
         Supplier s = iSupplier.get(position);
 
         holder.txtSppNo.setText(s.getSupplierId());

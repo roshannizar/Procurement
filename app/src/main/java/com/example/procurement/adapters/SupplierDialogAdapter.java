@@ -23,33 +23,30 @@ import com.example.procurement.utils.CommonConstants;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Objects;
-
-import static java.security.AccessController.getContext;
 
 public class SupplierDialogAdapter extends RecyclerView.Adapter<SupplierDialogAdapter.ViewHolder>{
 
-    private DatePickerDialog picker;
     private ArrayList<Supplier> iSupp;
-    private Context c;
-    private static Context test;
 
-    public SupplierDialogAdapter(Context c, ArrayList<Supplier> iSupp) {
-        this.c = c;
+    @SuppressLint("StaticFieldLeak")
+    private static Context mContext;
+
+    public SupplierDialogAdapter(Context context, ArrayList<Supplier> iSupp) {
         this.iSupp = iSupp;
-        test = c;
+        mContext = context;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_supplier_dialog_list, parent, false);
 
         return new ViewHolder(itemView);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         final Supplier supplier = iSupp.get(position);
 
         holder.checkBox.setText(supplier.getSupplierName());
@@ -67,7 +64,7 @@ public class SupplierDialogAdapter extends RecyclerView.Adapter<SupplierDialogAd
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(holder.txtOffer.getText().toString() != "" || holder.txtOffer.getText().toString()!= null){
+                if(!holder.txtOffer.getText().toString().equals("")){
                     holder.checkBox.setClickable(true);
                     holder.checkBox.setEnabled(true);
                     holder.checkBox.setOnCheckedChangeListener(
@@ -104,7 +101,7 @@ public class SupplierDialogAdapter extends RecyclerView.Adapter<SupplierDialogAd
                         int day = c.get(Calendar.DAY_OF_MONTH);
                         int month = c.get(Calendar.MONTH);
                         int year = c.get(Calendar.YEAR);
-                        DatePickerDialog picker = new DatePickerDialog(test,
+                        DatePickerDialog picker = new DatePickerDialog(mContext,
                                 new DatePickerDialog.OnDateSetListener() {
                                     @SuppressLint("SetTextI18n")
                                     @Override

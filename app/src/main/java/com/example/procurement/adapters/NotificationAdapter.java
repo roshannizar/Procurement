@@ -1,7 +1,6 @@
 package com.example.procurement.adapters;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,11 +25,9 @@ import static com.example.procurement.activities.SignInActivity.siteManagerDBRef
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.MyViewHolder> {
 
     private CollectionReference notificationDbRef;
-    private Context context;
     private List<Notification> notificationsList;
 
-    public NotificationAdapter(Context context, List<Notification> notificationsList) {
-        this.context = context;
+    public NotificationAdapter(List<Notification> notificationsList) {
         this.notificationsList = notificationsList;
     }
 

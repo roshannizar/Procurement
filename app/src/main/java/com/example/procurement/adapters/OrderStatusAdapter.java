@@ -37,11 +37,9 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
     private final LayoutInflater mInflater;
     private List<Order> mOrders; // copy of orders
     private List<Order> mOrdersOriginal;
-    private Context mContext;
 
     // pass data into constructor
     public OrderStatusAdapter(Context context, List<Order> orders) {
-        this.mContext = context;
         this.mInflater = LayoutInflater.from(context);
         this.mOrders = orders;
         this.mOrdersOriginal = orders;

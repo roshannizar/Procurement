@@ -1,6 +1,6 @@
 package com.example.procurement.adapters;
 
-import android.content.Context;
+import android.annotation.SuppressLint;
 import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.procurement.R;
 import com.example.procurement.activities.HomeActivity;
 import com.example.procurement.fragments.CreateOrderFragment;
-import com.example.procurement.models.Order;
 import com.example.procurement.models.Requisition;
 import com.example.procurement.utils.CommonConstants;
 
@@ -27,23 +26,22 @@ import java.util.List;
 public class RequisitionAdapter extends RecyclerView.Adapter<RequisitionAdapter.ViewHolder> {
 
     private List<Requisition> iRequisition,iRequistionFilter;
-    private Context c;
 
-    public RequisitionAdapter(Context c, List<Requisition> iRequisition) {
-        this.c = c;
+    public RequisitionAdapter(List<Requisition> iRequisition) {
         this.iRequisition = iRequisition;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_requisition_list,parent,false);
 
         return new ViewHolder(v);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
         if(iRequisition!= null) {
 
@@ -82,7 +80,7 @@ public class RequisitionAdapter extends RecyclerView.Adapter<RequisitionAdapter.
             holder.txtRequisitionStatus.setText(requisitionStatus);
             holder.txtwithInBudget.setText(requisition.getBudget());
             holder.txtdeliveryDate.setText(requisition.getDeliveryDate());
-            holder.txtTotalAmount.setText("Rs: " + requisition.getTotalAmount());
+            holder.txtTotalAmount.setText(requisition.getTotalAmount());
             holder.txtRequisitionStatus.setBackgroundResource(statusBackground);
             holder.txtRequisitionStatusIcon.setColorFilter(reqStatusIcon,PorterDuff.Mode.MULTIPLY);
 

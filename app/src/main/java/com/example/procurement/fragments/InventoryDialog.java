@@ -63,7 +63,7 @@ public class InventoryDialog extends Fragment implements AdapterView.OnItemSelec
         recyclerView = v.findViewById(R.id.checkBoxRecycle);
         c = v.getContext();
         listData = new ArrayList<>();
-        inventoryDialogAdapter = new InventoryDialogAdapter(c,listData);
+        inventoryDialogAdapter = new InventoryDialogAdapter(listData);
         btnSave = v.findViewById(R.id.btnSave);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -106,7 +106,7 @@ public class InventoryDialog extends Fragment implements AdapterView.OnItemSelec
                         }
 
                         if (listData != null) {
-                            inventoryDialogAdapter = new InventoryDialogAdapter(c, listData);
+                            inventoryDialogAdapter = new InventoryDialogAdapter(listData);
                             progressBar.setVisibility(View.GONE);
                             imgLoader.setVisibility(View.INVISIBLE);
                             txtLoader.setVisibility(View.INVISIBLE);

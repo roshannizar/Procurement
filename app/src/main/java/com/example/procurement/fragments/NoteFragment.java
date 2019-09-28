@@ -78,7 +78,7 @@ public class NoteFragment extends Fragment {
                 .collection(CommonConstants.COLLECTION_NOTES);
 
         notesList = new ArrayList<>();
-        mAdapter = new NoteAdapter(mContext, notesList);
+        mAdapter = new NoteAdapter(notesList);
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(mContext);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -220,7 +220,7 @@ public class NoteFragment extends Fragment {
 
 
                 if (notesList != null) {
-                    mAdapter = new NoteAdapter(mContext, notesList);
+                    mAdapter = new NoteAdapter(notesList);
                     imgLoader.setVisibility(View.INVISIBLE);
                     txtLoader.setVisibility(View.INVISIBLE);
                     txtWait.setVisibility(View.INVISIBLE);

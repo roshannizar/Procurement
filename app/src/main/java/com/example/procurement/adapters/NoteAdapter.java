@@ -1,6 +1,5 @@
 package com.example.procurement.adapters;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +15,9 @@ import java.util.List;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> {
 
-    private Context context;
     private List<Note> noteList;
 
-    public NoteAdapter(Context context, List<Note> noteList) {
-        this.context = context;
+    public NoteAdapter(List<Note> noteList) {
         this.noteList = noteList;
     }
 
@@ -45,7 +42,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Note note = noteList.get(position);
         holder.note.setText(note.getNote());
         holder.invoiceNo.setText(note.getInvoiceNo());
