@@ -118,6 +118,7 @@ public class InventoryDialog extends Fragment implements AdapterView.OnItemSelec
                             recyclerView.setAdapter(inventoryDialogAdapter);
 
                             if (listData.size() == 0) {
+                                progressBar.setVisibility(View.GONE);
                                 imgLoader.refreshDrawableState();
                                 imgLoader.setImageResource(R.drawable.ic_white_box);
                                 imgLoader.setVisibility(View.VISIBLE);

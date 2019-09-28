@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -35,7 +36,7 @@ public class InventoryDialogAdapter extends RecyclerView.Adapter<InventoryDialog
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_inventory_dialog_list, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_supplier_item_list, parent, false);
 
         return new ViewHolder(itemView);
     }
@@ -46,9 +47,8 @@ public class InventoryDialogAdapter extends RecyclerView.Adapter<InventoryDialog
         final Inventory inventoryData = listData.get(position);
         final double sum = inventoryData.getUnitprice() * inventoryData.getQuantity();
         holder.checkBox.setText(inventoryData.getItemName());
-        holder.seekBar.setProgress(inventoryData.getQuantity());
-        holder.textView.setText("Rs: "+inventoryData.getUnitprice());
-
+        holder.txtQty.setText(String.valueOf(inventoryData.getQuantity()));
+        holder.txtunitprice.setText("Rs: "+inventoryData.getUnitprice());
         holder.checkBox.setOnCheckedChangeListener(
                 new CheckBox.OnCheckedChangeListener() {
                     @Override
@@ -75,15 +75,18 @@ public class InventoryDialogAdapter extends RecyclerView.Adapter<InventoryDialog
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        private SeekBar seekBar;
-        private TextView textView;
+        private TextView txtDescription,txtunitprice,txtReduce,txtIncrease;
+        private EditText txtQty;
         private CheckBox checkBox;
 
         ViewHolder(View view) {
             super(view);
 
-            seekBar = view.findViewById(R.id.seekBar);
-            textView = view.findViewById(R.id.txtRemaining);
+            txtDescription = view.findViewById(R.id.description);
+            txtunitprice = view.findViewById(R.id.unitPrice);
+            txtQty = view.findViewById(R.id.qty);
+            txtReduce = view.findViewById(R.id.reduce);
+            txtIncrease = view.findViewById(R.id.increase);
             checkBox = view.findViewById(R.id.cbItem);
         }
     }
