@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -21,13 +20,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.procurement.R;
-import com.example.procurement.adapters.NoteAdapter;
 import com.example.procurement.adapters.NotificationAdapter;
-import com.example.procurement.models.Note;
 import com.example.procurement.models.Notification;
+import com.example.procurement.models.Order;
+import com.example.procurement.models.Requisition;
 import com.example.procurement.utils.CommonConstants;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -36,17 +33,20 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.text.DateFormat;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 
 import static com.example.procurement.activities.SignInActivity.siteManagerDBRef;
 
 
 public class DashboardFragment extends Fragment {
+
+    private int reqApproved,reqHold,reqPending,reqDeclined,orderApproved,orderDraft,orderPending,orderDeclined,orderPlaced,reqTotalAmount;
+    private CollectionReference requisitionRef,orderDBRef;
+    private ArrayList<Requisition> iRequisition;
+    private ArrayList<Order> orders;
 
     private static final String TAG = "DashboardFragment";
     private ArrayList<Notification> notifications;
@@ -55,8 +55,7 @@ public class DashboardFragment extends Fragment {
     private CollectionReference notificationDbRef;
     private Context mContext;
     private ProgressBar progressBar;
-    private TextView txtUserName,txtNoti;
-    private TextView txtMonthDate;
+    private TextView txtUserName,txtNoti,txtMonthDate,txtApprovedCount,txtHoldCount,txtDeclinedCount,txtPendingCount,txtPending,txtDecline,txtDraft,txtTotalOrder,txtPlacedCount;
     private FirebaseAuth mAuth;
     private ImageView imgNoti;
 
@@ -73,21 +72,29 @@ public class DashboardFragment extends Fragment {
         mContext = view.getContext();
 
         mAuth = FirebaseAuth.getInstance();
+
+        requisitionRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_REQUISITION);
+        orderDBRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_ORDER);
+
+        iRequisition = new ArrayList<>();
+        orders = new ArrayList<>();
+
         txtUserName = view.findViewById(R.id.txtUserName);
         txtMonthDate = view.findViewById(R.id.txtMonthData);
         progressBar = view.findViewById(R.id.progressBar2);
         txtNoti = view.findViewById(R.id.txtnoti);
         imgNoti = view.findViewById(R.id.imgnoti);
-        TextView txtApprovedCount = view.findViewById(R.id.txtApprovedCount);
-        TextView txtHoldCount = view.findViewById(R.id.txtHoldCount);
-        TextView txtPendingCount = view.findViewById(R.id.txtPendingCount);
-        TextView txtTotalOrder = view.findViewById(R.id.txtTotalOrders);
-        TextView txtPlacedCount = view.findViewById(R.id.txtPlacedCounts);
-        txtPendingCount.setText(String.valueOf(OrderStatusFragment.pendingStatus));
-        txtApprovedCount.setText(String.valueOf(OrderStatusFragment.approvedStatus));
-        txtHoldCount.setText(String.valueOf(""));
-        txtPlacedCount.setText(OrderStatusFragment.placedStatus + " Order(s) Placed");
-        txtTotalOrder.setText((OrderStatusFragment.approvedStatus + 0 + OrderStatusFragment.pendingStatus + OrderStatusFragment.declinedStatus + OrderStatusFragment.placedStatus) + " Order(s) Totally");
+
+        txtApprovedCount = view.findViewById(R.id.txtApprovedCount);
+        txtHoldCount = view.findViewById(R.id.txtHoldCount);
+        txtDeclinedCount = view.findViewById(R.id.txtDeniedCount);
+        txtPendingCount = view.findViewById(R.id.txtPendingCount);
+        txtPending = view.findViewById(R.id.txtPending);
+        txtDecline = view.findViewById(R.id.txtDecline);
+        txtDraft = view.findViewById(R.id.txtDraftCount);
+        txtTotalOrder = view.findViewById(R.id.txtTotalOrders);
+        txtPlacedCount = view.findViewById(R.id.txtPlacedCounts);
+
         setDate();
 
         notificationDbRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_NOTIFICATION);
@@ -96,21 +103,40 @@ public class DashboardFragment extends Fragment {
         recyclerView = view.findViewById(R.id.rvNotification);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        readData();
-        //writeData();
+
+        ReadData();
+        ReadRequisitionStatusCount();
+        ReadOrderStatusCount();
+
+        SetCount();
         return view;
     }
 
-    private void writeData() {
-        String key = notificationDbRef.document().getId();
-        Notification notification = new Notification("PO-01", "3L22ABg6ttMLkzKEeSIm", CommonConstants.ORDER_STATUS_APPROVED);
-        notification.setNotificationKey(key);
-        notificationDbRef.document(key).set(notification);
+//    private void writeData() {
+//        String key = notificationDbRef.document().getId();
+//        Notification notification = new Notification("PO-01", "3L22ABg6ttMLkzKEeSIm", CommonConstants.ORDER_STATUS_APPROVED);
+//        notification.setNotificationKey(key);
+//        notificationDbRef.document(key).set(notification);
+//    }
+
+    @SuppressLint("SetTextI18n")
+    private void SetCount() {
+        txtPendingCount.setText(String.valueOf(reqPending));
+        txtApprovedCount.setText(String.valueOf(reqApproved));
+        txtHoldCount.setText(String.valueOf(reqHold));
+        txtDeclinedCount.setText(String.valueOf(reqDeclined));
+        //progressBar.setProgress(StatusCountUtil.reqTotalAmount);
+        txtPlacedCount.setText(orderPlaced+ " Order(s) Placed");
+        txtTotalOrder.setText(orderPending+" Order(s) Pending");
+        txtPending.setText(orderApproved+" Order(s) Approved");
+        txtDecline.setText(orderDeclined+" Order(s) Declined");
+        txtDraft.setText(orderDraft+" Orders(s) Drafted");
     }
 
-    private void readData() {
+    private void ReadData() {
 
         notificationDbRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
@@ -119,6 +145,7 @@ public class DashboardFragment extends Fragment {
 
                 notifications.clear();
 
+                assert queryDocumentSnapshots != null;
                 for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                     Notification notification = document.toObject(Notification.class);
                     notifications.add(notification);
@@ -134,6 +161,7 @@ public class DashboardFragment extends Fragment {
                     recyclerView.setAdapter(adapter);
                 }
 
+                assert notifications != null;
                 if(notifications.size() == 0) {
                     imgNoti.setImageResource(R.drawable.ic_email);
                     imgNoti.setVisibility(View.VISIBLE);
@@ -155,7 +183,6 @@ public class DashboardFragment extends Fragment {
     private void updateUI(FirebaseUser currentUser) {
         if (currentUser != null) {
             txtUserName.setText("Hi " + currentUser.getEmail() + "!");
-            //txtUserName.setText(currentUser.getEmail());
         }
     }
 
@@ -217,4 +244,85 @@ public class DashboardFragment extends Fragment {
         return month;
     }
 
+    private void ReadRequisitionStatusCount() {
+        requisitionRef.addSnapshotListener(
+                new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+
+                        if (e != null) {
+                            Log.v(TAG, "Listen Failed", e);
+                        }
+
+                        iRequisition.clear();
+                        int sum = 0;
+                        assert queryDocumentSnapshots != null;
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            Requisition requisition = document.toObject(Requisition.class);
+
+                            //reqTotalAmount = sum+Integer.parseInt(requisition.getTotalAmount());
+
+                            switch (requisition.getRequisitionStatus()) {
+                                case CommonConstants.REQUISITION_STATUS_APPROVED:
+                                    reqApproved++;
+                                    System.out.println("Approved: "+reqApproved);
+                                    break;
+                                case CommonConstants.REQUISITION_STATUS_PENDING:
+                                    reqPending++;
+                                    System.out.println("Pending: "+reqPending);
+                                    break;
+                                case CommonConstants.REQUISITION_STATUS_DECLINED:
+                                    reqDeclined++;
+                                    break;
+                                case CommonConstants.REQUISITION_STATUS_HOLD:
+                                    reqHold++;
+                                    break;
+                                    default:
+                                        System.out.println("Nothing");
+                            }
+                        }
+                    }
+                }
+        );
+    }
+
+    private void ReadOrderStatusCount() {
+        orderDBRef.addSnapshotListener(
+                new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+
+                        if (e != null) {
+                            Log.v(TAG, "Listen Failed", e);
+                        }
+
+                        orders.clear();
+
+                        assert queryDocumentSnapshots != null;
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            Order ordersCount = document.toObject(Order.class);
+
+                            switch (ordersCount.getOrderStatus()) {
+                                case CommonConstants.ORDER_STATUS_APPROVED:
+                                    orderApproved++;
+                                    break;
+                                case CommonConstants.ORDER_STATUS_PENDING:
+                                    orderPending++;
+                                    break;
+                                case CommonConstants.ORDER_STATUS_DECLINED:
+                                    orderDeclined++;
+                                    break;
+                                case CommonConstants.ORDER_STATUS_DRAFT:
+                                    orderDraft++;
+                                    break;
+                                case CommonConstants.ORDER_STATUS_PLACED:
+                                    orderPlaced++;
+                                    break;
+                                    default: System.out.println("Nothing");
+                            }
+                        }
+                    }
+                }
+        );
+    }
 }
