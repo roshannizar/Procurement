@@ -224,7 +224,7 @@ public class CreateOrderFragment extends Fragment {
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                         Supplier supplier = document.toObject(Supplier.class);
 
-                        if (supplier.getSupplierStatus().equals("Active")) {
+                        if (supplier.getStatus().equals("Active")) {
                             vendorList.add(supplier.getSupplierName());
                         }
                     }

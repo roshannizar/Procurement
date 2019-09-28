@@ -27,7 +27,7 @@ public class Supplier {
         return offer;
     }
 
-    public String getSupplierStatus() {
+    public String getStatus() {
         return status;
     }
 
@@ -47,7 +47,7 @@ public class Supplier {
         this.offer = offer;
     }
 
-    public void setSupplierStatus(String status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 

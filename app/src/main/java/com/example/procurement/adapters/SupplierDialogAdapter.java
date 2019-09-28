@@ -3,6 +3,8 @@ package com.example.procurement.adapters;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,6 +59,42 @@ public class SupplierDialogAdapter extends RecyclerView.Adapter<SupplierDialogAd
         int year = c.get(Calendar.YEAR);
         holder.txtExpectedDate.setText(day+"/"+(month+1)+"/"+year);
 
+        holder.txtOffer.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if(holder.txtOffer.getText().toString() != "" || holder.txtOffer.getText().toString()!= null){
+                    holder.checkBox.setClickable(true);
+                    holder.checkBox.setEnabled(true);
+                    holder.checkBox.setOnCheckedChangeListener(
+                            new CheckBox.OnCheckedChangeListener() {
+                                @Override
+                                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                                    if (compoundButton.isChecked()) {
+                                        String offer = holder.txtOffer.getText().toString();
+
+                                        CommonConstants.iSupplier.add(new Supplier(supplier.getSupplierName(), holder.txtExpectedDate.getText().toString(), offer, supplier.getStatus()));
+                                    } else {
+                                        CommonConstants.iSupplier.remove(position);
+                                        notifyDataSetChanged();
+                                    }
+                                }
+                            }
+                    );
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
         holder.txtExpectedDate.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -79,27 +117,8 @@ public class SupplierDialogAdapter extends RecyclerView.Adapter<SupplierDialogAd
                 }
         );
 
-        holder.txtStatus.setText(supplier.getSupplierStatus());
+        holder.txtStatus.setText(supplier.getStatus());
 
-        if(holder.txtOffer.getText().toString() != "" || holder.txtOffer.getText().toString()!= null){
-            holder.checkBox.setClickable(true);
-            holder.checkBox.setOnCheckedChangeListener(
-                    new CheckBox.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
-                            if (compoundButton.isChecked()) {
-                                String offer = holder.txtOffer.getText().toString();
-
-                                CommonConstants.iSupplier.add(new Supplier(supplier.getSupplierName(), holder.txtExpectedDate.getText().toString(), offer, supplier.getSupplierStatus()));
-                            } else {
-                                CommonConstants.iSupplier.remove(position);
-                                notifyDataSetChanged();
-                            }
-                        }
-                    }
-            );
-        }
     }
 
     public int getItemCount() {
@@ -125,7 +144,7 @@ public class SupplierDialogAdapter extends RecyclerView.Adapter<SupplierDialogAd
             txtStatus = view.findViewById(R.id.txtSupplierStatus);
             checkBox = view.findViewById(R.id.cbItemSupplier);
 
-            //checkBox.setEnabled(false);
+            checkBox.setEnabled(false);
             checkBox.setClickable(false);
         }
     }

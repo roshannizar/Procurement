@@ -189,7 +189,7 @@ public class QuotationFragment extends Fragment {
         for(int i =0;i<iSupplier.size();i++) {
             Supplier supplierList = iSupplier.get(i);
             String supplierKey = supplierRef.document().getId();
-            Supplier supplier = new Supplier(supplierList.getSupplierName(),supplierList.getExpectedDate(),supplierList.getOffer(),supplierList.getSupplierStatus());
+            Supplier supplier = new Supplier(supplierList.getSupplierName(),supplierList.getExpectedDate(),supplierList.getOffer(),supplierList.getStatus());
             requisition.setKey(supplierKey);
             supplierRef.document(supplierKey)
                     .set(supplier)
