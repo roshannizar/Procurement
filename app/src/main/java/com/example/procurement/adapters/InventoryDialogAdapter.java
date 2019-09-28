@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.procurement.R;
+import com.example.procurement.fragments.RequisitionActivityFragment;
 import com.example.procurement.models.Inventory;
 import com.example.procurement.models.InventoryData;
 import com.example.procurement.utils.CommonConstants;
@@ -43,19 +44,22 @@ public class InventoryDialogAdapter extends RecyclerView.Adapter<InventoryDialog
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         final Inventory inventoryData = listData.get(position);
         final double sum = inventoryData.getUnitprice() * inventoryData.getQuantity();
         holder.checkBox.setText(inventoryData.getItemName());
         holder.txtQty.setText(String.valueOf(inventoryData.getQuantity()));
         holder.txtunitprice.setText("Rs: "+inventoryData.getUnitprice());
+
+
         holder.checkBox.setOnCheckedChangeListener(
                 new CheckBox.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
                         if(compoundButton.isChecked()) {
-                            CommonConstants.iInventory.add(new Inventory(String.valueOf(position),inventoryData.getItemName(),"",inventoryData.getQuantity(),inventoryData.getUnitprice()));
+                            int quantity = Integer.parseInt(holder.txtQty.getText().toString());
+                            CommonConstants.iInventory.add(new Inventory(String.valueOf(position),inventoryData.getItemName(),"",quantity,inventoryData.getUnitprice()));
                         } else {
                             CommonConstants.iInventory.remove(position);
                             notifyDataSetChanged();

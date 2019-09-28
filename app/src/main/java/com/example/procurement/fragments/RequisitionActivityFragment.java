@@ -49,7 +49,6 @@ public class RequisitionActivityFragment extends Fragment {
     static String REQUISITION_NO= REQUISITION_ID,PURPOSE,COMMENTS="",DELIVERY_DATE="",TOTAL_AMOUNT="",RADIO="",REQUISITION_STATUS="";
 
     public RequisitionActivityFragment() {
-
     }
 
     @Override
@@ -100,30 +99,32 @@ public class RequisitionActivityFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     private void setTotalAmountBadge() {
-        double value = 0.0;
-        boolean checkEmptyUnitPrice = false;
 
-        for(int i=0;i<CommonConstants.iInventory.size();i++) {
-            Inventory inventory = CommonConstants.iInventory.get(i);
-            value = value + inventory.getUnitprice()* inventory.getQuantity();
+        if(CommonConstants.iInventory!= null) {
+            double value = 0.0;
+            boolean checkEmptyUnitPrice = false;
 
-            System.out.println(inventory.getUnitprice());
+            for (int i = 0; i < CommonConstants.iInventory.size(); i++) {
+                Inventory inventory = CommonConstants.iInventory.get(i);
+                value = value + inventory.getUnitprice() * inventory.getQuantity();
 
-            if(inventory.getUnitprice()==0) {
-                checkEmptyUnitPrice=true;
+                System.out.println(inventory.getUnitprice());
+
+                if (inventory.getUnitprice() == 0) {
+                    checkEmptyUnitPrice = true;
+                }
+            }
+
+            txtTotalAmount.setText("Rs: " + value);
+
+            if (value > 100000.0 || checkEmptyUnitPrice) {
+                txtStatus.setText(R.string.hold);
+                txtStatus.setBackgroundResource(R.drawable.badge_hold);
+            } else {
+                txtStatus.setText(R.string.pending);
+                txtStatus.setBackgroundResource(R.drawable.badge_pending);
             }
         }
-
-        txtTotalAmount.setText("Rs: "+ value);
-
-        if(value>100000.0 || checkEmptyUnitPrice) {
-            txtStatus.setText(R.string.hold);
-            txtStatus.setBackgroundResource(R.drawable.badge_hold);
-        } else {
-            txtStatus.setText(R.string.pending);
-            txtStatus.setBackgroundResource(R.drawable.badge_pending);
-        }
-        
     }
 
     private void CheckRadio() {
