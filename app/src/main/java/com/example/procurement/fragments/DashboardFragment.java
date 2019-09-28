@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -21,7 +22,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.procurement.R;
 import com.example.procurement.adapters.NotificationAdapter;
-import com.example.procurement.models.Inventory;
 import com.example.procurement.models.Notification;
 import com.example.procurement.models.Order;
 import com.example.procurement.models.Requisition;
@@ -68,7 +68,7 @@ public class DashboardFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
@@ -255,7 +255,7 @@ public class DashboardFragment extends Fragment {
                         }
 
                         iRequisition.clear();
-                        int sum = 0;
+                        //int sum = 0;
                         assert queryDocumentSnapshots != null;
                         for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                             Requisition requisition = document.toObject(Requisition.class);

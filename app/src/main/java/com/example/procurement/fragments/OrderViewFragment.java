@@ -1,9 +1,11 @@
 package com.example.procurement.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,13 +29,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.procurement.R;
 import com.example.procurement.activities.HomeActivity;
+import com.example.procurement.activities.SignInActivity;
 import com.example.procurement.adapters.InventoryAdapter;
 import com.example.procurement.models.Inventory;
 import com.example.procurement.models.Order;
+import com.example.procurement.models.Supplier;
 import com.example.procurement.utils.CommonConstants;
 import com.example.procurement.utils.FileUtils;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -56,7 +61,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.time.Year;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 import static com.example.procurement.activities.SignInActivity.siteManagerDBRef;
@@ -73,7 +80,7 @@ public class OrderViewFragment extends Fragment {
     private Button btnUpdate;
     private ArrayList<Inventory> inventoryList;
     private InventoryAdapter adapter;
-    private Font titleFont, blackFont;
+    private Font titleFont, blackFont,subTitleFont;
     private Document document;
     private Context mContext;
 
@@ -95,6 +102,7 @@ public class OrderViewFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_purchase_order_view, container, false);
 
         orderDBRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_ORDER).document(orderKey);
+
         mContext = getActivity();
 
         btnBack = rootView.findViewById(R.id.btnBack);
@@ -140,7 +148,7 @@ public class OrderViewFragment extends Fragment {
 
         if (item.getItemId() == R.id.menu_download) {
             try {
-                String destinationPath = FileUtils.getAppPath(mContext) + order.getOrderID() + "--> " + order.getRequisitionID() + ".pdf";
+                String destinationPath = FileUtils.getAppPath(mContext) + order.getOrderID() + "- " + order.getRequisitionID() + System.currentTimeMillis()+  ".pdf";
                 createPdf(order, destinationPath);
             } catch (IllegalArgumentException e) {
                 Log.w(TAG, "Error writing document", e);
@@ -162,6 +170,7 @@ public class OrderViewFragment extends Fragment {
     }
 
     private void readData() {
+
         orderDBRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -227,7 +236,6 @@ public class OrderViewFragment extends Fragment {
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                         Inventory inventory = document.toObject(Inventory.class);
                         inventoryList.add(inventory);
-                        System.out.println(inventory.getItemName());
                     }
 
 
@@ -352,25 +360,29 @@ public class OrderViewFragment extends Fragment {
              */
             BaseColor mColorAccent = new BaseColor(0, 153, 204, 255);
             float mTitleFontSize = 18.0f;
+            float mSubTitleFontSize = 16.0f;
             float mValueFontSize = 14.0f;
 
             BaseFont urName = BaseFont.createFont("assets/fonts/brandon_medium.otf", "UTF-8", BaseFont.EMBEDDED);
 
             titleFont = new Font(urName, mTitleFontSize, Font.NORMAL, BaseColor.BLACK);
+            subTitleFont = new Font(urName, mSubTitleFontSize, Font.NORMAL, BaseColor.BLACK);
             blackFont = new Font(urName, mValueFontSize, Font.NORMAL, BaseColor.BLACK);
 
             Paragraph emptyParagraph = new Paragraph("");
-            // Title Order Details...
+
+            document.add(emptyParagraph);
+            document.add(new Chunk(lineSeparator));
             Paragraph titleParagraph = new Paragraph(new Chunk("Purchase Order Details", titleFont));
             titleParagraph.setAlignment(Element.ALIGN_CENTER);
             document.add(titleParagraph);
             document.add(emptyParagraph);
+            document.add(new Chunk(lineSeparator));
+            document.add(emptyParagraph);
 
             createParagraph("Vendor : " + order.getVendor());
             createParagraph("Company : " + order.getCompany());
-
             document.add(emptyParagraph);
-            document.add(new Chunk(lineSeparator));
             document.add(emptyParagraph);
 
             createParagraph("Order ID : " + order.getOrderID());
@@ -390,6 +402,34 @@ public class OrderViewFragment extends Fragment {
             document.add(new Chunk(lineSeparator));
             document.add(emptyParagraph);
 
+            Paragraph itemDetails = new Paragraph(new Chunk("Product Item Details", subTitleFont));
+            itemDetails.setAlignment(Element.ALIGN_CENTER);
+            document.add(itemDetails);
+            document.add(new Chunk(lineSeparator));
+            document.add(emptyParagraph);
+
+            for (Inventory inventory :  inventoryList){
+                createParagraph("Item No : " + inventory.getItemNo());
+                document.add(emptyParagraph);
+                createParagraph("Item Name : " + inventory.getItemName());
+                document.add(emptyParagraph);
+                createParagraph("Description : " + inventory.getDescription());
+                document.add(emptyParagraph);
+                createParagraph("Unit Price : " + inventory.getUnitprice());
+                document.add(emptyParagraph);
+                createParagraph("Quantity : " + inventory.getQuantity());
+                document.add(emptyParagraph);
+                document.add(new Chunk(lineSeparator));
+                document.add(emptyParagraph);
+            }
+
+            document.add(emptyParagraph);
+            document.add(emptyParagraph);
+            createParagraph("Created By : " + SignInActivity.email);
+            document.add(emptyParagraph);
+            createParagraph("Date : " + getDate());
+
+            document.add(emptyParagraph);
 
             document.close();
             FileUtils.openFile(mContext, new File(dest));
@@ -401,6 +441,20 @@ public class OrderViewFragment extends Fragment {
         } catch (ActivityNotFoundException ae) {
             Toast.makeText(mContext, "No application found to open this file.", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private String getDate() {
+        int year, date, month;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            year = Year.now().getValue();
+        } else {
+            year = Calendar.getInstance().get(Calendar.YEAR);
+        }
+
+        date = Calendar.getInstance().get(Calendar.DATE);
+        month = Calendar.getInstance().get(Calendar.MONTH);
+        return  (date + "-" + month + "-" + year);
     }
 
     private void createParagraph(String value) {
