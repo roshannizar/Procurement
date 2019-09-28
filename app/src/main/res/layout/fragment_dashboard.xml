@@ -83,13 +83,13 @@
                     android:paddingRight="10dp">
 
                     <TextView
-                        android:id="@+id/txtTotalOrders"
+                        android:id="@+id/txtApproveCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginBottom="16dp"
-                        android:background="@drawable/badge_pending"
+                        android:background="@drawable/badge_approved"
                         android:paddingLeft="10dp"
                         android:paddingTop="5dp"
                         android:paddingRight="10dp"
@@ -108,7 +108,7 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginBottom="16dp"
-                        android:background="@drawable/badge_approved"
+                        android:background="@drawable/badge_placed"
                         android:paddingLeft="10dp"
                         android:paddingTop="5dp"
                         android:paddingRight="10dp"
@@ -116,7 +116,7 @@
                         android:text="0 Order(s) Placed"
                         android:textColor="@color/colorWhiteSmoke"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/txtTotalOrders"
+                        app:layout_constraintStart_toEndOf="@+id/txtApproveCount"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
@@ -138,13 +138,13 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/txtPending"
+                        android:id="@+id/txtPendingCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginBottom="16dp"
-                        android:background="@drawable/badge_placed"
+                        android:background="@drawable/badge_pending"
                         android:paddingLeft="10dp"
                         android:paddingTop="5dp"
                         android:paddingRight="10dp"
@@ -156,7 +156,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/txtDecline"
+                        android:id="@+id/txtDeclineCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
@@ -170,7 +170,7 @@
                         android:text="0 Order(s) Declined"
                         android:textColor="@color/colorWhiteSmoke"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/txtPending"
+                        app:layout_constraintStart_toEndOf="@+id/txtPendingCount"
                         app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -226,7 +226,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
                                 android:src="@drawable/email"
-                                app:layout_constraintBottom_toTopOf="@+id/txtPendingCount"
+                                app:layout_constraintBottom_toTopOf="@+id/txtPending"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -243,7 +243,7 @@
                                 app:layout_constraintStart_toStartOf="parent" />
 
                             <TextView
-                                android:id="@+id/txtPendingCount"
+                                android:id="@+id/txtPending"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="0"
@@ -280,7 +280,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
                                 android:src="@drawable/completed"
-                                app:layout_constraintBottom_toTopOf="@+id/txtHoldCount"
+                                app:layout_constraintBottom_toTopOf="@+id/txtHold"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -297,7 +297,7 @@
                                 app:layout_constraintStart_toStartOf="parent" />
 
                             <TextView
-                                android:id="@+id/txtHoldCount"
+                                android:id="@+id/txtHold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="0"
@@ -334,7 +334,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
                                 android:src="@drawable/approve"
-                                app:layout_constraintBottom_toTopOf="@+id/txtApprovedCount"
+                                app:layout_constraintBottom_toTopOf="@+id/txtApproved"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -351,7 +351,7 @@
                                 app:layout_constraintStart_toStartOf="parent" />
 
                             <TextView
-                                android:id="@+id/txtApprovedCount"
+                                android:id="@+id/txtApproved"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="0"
@@ -386,7 +386,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
                                 android:src="@drawable/ic_close"
-                                app:layout_constraintBottom_toTopOf="@+id/txtDeniedCount"
+                                app:layout_constraintBottom_toTopOf="@+id/txtDenied"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -403,7 +403,7 @@
                                 app:layout_constraintStart_toStartOf="parent" />
 
                             <TextView
-                                android:id="@+id/txtDeniedCount"
+                                android:id="@+id/txtDenied"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="0"
