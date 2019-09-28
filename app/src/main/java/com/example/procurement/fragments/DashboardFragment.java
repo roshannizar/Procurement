@@ -43,8 +43,7 @@ import static com.example.procurement.activities.SignInActivity.siteManagerDBRef
 
 public class DashboardFragment extends Fragment {
 
-    private int reqApproved,reqHold,reqPending,reqDeclined,orderApproved,orderDraft,orderPending,orderDeclined,orderPlaced,reqTotalAmount;
-    private CollectionReference requisitionRef,orderDBRef;
+    private int reqApproved=0,reqHold=0,reqPending=0,reqDeclined=0,orderApproved=0,orderDraft=0,orderPending=0,orderDeclined=0,orderPlaced=0,reqTotalAmount;
     private ArrayList<Requisition> iRequisition;
     private ArrayList<Order> orders;
 
@@ -52,7 +51,7 @@ public class DashboardFragment extends Fragment {
     private ArrayList<Notification> notifications;
     private NotificationAdapter adapter;
     private RecyclerView recyclerView;
-    private CollectionReference notificationDbRef;
+    private CollectionReference notificationDbRef,requisitionRef,orderDBRef;
     private Context mContext;
     private ProgressBar progressBar;
     private TextView txtUserName,txtNoti,txtMonthDate,txtApprovedCount,txtHoldCount,txtDeclinedCount,txtPendingCount,txtPending,txtDecline,txtDraft,txtTotalOrder,txtPlacedCount;
@@ -109,7 +108,8 @@ public class DashboardFragment extends Fragment {
         ReadRequisitionStatusCount();
         ReadOrderStatusCount();
 
-        SetCount();
+        //SetCount();
+        System.out.println("Check pending: "+reqPending);
         return view;
     }
 
@@ -266,14 +266,15 @@ public class DashboardFragment extends Fragment {
                             switch (requisition.getRequisitionStatus()) {
                                 case CommonConstants.REQUISITION_STATUS_APPROVED:
                                     reqApproved++;
-                                    System.out.println("Approved: "+reqApproved);
+                                    txtApprovedCount.setText(String.valueOf(reqApproved));
                                     break;
                                 case CommonConstants.REQUISITION_STATUS_PENDING:
                                     reqPending++;
-                                    System.out.println("Pending: "+reqPending);
+                                    txtPendingCount.setText(String.valueOf(reqPending));
                                     break;
                                 case CommonConstants.REQUISITION_STATUS_DECLINED:
                                     reqDeclined++;
+                                    txtDeclinedCount.setText(String.valueOf(reqDeclined));
                                     break;
                                 case CommonConstants.REQUISITION_STATUS_HOLD:
                                     reqHold++;
@@ -289,6 +290,7 @@ public class DashboardFragment extends Fragment {
     private void ReadOrderStatusCount() {
         orderDBRef.addSnapshotListener(
                 new EventListener<QuerySnapshot>() {
+                    @SuppressLint("SetTextI18n")
                     @Override
                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
 
@@ -305,18 +307,23 @@ public class DashboardFragment extends Fragment {
                             switch (ordersCount.getOrderStatus()) {
                                 case CommonConstants.ORDER_STATUS_APPROVED:
                                     orderApproved++;
+                                    txtPending.setText(orderApproved+" Order(s) Approved");
                                     break;
                                 case CommonConstants.ORDER_STATUS_PENDING:
                                     orderPending++;
+                                    txtTotalOrder.setText(orderPending+" Order(s) Pending");
                                     break;
                                 case CommonConstants.ORDER_STATUS_DECLINED:
                                     orderDeclined++;
+                                    txtDecline.setText(orderDeclined+" Order(s) Declined");
                                     break;
                                 case CommonConstants.ORDER_STATUS_DRAFT:
                                     orderDraft++;
+                                    txtDraft.setText(orderDraft+" Orders(s) Drafted");
                                     break;
                                 case CommonConstants.ORDER_STATUS_PLACED:
                                     orderPlaced++;
+                                    txtPlacedCount.setText(orderPlaced+ " Order(s) Placed");
                                     break;
                                     default: System.out.println("Nothing");
                             }
