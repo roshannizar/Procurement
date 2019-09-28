@@ -176,7 +176,13 @@ public class RequisitionEditFragment extends Fragment {
                     txtReason.setText(requisition.getReason());
                     txtProposalDate.setText(requisition.getProposalDate());
                     txtProposedBy.setText(requisition.getProposedBy());
+                    RADIO = requisition.getBudget();
 
+                    if(RADIO.equals("Yes")) {
+                        radioGroup.check(R.id.radioYes);
+                    } else {
+                        radioGroup.check(R.id.radioNo);
+                    }
                 }
             }
         });
@@ -236,7 +242,7 @@ public class RequisitionEditFragment extends Fragment {
                     public void onClick(View view) {
                         if (Validation()) {
 
-                            Requisition requisition = new Requisition(txtRequisitionNo.getText().toString(), txtComments.getText().toString(), txtPurpose.getText().toString(), txtDeliveryDate.getText().toString(), txtTotalAmount.getText().toString(), txtStatus.getText().toString(), txtReason.getText().toString(), txtProposalDate.getText().toString(), txtProposedBy.getText().toString(), RequisitionActivityFragment.RADIO);
+                            Requisition requisition = new Requisition(txtRequisitionNo.getText().toString(), txtComments.getText().toString(), txtPurpose.getText().toString(), txtDeliveryDate.getText().toString(), txtTotalAmount.getText().toString(), txtStatus.getText().toString(), txtReason.getText().toString(), txtProposalDate.getText().toString(), txtProposedBy.getText().toString(), RADIO);
                             requisition.setKey(requisitionKey);
                             requisitionUpdateRef.document(requisitionKey)
                                     .set(requisition)
