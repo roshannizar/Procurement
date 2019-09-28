@@ -71,7 +71,7 @@ public class CreateOrderFragment extends Fragment {
     private ImageView btnBack;
     private String requisitionKey;
     private DocumentReference requisitionRef;
-    private CollectionReference orderDBRef, supplierDBRef, sitesDBRef, inventoryDBRef, productDBRef;
+    private CollectionReference orderDBRef, supplierDBRef, sitesDBRef, inventoryDBRef, productDBRef, supplierProductDBRef;
     private Requisition requisition;
     private DatePickerDialog picker;
     private InventoryAdapter adapter;
@@ -80,6 +80,7 @@ public class CreateOrderFragment extends Fragment {
     private final String selectCompany = "Select Company";
     private final String selectVendor = "Select Vendor";
     private ArrayList<Inventory> inventoryList;
+    private ArrayList<Supplier> suppliersList;
 
 
     public CreateOrderFragment(String requisitionKey) {
@@ -87,6 +88,7 @@ public class CreateOrderFragment extends Fragment {
         companyList = new ArrayList<>();
         vendorList = new ArrayList<>();
         inventoryList = new ArrayList<>();
+        suppliersList = new ArrayList<>();
     }
 
 
@@ -164,6 +166,17 @@ public class CreateOrderFragment extends Fragment {
             order.setOrderStatus(getString(R.string.draft));
             order.setSubTotal(Double.parseDouble(txtSubTotal.getText().toString()));
             order.setOrderKey(key);
+
+            productDBRef = orderDBRef.document(key).collection(CommonConstants.COLLECTION_INVENTORIES);
+            for (Inventory inventory : inventoryList) {
+                productDBRef.document().set(inventory);
+            }
+
+            supplierProductDBRef = orderDBRef.document(key).collection(CommonConstants.COLLECTION_SUPPLIERS);
+            for (Supplier supplier : suppliersList) {
+                supplierProductDBRef.document().set(supplier);
+            }
+
             orderDBRef.document(key)
                     .set(order)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -223,8 +236,8 @@ public class CreateOrderFragment extends Fragment {
                 if (queryDocumentSnapshots != null) {
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                         Supplier supplier = document.toObject(Supplier.class);
-
                         if (supplier.getStatus().equals("Active")) {
+                            suppliersList.add(supplier);
                             vendorList.add(supplier.getSupplierName());
                         }
                     }
@@ -334,10 +347,15 @@ public class CreateOrderFragment extends Fragment {
                             while (m.find()) {
                                 generateNo = m.group();
                             }
-                            int value = Integer.parseInt(generateNo) + 1;
-                            String temp = "PO-" + value;
-                            txtOrderId.setText(temp);
-                            ORDER_ID = "";
+                            if (generateNo != null) {
+                                int value = Integer.parseInt(generateNo) + 1;
+                                String temp = "PO-" + value;
+                                txtOrderId.setText(temp);
+                                ORDER_ID = "";
+                            } else {
+                                ORDER_ID = "PO-1";
+                                txtOrderId.setText(ORDER_ID);
+                            }
                         }
                     } catch (NumberFormatException e1) {
                         Log.w(TAG, "Error writing document", e1);
@@ -460,9 +478,13 @@ public class CreateOrderFragment extends Fragment {
                     order.setOrderKey(key);
 
                     productDBRef = orderDBRef.document(key).collection(CommonConstants.COLLECTION_INVENTORIES);
-
                     for (Inventory inventory : inventoryList) {
                         productDBRef.document().set(inventory);
+                    }
+
+                    supplierProductDBRef = orderDBRef.document(key).collection(CommonConstants.COLLECTION_SUPPLIERS);
+                    for (Supplier supplier : suppliersList) {
+                        supplierProductDBRef.document().set(supplier);
                     }
 
                     orderDBRef.document(key)

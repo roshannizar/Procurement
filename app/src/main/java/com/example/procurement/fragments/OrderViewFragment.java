@@ -233,21 +233,7 @@ public class OrderViewFragment extends Fragment {
 
                     if (inventoryList != null) {
                         adapter = new InventoryAdapter(mContext, inventoryList, "Order");
-//                        progressBar.setVisibility(View.GONE);
-//                        imgLoader.setVisibility(View.INVISIBLE);
-//                        txtLoader.setVisibility(View.INVISIBLE);
-//                        txtWait.setVisibility(View.INVISIBLE);
                         productItemView.setAdapter(adapter);
-
-//                        if (orders.size() == 0) {
-//                            imgLoader.refreshDrawableState();
-//                            imgLoader.setImageResource(R.drawable.ic_safebox);
-//                            imgLoader.setVisibility(View.VISIBLE);
-//                            txtLoader.setVisibility(View.VISIBLE);
-//                            txtWait.setVisibility(View.VISIBLE);
-//                            txtLoader.setText("Purchase Order is empty!");
-//                            txtWait.setText("No point in waiting!");
-//                        }
                     }
 
                 }

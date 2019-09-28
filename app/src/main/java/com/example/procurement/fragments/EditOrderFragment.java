@@ -24,7 +24,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -32,6 +31,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.procurement.R;
 import com.example.procurement.activities.HomeActivity;
+import com.example.procurement.adapters.InventoryAdapter;
 import com.example.procurement.models.Inventory;
 import com.example.procurement.models.Order;
 import com.example.procurement.models.Site;
@@ -46,6 +46,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.DecimalFormat;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -63,13 +64,15 @@ public class EditOrderFragment extends Fragment {
     private Button btnGenerate;
     private ImageView btnBack;
     private Order order;
-    private CollectionReference orderDBRef, supplierDBRef, sitesDBRef,inventoryDBRef;
+    private CollectionReference orderDBRef, supplierDBRef, sitesDBRef, inventoryDBRef;
     private DatePickerDialog picker;
     private ArrayList<String> companyList, vendorList;
     private Context mContext;
     private final String selectCompany = "Select Company";
     private final String selectVendor = "Select Vendor";
     private ArrayList<Inventory> inventoryList;
+    private InventoryAdapter adapter;
+
 
     public EditOrderFragment(Order order) {
         this.order = order;
@@ -109,8 +112,9 @@ public class EditOrderFragment extends Fragment {
         txtSubTotal = rootView.findViewById(R.id.txtSubTotal);
         txtTax = rootView.findViewById(R.id.txtTax);
         txtTotal = rootView.findViewById(R.id.txtTotal);
-
         productItem = rootView.findViewById(R.id.rvItemView);
+
+        adapter = new InventoryAdapter(getActivity(), inventoryList, "Order");
         productItem.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         productItem.setItemAnimator(new DefaultItemAnimator());
 
@@ -180,6 +184,29 @@ public class EditOrderFragment extends Fragment {
                 spVendor.setAdapter(adapter);
             }
         });
+
+        inventoryDBRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(ContentValues.TAG, "Listen failed.", e);
+                }
+
+                inventoryList.clear();
+
+                if (queryDocumentSnapshots != null) {
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        Inventory inventory = document.toObject(Inventory.class);
+                        inventoryList.add(inventory);
+                    }
+                }
+
+                if (inventoryList != null) {
+                    adapter = new InventoryAdapter(mContext, inventoryList, "Order");
+                    productItem.setAdapter(adapter);
+                }
+            }
+        });
     }
 
     private void getBack() {
@@ -201,6 +228,14 @@ public class EditOrderFragment extends Fragment {
         txtStatusView.setText(order.getOrderStatus());
         txtRequisitionId.setText(order.getRequisitionID());
         txtDeliveryDate.setText(order.getDeliveryDate());
+
+        DecimalFormat df = new DecimalFormat("#.##");
+        double subTotal = order.getSubTotal();
+        double tax = subTotal * 0.10d;
+        double total = subTotal + tax;
+        txtSubTotal.setText(String.valueOf(subTotal));
+        txtTax.setText((df.format(tax)));
+        txtTotal.setText(String.valueOf(total));
 
         switch (order.getOrderStatus()) {
             case CommonConstants.ORDER_STATUS_PENDING:
@@ -308,7 +343,7 @@ public class EditOrderFragment extends Fragment {
                     order.setDeliveryDate(txtDeliveryDate.getText().toString());
                     order.setDescription(txtDescription.getText().toString());
                     order.setOrderStatus(getString(R.string.pending));
-                    order.setSubTotal(2500.00);
+                    order.setSubTotal(Double.parseDouble(txtSubTotal.getText().toString()));
 
                     orderDBRef.document(order.getOrderKey())
                             .set(order)
@@ -353,7 +388,7 @@ public class EditOrderFragment extends Fragment {
 
     private boolean Validation() {
 
-        boolean value = true;
+        boolean value;
         if (spVendor.getSelectedItem().toString().equals(selectVendor)) {
             spVendor.setBackgroundResource(R.drawable.text_box_empty);
             value = false;
@@ -365,12 +400,8 @@ public class EditOrderFragment extends Fragment {
             spCompany.setBackgroundResource(R.drawable.text_box);
             txtDescription.setBackgroundResource(R.drawable.text_box_empty);
             value = false;
-        } else if (inventoryList.size() == 0) {
-            txtDescription.setBackgroundResource(R.drawable.text_box);
-            productItem.setBackgroundResource(R.drawable.text_box_empty);
-            value = true;
         } else {
-            productItem.setBackgroundResource(R.drawable.text_box);
+            txtDescription.setBackgroundResource(R.drawable.text_box);
             value = true;
         }
 
