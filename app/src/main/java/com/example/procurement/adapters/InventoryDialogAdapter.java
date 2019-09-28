@@ -48,9 +48,38 @@ public class InventoryDialogAdapter extends RecyclerView.Adapter<InventoryDialog
         final Inventory inventoryData = listData.get(position);
         final double sum = inventoryData.getUnitprice() * inventoryData.getQuantity();
         holder.checkBox.setText(inventoryData.getItemName());
-        holder.txtQty.setText(String.valueOf(inventoryData.getQuantity()));
+        holder.txtQty.setText("0");
         holder.txtunitprice.setText("Rs: "+inventoryData.getUnitprice());
 
+        holder.txtIncrease.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(holder.txtQty.getText().toString().equals("0")) {
+                            holder.txtQty.setText("1");
+                        } else {
+                            int value = Integer.parseInt(holder.txtQty.getText().toString());
+                            int total = value +1;
+                            holder.txtQty.setText(String.valueOf(total));
+                        }
+                    }
+                }
+        );
+
+        holder.txtReduce.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(holder.txtQty.getText().toString().equals("0")) {
+                            holder.txtQty.setText("0");
+                        } else {
+                            int value = Integer.parseInt(holder.txtQty.getText().toString());
+                            int total = value -1;
+                            holder.txtQty.setText(String.valueOf(total));
+                        }
+                    }
+                }
+        );
 
         holder.checkBox.setOnCheckedChangeListener(
                 new CheckBox.OnCheckedChangeListener() {

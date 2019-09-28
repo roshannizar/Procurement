@@ -223,7 +223,10 @@ public class CreateOrderFragment extends Fragment {
                 if (queryDocumentSnapshots != null) {
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                         Supplier supplier = document.toObject(Supplier.class);
-                        vendorList.add(supplier.getSupplierName());
+
+                        if(supplier.getSupplierStatus().equals("Active")) {
+                            vendorList.add(supplier.getSupplierName());
+                        }
                     }
                 }
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(mContext, android.R.layout.simple_spinner_item, vendorList);

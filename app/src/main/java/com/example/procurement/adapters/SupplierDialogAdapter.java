@@ -45,15 +45,12 @@ public class SupplierDialogAdapter extends RecyclerView.Adapter<SupplierDialogAd
     }
 
     @Override
-    public void onBindViewHolder(SupplierDialogAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         final Supplier supplier = iSupp.get(position);
 
         holder.checkBox.setText(supplier.getSupplierName());
         holder.txtExpectedDate.setText(supplier.getExpectedDate());
         holder.txtStatus.setText(supplier.getSupplierStatus());
-        holder.txtOffer.setText(supplier.getOffer());
-
-        final String offer = holder.txtOffer.getText().toString();
 
         holder.checkBox.setOnCheckedChangeListener(
                 new CheckBox.OnCheckedChangeListener() {
@@ -61,6 +58,8 @@ public class SupplierDialogAdapter extends RecyclerView.Adapter<SupplierDialogAd
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
                         if(compoundButton.isChecked()) {
+                            String offer = holder.txtOffer.getText().toString();
+
                             CommonConstants.iSupplier.add(new Supplier(supplier.getSupplierName(),supplier.getExpectedDate(),offer,supplier.getSupplierStatus()));
                         } else {
                             CommonConstants.iSupplier.remove(position);
