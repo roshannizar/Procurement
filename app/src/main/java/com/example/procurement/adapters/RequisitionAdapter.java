@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.procurement.R;
 import com.example.procurement.activities.HomeActivity;
 import com.example.procurement.fragments.CreateOrderFragment;
+import com.example.procurement.fragments.RequisitionEditFragment;
 import com.example.procurement.models.Requisition;
 import com.example.procurement.utils.CommonConstants;
 
@@ -98,7 +99,7 @@ public class RequisitionAdapter extends RecyclerView.Adapter<RequisitionAdapter.
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Toast.makeText(view.getContext(), "Coming Soon!", Toast.LENGTH_SHORT).show();
+                            HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new RequisitionEditFragment(requisition.getKey()),null).commit();
                         }
                     }
             );

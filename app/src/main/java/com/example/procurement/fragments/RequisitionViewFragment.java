@@ -99,6 +99,8 @@ public class RequisitionViewFragment extends Fragment {
         requisitionRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_REQUISITION);
 
         readStatus();
+        CommonConstants.iInventory.clear();
+        CommonConstants.iSupplier.clear();
 
         return v;
     }

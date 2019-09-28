@@ -119,6 +119,7 @@ public class EditOrderFragment extends Fragment {
         productItem.setItemAnimator(new DefaultItemAnimator());
 
         btnGenerate = rootView.findViewById(R.id.btnGenerate);
+
         getBack();
         updateOrder();
         ShowDialog();

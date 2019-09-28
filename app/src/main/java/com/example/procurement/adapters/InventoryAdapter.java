@@ -1,6 +1,7 @@
 package com.example.procurement.adapters;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +41,6 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
         if(iList!=null) {
 
             Inventory i = iList.get(position);
-
             holder.txtNo.setText(i.getItemNo());
             holder.txtItemName.setText(i.getItemName());
             holder.txtQuantity.setText("Quantity: " + i.getQuantity());
