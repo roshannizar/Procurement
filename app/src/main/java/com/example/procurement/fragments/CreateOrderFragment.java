@@ -327,16 +327,20 @@ public class CreateOrderFragment extends Fragment {
 
                     Pattern p = Pattern.compile("\\d+");
                     String generateNo = null;
-                    if (ORDER_ID != null) {
-                        Matcher m = p.matcher(ORDER_ID);
+                    try {
+                        if (ORDER_ID != null) {
+                            Matcher m = p.matcher(ORDER_ID);
 
-                        while (m.find()) {
-                            generateNo = m.group();
+                            while (m.find()) {
+                                generateNo = m.group();
+                            }
+                            int value = Integer.parseInt(generateNo) + 1;
+                            String temp = "PO-" + value;
+                            txtOrderId.setText(temp);
+                            ORDER_ID = "";
                         }
-                        int value = Integer.parseInt(generateNo) + 1;
-                        String temp = "PO-" + value;
-                        txtOrderId.setText(temp);
-                        ORDER_ID = "";
+                    } catch (NumberFormatException e1) {
+                        Log.w(TAG, "Error writing document", e1);
                     }
                 }
             }

@@ -3,6 +3,7 @@ package com.example.procurement.fragments;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Build;
@@ -25,6 +26,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.procurement.R;
@@ -55,13 +58,12 @@ public class EditOrderFragment extends Fragment {
 
     private Spinner spCompany, spVendor;
     private TextView txtOrderId, txtRequisitionId, txtDeliveryDate,
-            txtDescription, txtStatusView, txtSubTotal, txtTax, txtTotal, txtCurrentDate, btnAddItems;
-    private CardView cvTotal;
+            txtDescription, txtStatusView, txtSubTotal, txtTax, txtTotal, txtCurrentDate;
     private RecyclerView productItem;
     private Button btnGenerate;
     private ImageView btnBack;
     private Order order;
-    private CollectionReference orderDBRef, supplierDBRef, sitesDBRef;
+    private CollectionReference orderDBRef, supplierDBRef, sitesDBRef,inventoryDBRef;
     private DatePickerDialog picker;
     private ArrayList<String> companyList, vendorList;
     private Context mContext;
@@ -88,8 +90,9 @@ public class EditOrderFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_edit_purchase_order, container, false);
 
         orderDBRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_ORDER);
-        supplierDBRef = FirebaseFirestore.getInstance().collection(CommonConstants.COLLECTION_SUPPLIERS);
+        supplierDBRef = orderDBRef.document(order.getOrderKey()).collection(CommonConstants.COLLECTION_SUPPLIERS);
         sitesDBRef = FirebaseFirestore.getInstance().collection(CommonConstants.COLLECTION_SITES);
+        inventoryDBRef = orderDBRef.document(order.getOrderKey()).collection(CommonConstants.COLLECTION_INVENTORIES);
 
         mContext = getContext();
 
@@ -107,15 +110,12 @@ public class EditOrderFragment extends Fragment {
         txtTax = rootView.findViewById(R.id.txtTax);
         txtTotal = rootView.findViewById(R.id.txtTotal);
 
-
-        cvTotal = rootView.findViewById(R.id.cvTotal);
-        cvTotal.setVisibility(View.GONE);
-
         productItem = rootView.findViewById(R.id.rvItemView);
-        btnAddItems = rootView.findViewById(R.id.btnAddItems);
+        productItem.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        productItem.setItemAnimator(new DefaultItemAnimator());
+
         btnGenerate = rootView.findViewById(R.id.btnGenerate);
         getBack();
-        PopUpItems();
         updateOrder();
         ShowDialog();
         readData();
@@ -160,7 +160,7 @@ public class EditOrderFragment extends Fragment {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
-                    Log.w(TAG, "Listen failed.", e);
+                    Log.w(ContentValues.TAG, "Listen failed.", e);
                 }
 
                 vendorList.clear();
@@ -169,7 +169,10 @@ public class EditOrderFragment extends Fragment {
                 if (queryDocumentSnapshots != null) {
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                         Supplier supplier = document.toObject(Supplier.class);
-                        vendorList.add(supplier.getSupplierName());
+
+                        if (supplier.getSupplierStatus().equals("Active")) {
+                            vendorList.add(supplier.getSupplierName());
+                        }
                     }
                 }
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(mContext, android.R.layout.simple_spinner_item, vendorList);
@@ -177,7 +180,6 @@ public class EditOrderFragment extends Fragment {
                 spVendor.setAdapter(adapter);
             }
         });
-
     }
 
     private void getBack() {
@@ -213,14 +215,6 @@ public class EditOrderFragment extends Fragment {
         }
     }
 
-    private void PopUpItems() {
-        btnAddItems.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new InventoryDialog(), null).commit();
-            }
-        });
-    }
 
     private void ShowDialog() {
         txtDeliveryDate.setOnClickListener(

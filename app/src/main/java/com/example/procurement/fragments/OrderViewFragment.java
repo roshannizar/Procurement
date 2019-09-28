@@ -1,6 +1,5 @@
 package com.example.procurement.fragments;
 
-
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -59,11 +58,10 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+import static androidx.constraintlayout.widget.Constraints.TAG;
 import static com.example.procurement.activities.SignInActivity.siteManagerDBRef;
 
 public class OrderViewFragment extends Fragment {
-    private static final String TAG = "OrderViewFragment";
-
     private String orderKey;
     private Order order;
     private DocumentReference orderDBRef;
@@ -75,7 +73,6 @@ public class OrderViewFragment extends Fragment {
     private Button btnUpdate;
     private ArrayList<Inventory> inventoryList;
     private InventoryAdapter adapter;
-    private Inventory i;
     private Font titleFont, blackFont;
     private Document document;
     private Context mContext;
