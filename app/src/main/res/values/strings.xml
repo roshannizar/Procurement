@@ -42,6 +42,14 @@
     <string name="title_requisition">Requisition</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <string name="requisitionID">"Requisition ID : "</string>
+
+    <string name="orderID">"Order ID           : "</string>
+    <string name="orderName">"Order Name    : "</string>
+    <string name="description">"Description     : "</string>
+    <string name="deliveryDate">"Delivery Date  : "</string>
+    <string name="orderedDate">"Ordered Date  : "</string>
+    <string name="emptyString">"     "</string>
     <string-array name="stock_array">
         <item>-- Please select a Supplier --</item>
         <item>HuHu</item>
@@ -50,12 +58,4 @@
         <item>Santa</item>
         <item>Amigo</item>
     </string-array>
-
-    <string name="requisitionID">"Requisition ID : "</string>
-    <string name="orderID">"Order ID           : "</string>
-    <string name="orderName">"Order Name    : "</string>
-    <string name="description">"Description     : "</string>
-    <string name="deliveryDate">"Delivery Date  : "</string>
-    <string name="orderedDate">"Ordered Date  : "</string>
-    <string name="emptyString">"     "</string>
 </resources>
