@@ -36,22 +36,27 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        Inventory i = iList.get(position);
 
-        holder.txtNo.setText(i.getItemNo());
-        holder.txtItemName.setText(i.getItemName());
-        holder.txtQuantity.setText("Quantity: "+String.valueOf(i.getQuantity()));
-        holder.txtUnitPrice.setText("Unit Price: "+String.valueOf(i.getUnitprice()));
-        holder.txtTotalAmount.setText("Total Amount: "+String.valueOf(i.getQuantity()*i.getUnitprice()));
+        if(iList!=null) {
 
-        holder.btnClose.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                       CommonConstants.iInventory.remove(position);
+            Inventory i = iList.get(position);
+
+            holder.txtNo.setText(i.getItemNo());
+            holder.txtItemName.setText(i.getItemName());
+            holder.txtQuantity.setText("Quantity: " + String.valueOf(i.getQuantity()));
+            holder.txtUnitPrice.setText("Unit Price: " + String.valueOf(i.getUnitprice()));
+            holder.txtTotalAmount.setText("Total Amount: " + String.valueOf(i.getQuantity() * i.getUnitprice()));
+
+            holder.btnClose.setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            CommonConstants.iInventory.remove(position);
+                            notifyDataSetChanged();
+                        }
                     }
-                }
-        );
+            );
+        }
     }
 
     public int getItemCount() {

@@ -58,6 +58,7 @@ public class InventoryDialogAdapter extends RecyclerView.Adapter<InventoryDialog
                             CommonConstants.iInventory.add(new Inventory(String.valueOf(position),inventoryData.getItemName(),"",inventoryData.getQuantity(),inventoryData.getUnitprice()));
                         } else {
                             CommonConstants.iInventory.remove(position);
+                            notifyDataSetChanged();
                         }
                     }
                 }

@@ -1,4 +1,4 @@
-package com.example.procurement.RepositoryPattern;
+package com.example.procurement.repositoryPattern;
 
 public interface IRepository {
 

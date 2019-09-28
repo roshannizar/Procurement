@@ -1,7 +1,9 @@
 package com.example.procurement.fragments;
 
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,6 +29,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.procurement.R;
 import com.example.procurement.activities.RequisitionActivity;
 import com.example.procurement.adapters.RequisitionAdapter;
+import com.example.procurement.filterPattern.requisition.ApprovedRequisitionStatus;
+import com.example.procurement.filterPattern.requisition.DeclineRequisitionStatus;
+import com.example.procurement.filterPattern.requisition.HoldRequisitionStatus;
+import com.example.procurement.filterPattern.requisition.PendingRequisitionStatus;
+import com.example.procurement.filterPattern.requisition.RequisitionStatus;
 import com.example.procurement.models.Requisition;
 import com.example.procurement.utils.CommonConstants;
 import com.google.firebase.firestore.CollectionReference;
@@ -49,14 +56,25 @@ public class RequisitionViewFragment extends Fragment {
     private CollectionReference requisitionRef;
     private RequisitionAdapter requisitionAdapter;
     private Context c;
+    private int checkedItem = -99;
     private ProgressBar progressBar;
     private TextView txtLoader, txtWait;
     private ImageView imgLoader;
+    private RequisitionStatus approvedStatus,declinedStatus,holdStatus,pendingStatus;
+    private int approvedCount,delinedCount,holdCount,pendingCount;
 
     public RequisitionViewFragment() {
 
     }
 
+    @Override
+    public void onCreate(Bundle bundle) {
+        super.onCreate((bundle));
+        approvedCount=0;
+        delinedCount=0;
+        holdCount=0;
+        pendingCount=0;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,7 +83,7 @@ public class RequisitionViewFragment extends Fragment {
         setHasOptionsMenu(true);
 
         iRequisition = new ArrayList<>();
-
+        c=v.getContext();
         progressBar = v.findViewById(R.id.progressBar3);
         txtLoader = v.findViewById(R.id.txtLoader2);
         txtWait = v.findViewById(R.id.txtWait2);
@@ -73,6 +91,11 @@ public class RequisitionViewFragment extends Fragment {
         recyclerView = v.findViewById(R.id.recyclerView2);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        approvedStatus = new ApprovedRequisitionStatus();
+        declinedStatus= new DeclineRequisitionStatus();
+        holdStatus = new HoldRequisitionStatus();
+        pendingStatus = new PendingRequisitionStatus();
 
         requisitionRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_REQUISITION);
 
@@ -124,6 +147,15 @@ public class RequisitionViewFragment extends Fragment {
         );
     }
 
+    private int getCheckedItem() {
+        return checkedItem;
+    }
+
+    private void setCheckedItem(int checkedItem) {
+        this.checkedItem = checkedItem;
+    }
+
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
@@ -141,9 +173,9 @@ public class RequisitionViewFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-//                if (!newText.equals("")) {
-//                    adapter.getFilter().filter(newText);
-//                }
+                if (!newText.equals("")) {
+                    requisitionAdapter.getFilter().filter(newText);
+                }
                 return true;
             }
         });
@@ -155,56 +187,47 @@ public class RequisitionViewFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         if (item.getItemId() == R.id.filter_status) {
-            Toast.makeText(this.getContext(), "Constructing still!", Toast.LENGTH_LONG).show();
-//            // setup the alert builder
-//            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-//            builder.setTitle("Choose Status Filter Type");
-//
-//            // add a radio button list
-//            String[] status = {
-//                    getString(R.string.draft),
-//                    getString(R.string.approved),
-//                    getString(R.string.declined),
-//                    getString(R.string.hold),
-//                    getString(R.string.pending),
-//                    getString(R.string.placed),
-//
-//            };
-//
-//            builder.setSingleChoiceItems(status, getCheckedItem(), new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//                    switch (which) {
-//                        case 0:
-//                            adapter = new OrderStatusAdapter(mContext, draftOrderStatus.meetOrderStatus(orders));
-//                            break;
-//                        case 1:
-//                            adapter = new OrderStatusAdapter(mContext, approvedOrderStatus.meetOrderStatus(orders));
-//                            break;
-//                        case 2:
-//                            adapter = new OrderStatusAdapter(mContext, declinedOrderStatus.meetOrderStatus(orders));
-//                            break;
-//                        case 3:
-//                            adapter = new OrderStatusAdapter(mContext, holdOrderStatus.meetOrderStatus(orders));
-//                            break;
-//                        case 4:
-//                            adapter = new OrderStatusAdapter(mContext, pendingOrderStatus.meetOrderStatus(orders));
-//                            break;
-//                        case 5:
-//                            adapter = new OrderStatusAdapter(mContext, placedOrderStatus.meetOrderStatus(orders));
-//                            break;
-//                        default:
-//                            adapter = new OrderStatusAdapter(mContext, orders);
-//                            break;
-//                    }
-//                    setCheckedItem(which);
-//                    recyclerView.setAdapter(adapter);
-//                }
-//            });
-//
-//            // create and show the alert dialog
-//            AlertDialog dialog = builder.create();
-//            dialog.show();
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(c);
+            builder.setTitle("Choose Status Filter Type");
+
+            // add a radio button list
+            String[] status = {
+                    getString(R.string.approved),
+                    getString(R.string.declined),
+                    getString(R.string.hold),
+                    getString(R.string.pending),
+
+            };
+
+            builder.setSingleChoiceItems(status, getCheckedItem(), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which) {
+                        case 0:
+                            requisitionAdapter = new RequisitionAdapter(c, approvedStatus.meetRequisitionStatus(iRequisition));
+                            break;
+                        case 1:
+                            requisitionAdapter = new RequisitionAdapter(c, declinedStatus.meetRequisitionStatus(iRequisition));
+                            break;
+                        case 2:
+                            requisitionAdapter = new RequisitionAdapter(c, holdStatus.meetRequisitionStatus(iRequisition));
+                            break;
+                        case 3:
+                            requisitionAdapter = new RequisitionAdapter(c, pendingStatus.meetRequisitionStatus(iRequisition));
+                            break;
+                        default:
+                            requisitionAdapter = new RequisitionAdapter(c, iRequisition);
+                            break;
+                    }
+                    setCheckedItem(which);
+                    recyclerView.setAdapter(requisitionAdapter);
+                }
+            });
+
+            // create and show the alert dialog
+            AlertDialog dialog = builder.create();
+            dialog.show();
 
         } else if (item.getItemId() == R.id.action_create_requisition) {
             Intent i = new Intent(this.getActivity(), RequisitionActivity.class);

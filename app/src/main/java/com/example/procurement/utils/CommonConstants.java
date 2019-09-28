@@ -26,6 +26,12 @@ public class CommonConstants {
     public static final String ORDER_STATUS_HOLD = "Hold";
     public static final String ORDER_STATUS_DRAFT = "Draft";
 
+    public static final String REQUISITION_STATUS_DECLINED = "Declined";
+    public static final String REQUISITION_STATUS_PENDING = "Pending";
+    public static final String REQUISITION_STATUS_APPROVED = "Approved";
+    public static final String REQUISITION_STATUS_HOLD = "Hold";
+
+
     public static final String NOTE_FRAGMENT_TAG = "Note Fragment";
     public static final String ENQUIRE_FRAGMENT_TAG = "Enquire Fragment";
     public static final String ORDER_VIEW_FRAGMENT_TAG = "OrderView Fragment";
