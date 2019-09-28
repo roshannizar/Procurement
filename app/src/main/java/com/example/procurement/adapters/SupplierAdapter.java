@@ -48,6 +48,7 @@ public class SupplierAdapter extends RecyclerView.Adapter<SupplierAdapter.ViewHo
                     @Override
                     public void onClick(View view) {
                         CommonConstants.iSupplier.remove(position);
+                        notifyDataSetChanged();
                     }
                 }
         );

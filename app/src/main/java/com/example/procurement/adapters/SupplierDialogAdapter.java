@@ -64,6 +64,7 @@ public class SupplierDialogAdapter extends RecyclerView.Adapter<SupplierDialogAd
                             CommonConstants.iSupplier.add(new Supplier(supplier.getSupplierName(),supplier.getExpectedDate(),offer,supplier.getSupplierStatus()));
                         } else {
                             CommonConstants.iSupplier.remove(position);
+                            notifyDataSetChanged();
                         }
                     }
                 }

@@ -1,4 +1,4 @@
-package com.example.procurement.filterPattern;
+package com.example.procurement.filterPattern.purchaseOrder;
 
 import com.example.procurement.models.Order;
 import com.example.procurement.utils.CommonConstants;
