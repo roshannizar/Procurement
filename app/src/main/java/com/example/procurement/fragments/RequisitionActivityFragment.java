@@ -69,7 +69,7 @@ public class RequisitionActivityFragment extends Fragment {
         recyclerView = v.findViewById(R.id.recyclerItems);
 
         c= v.getContext();
-        inventoryAdapter = new InventoryAdapter(c,CommonConstants.iInventory);
+        inventoryAdapter = new InventoryAdapter(c,CommonConstants.iInventory,"Requisition");
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
@@ -144,7 +144,7 @@ public class RequisitionActivityFragment extends Fragment {
     }
 
     private void WriteDataValues() {
-        inventoryAdapter = new InventoryAdapter(c, CommonConstants.iInventory);
+        inventoryAdapter = new InventoryAdapter(c, CommonConstants.iInventory,"Requisition");
         inventoryAdapter.notifyDataSetChanged();
         recyclerView.setAdapter(inventoryAdapter);
     }

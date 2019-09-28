@@ -20,10 +20,12 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
 
     private ArrayList<Inventory> iList;
     private Context c;
+    private String classType;
 
-    public InventoryAdapter(Context c, ArrayList<Inventory> iList) {
+    public InventoryAdapter(Context c, ArrayList<Inventory> iList,String classType) {
         this.c = c;
         this.iList = iList;
+        this.classType = classType;
     }
 
     @NonNull
@@ -47,15 +49,19 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
             holder.txtUnitPrice.setText("Unit Price: " + String.valueOf(i.getUnitprice()));
             holder.txtTotalAmount.setText("Total Amount: " + String.valueOf(i.getQuantity() * i.getUnitprice()));
 
-            holder.btnClose.setOnClickListener(
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            CommonConstants.iInventory.remove(position);
-                            notifyDataSetChanged();
+            if(classType.equals("Order")) {
+                holder.btnClose.setVisibility(View.INVISIBLE);
+            } else {
+                holder.btnClose.setOnClickListener(
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                CommonConstants.iInventory.remove(position);
+                                notifyDataSetChanged();
+                            }
                         }
-                    }
-            );
+                );
+            }
         }
     }
 
