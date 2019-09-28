@@ -12,6 +12,7 @@ import com.example.procurement.models.Requisition;
 import com.example.procurement.utils.CommonConstants;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -23,7 +24,6 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 import static com.example.procurement.activities.SignInActivity.siteManagerDBRef;
 
 public class PMS extends Application {
-
 
     @Override
     public void onCreate() {

@@ -71,12 +71,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             case CommonConstants.ORDER_STATUS_APPROVED:
                 statusColor = R.color.orderStatusAccepted;
                 break;
-            case CommonConstants.ORDER_STATUS_PENDING:
-                statusColor = R.color.orderStatusPending;
-                break;
-            case CommonConstants.ORDER_STATUS_PLACED:
-                statusColor = R.color.orderStatusPlaced;
-                break;
             case CommonConstants.ORDER_STATUS_HOLD:
                 statusColor = R.color.orderStatusHold;
                 break;
