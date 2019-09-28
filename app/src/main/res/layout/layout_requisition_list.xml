@@ -40,7 +40,7 @@
                 app:srcCompat="@drawable/ic_report" />
 
             <ImageView
-                android:id="@+id/orderStatusIcon"
+                android:id="@+id/reqStatusIcon"
                 android:layout_width="@dimen/orderRowStatusIconSize"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -94,7 +94,7 @@
                 android:textColor="@color/colorWhiteSmoke"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/orderStatusIcon"
+                app:layout_constraintEnd_toStartOf="@+id/reqStatusIcon"
                 app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
             <TextView
@@ -103,7 +103,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:linksClickable="true"
                 android:paddingLeft="10dp"
@@ -111,31 +110,12 @@
                 android:paddingRight="10dp"
                 android:paddingBottom="5dp"
                 android:text="PLACE ORDER"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/colorDarkBlue"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/enquire"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider2" />
-
-            <TextView
-                android:id="@+id/enquire"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:linksClickable="true"
-                android:paddingLeft="10dp"
-                android:paddingTop="5dp"
-                android:paddingRight="10dp"
-                android:paddingBottom="5dp"
-                android:text="ENQUIRE"
-                android:textColor="@color/colorDarkGreen"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/placeOrder"
-                app:layout_constraintTop_toBottomOf="@+id/divider2" />
+                app:layout_constraintStart_toEndOf="@+id/txtView"
+                app:layout_constraintTop_toBottomOf="@+id/divider2"
+                app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/deliveryDate"
@@ -200,6 +180,26 @@
                 app:layout_constraintHorizontal_bias="0.888"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/orderIcon" />
+
+            <TextView
+                android:id="@+id/txtView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:linksClickable="true"
+                android:paddingLeft="10dp"
+                android:paddingTop="5dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="5dp"
+                android:text="VIEW"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider2"
+                app:layout_constraintVertical_bias="1.0" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

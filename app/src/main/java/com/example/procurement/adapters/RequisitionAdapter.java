@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -51,21 +52,31 @@ public class RequisitionAdapter extends RecyclerView.Adapter<RequisitionAdapter.
 
             requisitionStatus = requisition.getRequisitionStatus();
 
-            int statusBackground;
+            int statusBackground,reqStatusIcon;
 
             switch (requisitionStatus) {
                 case CommonConstants.ORDER_STATUS_APPROVED:
                     statusBackground = R.drawable.badge_approved;
+                    reqStatusIcon = R.color.orderStatusAccepted;
                     break;
                 case CommonConstants.ORDER_STATUS_PENDING:
                     statusBackground = R.drawable.badge_pending;
+                    reqStatusIcon = R.color.orderStatusPending;
                     break;
                 case CommonConstants.ORDER_STATUS_HOLD:
                     statusBackground = R.drawable.badge_hold;
+                    reqStatusIcon = R.color.orderStatusHold;
                     break;
                 default:
+                    reqStatusIcon = R.color.orderStatusDenied;
                     statusBackground = R.drawable.badge_denied;
             }
+
+            reqStatusIcon = ContextCompat.getColor(holder.txtRequisitionStatusIcon.getContext(), reqStatusIcon);
+
+            String statusReq = requisition.getRequisitionStatus();
+
+            System.out.println(statusReq);
 
             holder.txtRequisitionName.setText(requisition.getRequisitionNo());
             holder.txtRequisitionStatus.setText(requisitionStatus);
@@ -73,8 +84,9 @@ public class RequisitionAdapter extends RecyclerView.Adapter<RequisitionAdapter.
             holder.txtdeliveryDate.setText(requisition.getDeliveryDate());
             holder.txtTotalAmount.setText("Rs: " + requisition.getTotalAmount());
             holder.txtRequisitionStatus.setBackgroundResource(statusBackground);
+            holder.txtRequisitionStatusIcon.setColorFilter(reqStatusIcon,PorterDuff.Mode.MULTIPLY);
 
-            if (requisition.getRequisitionStatus().equals(R.string.approved)) {
+            if (statusReq.equals(CommonConstants.REQUISITION_STATUS_APPROVED)) {
                 holder.txtPlaceOrder.setVisibility(View.VISIBLE);
                 holder.txtPlaceOrder.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -82,9 +94,16 @@ public class RequisitionAdapter extends RecyclerView.Adapter<RequisitionAdapter.
                         HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new CreateOrderFragment(requisition.getKey()), null).commit();
                     }
                 });
-            } else {
-                holder.txtPlaceOrder.setVisibility(View.INVISIBLE);
             }
+
+            holder.txtView.setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Toast.makeText(view.getContext(), "Coming Soon!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+            );
 
         }
     }
@@ -99,7 +118,7 @@ public class RequisitionAdapter extends RecyclerView.Adapter<RequisitionAdapter.
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView txtRequisitionName, txtRequisitionDescription,txtRequisitionStatus,txtPlaceOrder,txtEnquire,txtdeliveryDate,txtwithInBudget,txtTotalAmount;
+        private TextView txtRequisitionName,txtRequisitionStatus,txtPlaceOrder,txtdeliveryDate,txtView,txtwithInBudget,txtTotalAmount;
         private ImageView txtRequisitionIcon,txtRequisitionStatusIcon;
 
         ViewHolder(View v) {
@@ -111,9 +130,11 @@ public class RequisitionAdapter extends RecyclerView.Adapter<RequisitionAdapter.
             txtdeliveryDate = v.findViewById(R.id.deliveryDate);
             txtwithInBudget = v.findViewById(R.id.withInBudget);
             txtPlaceOrder = v.findViewById(R.id.placeOrder);
-            txtEnquire = v.findViewById(R.id.enquire);
             txtRequisitionIcon = v.findViewById(R.id.orderIcon);
-            txtRequisitionStatusIcon = v.findViewById(R.id.orderStatusIcon);
+            txtRequisitionStatusIcon = v.findViewById(R.id.reqStatusIcon);
+            txtView = v.findViewById(R.id.txtView);
+
+            txtPlaceOrder.setVisibility(View.INVISIBLE);
         }
     }
 
