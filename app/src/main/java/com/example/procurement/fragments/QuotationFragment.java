@@ -129,6 +129,7 @@ public class QuotationFragment extends Fragment {
         if(CommonConstants.iSupplier != null) {
             ArrayList<String> arraylist = new ArrayList<>();
 
+            arraylist.add("-- Please Choose a supplier --");
             for (int i = 0; i < CommonConstants.iSupplier.size(); i++) {
 
                 Supplier supplier = CommonConstants.iSupplier.get(i);
@@ -154,81 +155,85 @@ public class QuotationFragment extends Fragment {
     }
 
     private void WriteStatus() {
-        createProgressBar.setVisibility(View.VISIBLE);
-        String key = requisitionRef.document().getId();
-        Requisition requisition = new Requisition(RequisitionActivityFragment.REQUISITION_NO, RequisitionActivityFragment.COMMENTS, RequisitionActivityFragment.PURPOSE, RequisitionActivityFragment.DELIVERY_DATE, RequisitionActivityFragment.TOTAL_AMOUNT,RequisitionActivityFragment.REQUISITION_STATUS,txtReason.getText().toString(),txtProposalDate.getText().toString(),txtProposedBy.getText().toString(),RequisitionActivityFragment.RADIO);
-        requisition.setKey(key);
-        requisitionRef.document(key)
-                .set(requisition)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Requisition placed successfully!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getContext(),"Error while placing the document",Toast.LENGTH_LONG).show();
-                        Log.w(TAG, "Error while placing the document", e);
-                    }
-                });
 
-        //Add Inventory Bulk Insert
-        CollectionReference inventoryRef = siteManagerDBRef.collection(COLLECTION_REQUISITION).document(key).collection(COLLECTION_REQUISITION_INVENTORY);
-        CollectionReference supplierRef = siteManagerDBRef.collection(COLLECTION_REQUISITION).document(key).collection(COLLECTION_REQUISITION_SUPPLIER);
+        // Checks Validation
+        if(Validation()) {
 
-        for(int i=0;i<iInventory.size();i++) {
-
-            Inventory inventoryList = iInventory.get(i);
-            String inventoryKey = inventoryRef.document().getId();
-            Inventory inventory = new Inventory(inventoryList.getItemNo(),inventoryList.getItemName(),"",inventoryList.getQuantity(),inventoryList.getUnitprice());
-            requisition.setKey(inventoryKey);
-            inventoryRef.document(inventoryKey)
-                    .set(inventory)
+            createProgressBar.setVisibility(View.VISIBLE);
+            String key = requisitionRef.document().getId();
+            Requisition requisition = new Requisition(RequisitionActivityFragment.REQUISITION_NO, RequisitionActivityFragment.COMMENTS, RequisitionActivityFragment.PURPOSE, RequisitionActivityFragment.DELIVERY_DATE, RequisitionActivityFragment.TOTAL_AMOUNT, RequisitionActivityFragment.REQUISITION_STATUS, txtReason.getText().toString(), txtProposalDate.getText().toString(), txtProposedBy.getText().toString(), RequisitionActivityFragment.RADIO);
+            requisition.setKey(key);
+            requisitionRef.document(key)
+                    .set(requisition)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            Log.d(TAG, "Inventory placed successfully!");
+                            Log.d(TAG, "Requisition placed successfully!");
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getContext(),"Error while placing the inventory",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), "Error while placing the document", Toast.LENGTH_LONG).show();
                             Log.w(TAG, "Error while placing the document", e);
                         }
                     });
+
+            //Add Inventory Bulk Insert
+            CollectionReference inventoryRef = siteManagerDBRef.collection(COLLECTION_REQUISITION).document(key).collection(COLLECTION_REQUISITION_INVENTORY);
+            CollectionReference supplierRef = siteManagerDBRef.collection(COLLECTION_REQUISITION).document(key).collection(COLLECTION_REQUISITION_SUPPLIER);
+
+            for (int i = 0; i < iInventory.size(); i++) {
+
+                Inventory inventoryList = iInventory.get(i);
+                String inventoryKey = inventoryRef.document().getId();
+                Inventory inventory = new Inventory(inventoryList.getItemNo(), inventoryList.getItemName(), "", inventoryList.getQuantity(), inventoryList.getUnitprice());
+                requisition.setKey(inventoryKey);
+                inventoryRef.document(inventoryKey)
+                        .set(inventory)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d(TAG, "Inventory placed successfully!");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getContext(), "Error while placing the inventory", Toast.LENGTH_LONG).show();
+                                Log.w(TAG, "Error while placing the document", e);
+                            }
+                        });
+            }
+
+            //Add Supplier Bulk Insert
+            for (int i = 0; i < iSupplier.size(); i++) {
+                Supplier supplierList = iSupplier.get(i);
+                String supplierKey = supplierRef.document().getId();
+                Supplier supplier = new Supplier(supplierList.getSupplierName(), supplierList.getExpectedDate(), supplierList.getOffer(), supplierList.getStatus());
+                requisition.setKey(supplierKey);
+                supplierRef.document(supplierKey)
+                        .set(supplier)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(getContext(), "Requisition placed successfully!", Toast.LENGTH_LONG).show();
+                                createProgressBar.setVisibility(View.INVISIBLE);
+                                Log.d(TAG, "Supplier placed successfully!");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getContext(), "Error while placing the inventory", Toast.LENGTH_LONG).show();
+                                Log.w(TAG, "Error while placing the document", e);
+                            }
+                        });
+            }
+
+            CommonConstants.iInventory.clear();
+            CommonConstants.iSupplier.clear();
         }
-
-        //Add Supplier Bulk Insert
-        for(int i =0;i<iSupplier.size();i++) {
-            Supplier supplierList = iSupplier.get(i);
-            String supplierKey = supplierRef.document().getId();
-            Supplier supplier = new Supplier(supplierList.getSupplierName(),supplierList.getExpectedDate(),supplierList.getOffer(),supplierList.getStatus());
-            requisition.setKey(supplierKey);
-            supplierRef.document(supplierKey)
-                    .set(supplier)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Toast.makeText(getContext(),"Requisition placed successfully!",Toast.LENGTH_LONG).show();
-                            createProgressBar.setVisibility(View.INVISIBLE);
-                            Log.d(TAG, "Supplier placed successfully!");
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getContext(),"Error while placing the inventory",Toast.LENGTH_LONG).show();
-                            Log.w(TAG, "Error while placing the document", e);
-                        }
-                    });
-        }
-
-        CommonConstants.iInventory.clear();
-        CommonConstants.iSupplier.clear();
-
     }
 
     private void PlaceOrder() {
@@ -253,4 +258,28 @@ public class QuotationFragment extends Fragment {
         );
     }
 
+    private boolean Validation() {
+
+        boolean value = true;
+
+        if(CommonConstants.iSupplier.size() == 0) {
+            recyclerView.setBackgroundResource(R.drawable.text_box_empty);
+            value = false;
+        } else {
+            if(spRecommendedSupplier.getSelectedItem().toString().equals("-- Please choose a supplier --")) {
+                recyclerView.setBackgroundResource(R.drawable.text_box);
+                spRecommendedSupplier.setBackgroundResource(R.drawable.text_box_empty);
+                value = false;
+
+            } else {
+                if(txtReason.getText().toString().equals("")) {
+                    spRecommendedSupplier.setBackgroundResource(R.drawable.text_box);
+                    txtReason.setBackgroundResource(R.drawable.text_box_empty);
+                    value = false;
+                }
+            }
+        }
+
+        return value;
+    }
 }
