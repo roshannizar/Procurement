@@ -85,9 +85,9 @@ public class DashboardFragment extends Fragment {
         TextView txtPlacedCount = view.findViewById(R.id.txtPlacedCounts);
         txtPendingCount.setText(String.valueOf(OrderStatusFragment.pendingStatus));
         txtApprovedCount.setText(String.valueOf(OrderStatusFragment.approvedStatus));
-        txtHoldCount.setText(String.valueOf(OrderStatusFragment.holdStatus));
+        txtHoldCount.setText(String.valueOf(""));
         txtPlacedCount.setText(OrderStatusFragment.placedStatus + " Order(s) Placed");
-        txtTotalOrder.setText((OrderStatusFragment.approvedStatus + OrderStatusFragment.holdStatus + OrderStatusFragment.pendingStatus + OrderStatusFragment.declinedStatus + OrderStatusFragment.placedStatus) + " Order(s) Totally");
+        txtTotalOrder.setText((OrderStatusFragment.approvedStatus + 0 + OrderStatusFragment.pendingStatus + OrderStatusFragment.declinedStatus + OrderStatusFragment.placedStatus) + " Order(s) Totally");
         setDate();
 
         notificationDbRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_NOTIFICATION);

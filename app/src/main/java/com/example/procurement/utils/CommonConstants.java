@@ -15,7 +15,7 @@ public class CommonConstants {
     public static final String COLLECTION_REQUISITION = "requisitions";
     public static final String COLLECTION_SUPPLIERS = "suppliers";
     public static final String COLLECTION_SITES = "sites";
-    public static final String COLLECTION_ORDER_PRODUCT = "products";
+    public static final String COLLECTION_INVENTORIES= "inventories";
     public static final String COLLECTION_REQUISITION_INVENTORY = "inventory";
     public static final String COLLECTION_REQUISITION_SUPPLIER = "supplier";
     public static final String COLLECTION_INVENTORY ="inventories";

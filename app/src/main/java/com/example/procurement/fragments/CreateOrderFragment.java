@@ -71,7 +71,7 @@ public class CreateOrderFragment extends Fragment {
     private ImageView btnBack;
     private String requisitionKey;
     private DocumentReference requisitionRef;
-    private CollectionReference orderDBRef, supplierDBRef, sitesDBRef, inventoryRef;
+    private CollectionReference orderDBRef, supplierDBRef, sitesDBRef, inventoryDBRef, productDBRef;
     private Requisition requisition;
     private DatePickerDialog picker;
     private InventoryAdapter adapter;
@@ -105,7 +105,7 @@ public class CreateOrderFragment extends Fragment {
         orderDBRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_ORDER);
         supplierDBRef = requisitionRef.collection(CommonConstants.COLLECTION_REQUISITION_SUPPLIER);
         sitesDBRef = FirebaseFirestore.getInstance().collection(CommonConstants.COLLECTION_SITES);
-        inventoryRef = requisitionRef.collection(CommonConstants.COLLECTION_REQUISITION_INVENTORY);
+        inventoryDBRef = requisitionRef.collection(CommonConstants.COLLECTION_REQUISITION_INVENTORY);
 
         mContext = getContext();
 
@@ -162,7 +162,7 @@ public class CreateOrderFragment extends Fragment {
             order.setOrderedDate(txtCurrentDate.getText().toString());
             order.setDescription(txtDescription.getText().toString());
             order.setOrderStatus(getString(R.string.draft));
-            order.setSubTotal(2500.00);
+            order.setSubTotal(Double.parseDouble(txtSubTotal.getText().toString()));
             order.setOrderKey(key);
             orderDBRef.document(key)
                     .set(order)
@@ -224,7 +224,7 @@ public class CreateOrderFragment extends Fragment {
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                         Supplier supplier = document.toObject(Supplier.class);
 
-                        if(supplier.getSupplierStatus().equals("Active")) {
+                        if (supplier.getSupplierStatus().equals("Active")) {
                             vendorList.add(supplier.getSupplierName());
                         }
                     }
@@ -271,7 +271,7 @@ public class CreateOrderFragment extends Fragment {
             }
         });
 
-        inventoryRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        inventoryDBRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
@@ -452,8 +452,15 @@ public class CreateOrderFragment extends Fragment {
                     order.setOrderedDate(txtCurrentDate.getText().toString());
                     order.setDescription(txtDescription.getText().toString());
                     order.setOrderStatus(txtStatusView.getText().toString());
-                    order.setSubTotal(2500.00);
+                    order.setSubTotal(Double.parseDouble(txtSubTotal.getText().toString()));
                     order.setOrderKey(key);
+
+                    productDBRef = orderDBRef.document(key).collection(CommonConstants.COLLECTION_INVENTORIES);
+
+                    for (Inventory inventory : inventoryList) {
+                        productDBRef.document().set(inventory);
+                    }
+
                     orderDBRef.document(key)
                             .set(order)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -497,12 +504,15 @@ public class CreateOrderFragment extends Fragment {
             spVendor.setBackgroundResource(R.drawable.text_box);
             spCompany.setBackgroundResource(R.drawable.text_box_empty);
             value = false;
-        } else if (txtDescription.getText().toString().equals("")) {
+        } else  if (txtDescription.getText().toString().equals("")) {
             spCompany.setBackgroundResource(R.drawable.text_box);
             txtDescription.setBackgroundResource(R.drawable.text_box_empty);
             value = false;
-        } else {
+        }else if (txtDescription.getText().toString().equals("")) {
             txtDescription.setBackgroundResource(R.drawable.text_box);
+            txtDeliveryDate.setBackgroundResource(R.drawable.text_box_empty);
+            value = false;
+        } else {
             value = true;
         }
 

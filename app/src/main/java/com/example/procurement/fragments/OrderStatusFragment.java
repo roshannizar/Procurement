@@ -29,7 +29,6 @@ import com.example.procurement.adapters.OrderStatusAdapter;
 import com.example.procurement.filterPattern.purchaseOrder.ApprovedOrderStatus;
 import com.example.procurement.filterPattern.purchaseOrder.DeclinedOrderStatus;
 import com.example.procurement.filterPattern.purchaseOrder.DraftOrderStatus;
-import com.example.procurement.filterPattern.purchaseOrder.HoldOrderStatus;
 import com.example.procurement.filterPattern.purchaseOrder.OrderStatus;
 import com.example.procurement.filterPattern.purchaseOrder.PendingOrderStatus;
 import com.example.procurement.filterPattern.purchaseOrder.PlacedOrderStatus;
@@ -51,7 +50,7 @@ public class OrderStatusFragment extends Fragment {
     private static final String TAG = "OrderStatusFragment";
     private ArrayList<Order> orders;
     private OrderStatusAdapter adapter;
-    private OrderStatus approvedOrderStatus, declinedOrderStatus, placedOrderStatus, pendingOrderStatus, holdOrderStatus, draftOrderStatus;
+    private OrderStatus approvedOrderStatus, declinedOrderStatus, placedOrderStatus, pendingOrderStatus, draftOrderStatus;
     private RecyclerView recyclerView;
     private int checkedItem = -99;
     private CollectionReference orderDBRef;
@@ -59,7 +58,7 @@ public class OrderStatusFragment extends Fragment {
     private Context mContext;
     private ImageView imgLoader;
     private TextView txtLoader, txtWait;
-    static int pendingStatus = 0, approvedStatus = 0, holdStatus = 0, placedStatus = 0, declinedStatus = 0, draftStatus = 0;
+    static int pendingStatus = 0, approvedStatus = 0, placedStatus = 0, declinedStatus = 0, draftStatus = 0;
 
     public OrderStatusFragment() {
     }
@@ -70,7 +69,6 @@ public class OrderStatusFragment extends Fragment {
         setHasOptionsMenu(true);
         pendingStatus = 0;
         approvedStatus = 0;
-        holdStatus = 0;
         placedStatus = 0;
         declinedStatus = 0;
         draftStatus = 0;
@@ -90,7 +88,6 @@ public class OrderStatusFragment extends Fragment {
         declinedOrderStatus = new DeclinedOrderStatus();
         pendingOrderStatus = new PendingOrderStatus();
         placedOrderStatus = new PlacedOrderStatus();
-        holdOrderStatus = new HoldOrderStatus();
         draftOrderStatus = new DraftOrderStatus();
 
         progressBar = rootView.findViewById(R.id.progressBar);
@@ -134,7 +131,7 @@ public class OrderStatusFragment extends Fragment {
                     }
 
                     Collections.reverse(orders);
-                    
+
                     if (orders != null) {
                         adapter = new OrderStatusAdapter(mContext, orders);
                         progressBar.setVisibility(View.GONE);
@@ -203,10 +200,9 @@ public class OrderStatusFragment extends Fragment {
 
             // add a radio button list
             String[] status = {
-                    getString(R.string.draft),
                     getString(R.string.approved),
                     getString(R.string.declined),
-                    getString(R.string.hold),
+                    getString(R.string.draft),
                     getString(R.string.pending),
                     getString(R.string.placed),
 
@@ -217,21 +213,18 @@ public class OrderStatusFragment extends Fragment {
                 public void onClick(DialogInterface dialog, int which) {
                     switch (which) {
                         case 0:
-                            adapter = new OrderStatusAdapter(mContext, draftOrderStatus.meetOrderStatus(orders));
-                            break;
-                        case 1:
                             adapter = new OrderStatusAdapter(mContext, approvedOrderStatus.meetOrderStatus(orders));
                             break;
-                        case 2:
+                        case 1:
                             adapter = new OrderStatusAdapter(mContext, declinedOrderStatus.meetOrderStatus(orders));
                             break;
-                        case 3:
-                            adapter = new OrderStatusAdapter(mContext, holdOrderStatus.meetOrderStatus(orders));
+                        case 2:
+                            adapter = new OrderStatusAdapter(mContext, draftOrderStatus.meetOrderStatus(orders));
                             break;
-                        case 4:
+                        case 3:
                             adapter = new OrderStatusAdapter(mContext, pendingOrderStatus.meetOrderStatus(orders));
                             break;
-                        case 5:
+                        case 4:
                             adapter = new OrderStatusAdapter(mContext, placedOrderStatus.meetOrderStatus(orders));
                             break;
                         default:
@@ -257,9 +250,6 @@ public class OrderStatusFragment extends Fragment {
         switch (status) {
             case CommonConstants.ORDER_STATUS_PENDING:
                 pendingStatus++;
-                break;
-            case CommonConstants.ORDER_STATUS_HOLD:
-                holdStatus++;
                 break;
             case CommonConstants.ORDER_STATUS_APPROVED:
                 approvedStatus++;
