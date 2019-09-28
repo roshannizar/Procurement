@@ -49,7 +49,7 @@ public class InventoryDialogAdapter extends RecyclerView.Adapter<InventoryDialog
         final double sum = inventoryData.getUnitprice() * inventoryData.getQuantity();
         holder.checkBox.setText(inventoryData.getItemName());
         holder.txtQty.setText("0");
-        holder.txtunitprice.setText("Rs: "+inventoryData.getUnitprice());
+        holder.txtunitprice.setText(String.valueOf(inventoryData.getUnitprice()));
 
         holder.txtIncrease.setOnClickListener(
                 new View.OnClickListener() {
