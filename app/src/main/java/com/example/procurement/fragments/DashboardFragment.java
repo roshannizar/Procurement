@@ -110,45 +110,30 @@ public class DashboardFragment extends Fragment {
         ReadData();
         ReadRequisitionStatusCount();
         ReadOrderStatusCount();
-
+        //writeData();
         return view;
     }
 
-//    private void writeData() {
-//        String key = notificationDbRef.document().getId();
-//        Notification notification = new Notification("PO-01", "3L22ABg6ttMLkzKEeSIm", CommonConstants.ORDER_STATUS_APPROVED);
-//        notification.setNotificationKey(key);
-//        notificationDbRef.document(key).set(notification);
-//    }
+    private void writeData() {
+        String key1 = notificationDbRef.document().getId();
+        Notification notification1 = new Notification();
+        notification1.setOrderKey("PKpB6EXFjb9JL11veL7x");
+        notification1.setID("PO-1");
+        notification1.setStatus(CommonConstants.ORDER_STATUS_APPROVED);
+        notification1.setNotificationKey(key1);
+        notificationDbRef.document(key1).set(notification1);
+
+        String key2 = notificationDbRef.document().getId();
+        Notification notification2 = new Notification();
+        notification2.setRequisitionKey("V0mx632Hx2fWDk4svs7m");
+        notification2.setID("REQ-1");
+        notification2.setStatus(CommonConstants.ORDER_STATUS_APPROVED);
+        notification2.setNotificationKey(key2);
+        notificationDbRef.document(key2).set(notification2);
+    }
 
 
     private void ReadData() {
-        inventoryDBRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @SuppressLint("SetTextI18n")
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.w(TAG, "Listen failed.", e);
-                }
-
-                notificationList.clear();
-
-                assert queryDocumentSnapshots != null;
-                for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                    Inventory inventory = document.toObject(Inventory.class);
-
-                    if (inventory.getQuantity() < 10) {
-
-                        System.out.println(inventory.getQuantity());
-                        String key = notificationDbRef.document().getId();
-                        Notification notification = new Notification("PO-01", "3L22ABg6ttMLkzKEeSIm", CommonConstants.ORDER_STATUS_DECLINED);
-                        notification.setNotificationKey(key);
-                        notificationDbRef.document(key).set(notification);
-                    }
-                }
-
-            }
-        });
 
         notificationDbRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @SuppressLint("SetTextI18n")
