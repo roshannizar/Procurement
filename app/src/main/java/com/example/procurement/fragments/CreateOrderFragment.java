@@ -64,8 +64,6 @@ import static com.example.procurement.utils.CommonConstants.ORDER_ID;
 public class CreateOrderFragment extends Fragment {
 
     private Spinner spCompany, spVendor;
-    private TextView txtOrderId, txtRequisitionId, txtDeliveryDate,
-            txtDescription, txtStatusView, txtSubTotal, txtTax, txtTotal, txtCurrentDate;
     private RecyclerView productItem;
     private Button btnGenerate;
     private ImageView btnBack;
@@ -81,7 +79,8 @@ public class CreateOrderFragment extends Fragment {
     private final String selectVendor = "Select Vendor";
     private ArrayList<Inventory> inventoryList;
     private ArrayList<Supplier> suppliersList;
-
+    private TextView txtOrderId, txtRequisitionId, txtDeliveryDate,
+            txtDescription, txtStatusView, txtSubTotal, txtTax, txtTotal, txtCurrentDate;
 
     public CreateOrderFragment(String requisitionKey) {
         this.requisitionKey = requisitionKey;
@@ -105,9 +104,9 @@ public class CreateOrderFragment extends Fragment {
 
         requisitionRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_REQUISITION).document(requisitionKey);
         orderDBRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_ORDER);
-        supplierDBRef = requisitionRef.collection(CommonConstants.COLLECTION_REQUISITION_SUPPLIER);
+        supplierDBRef = requisitionRef.collection(CommonConstants.COLLECTION_SUPPLIERS);
         sitesDBRef = FirebaseFirestore.getInstance().collection(CommonConstants.COLLECTION_SITES);
-        inventoryDBRef = requisitionRef.collection(CommonConstants.COLLECTION_REQUISITION_INVENTORY);
+        inventoryDBRef = requisitionRef.collection(CommonConstants.COLLECTION_INVENTORIES);
 
         mContext = getContext();
 
@@ -301,21 +300,7 @@ public class CreateOrderFragment extends Fragment {
 
                     if (inventoryList != null) {
                         adapter = new InventoryAdapter(mContext, inventoryList, "Order");
-//                        progressBar.setVisibility(View.GONE);
-//                        imgLoader.setVisibility(View.INVISIBLE);
-//                        txtLoader.setVisibility(View.INVISIBLE);
-//                        txtWait.setVisibility(View.INVISIBLE);
                         productItem.setAdapter(adapter);
-
-//                        if (orders.size() == 0) {
-//                            imgLoader.refreshDrawableState();
-//                            imgLoader.setImageResource(R.drawable.ic_safebox);
-//                            imgLoader.setVisibility(View.VISIBLE);
-//                            txtLoader.setVisibility(View.VISIBLE);
-//                            txtWait.setVisibility(View.VISIBLE);
-//                            txtLoader.setText("Purchase Order is empty!");
-//                            txtWait.setText("No point in waiting!");
-//                        }
                     }
 
                 }

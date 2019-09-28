@@ -42,9 +42,9 @@ import java.util.Objects;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 import static com.example.procurement.activities.SignInActivity.siteManagerDBRef;
+import static com.example.procurement.utils.CommonConstants.COLLECTION_INVENTORIES;
 import static com.example.procurement.utils.CommonConstants.COLLECTION_REQUISITION;
-import static com.example.procurement.utils.CommonConstants.COLLECTION_REQUISITION_INVENTORY;
-import static com.example.procurement.utils.CommonConstants.COLLECTION_REQUISITION_SUPPLIER;
+import static com.example.procurement.utils.CommonConstants.COLLECTION_SUPPLIERS;
 import static com.example.procurement.utils.CommonConstants.iInventory;
 import static com.example.procurement.utils.CommonConstants.iSupplier;
 
@@ -180,8 +180,8 @@ public class QuotationFragment extends Fragment {
                     });
 
             //Add Inventory Bulk Insert
-            CollectionReference inventoryRef = siteManagerDBRef.collection(COLLECTION_REQUISITION).document(key).collection(COLLECTION_REQUISITION_INVENTORY);
-            CollectionReference supplierRef = siteManagerDBRef.collection(COLLECTION_REQUISITION).document(key).collection(COLLECTION_REQUISITION_SUPPLIER);
+            CollectionReference inventoryRef = siteManagerDBRef.collection(COLLECTION_REQUISITION).document(key).collection(COLLECTION_INVENTORIES);
+            CollectionReference supplierRef = siteManagerDBRef.collection(COLLECTION_REQUISITION).document(key).collection(COLLECTION_SUPPLIERS);
 
             for (int i = 0; i < iInventory.size(); i++) {
 

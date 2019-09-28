@@ -67,7 +67,7 @@ public class InventoryDialog extends Fragment implements AdapterView.OnItemSelec
         btnSave = v.findViewById(R.id.btnSave);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        inventoryRef = FirebaseFirestore.getInstance().collection(CommonConstants.COLLECTION_INVENTORY);
+        inventoryRef = FirebaseFirestore.getInstance().collection(CommonConstants.COLLECTION_INVENTORIES);
         imgLoader = v.findViewById(R.id.imgInvLoader);
         txtLoader = v.findViewById(R.id.txtInvLoader);
         progressBar = v.findViewById(R.id.progressBar6);

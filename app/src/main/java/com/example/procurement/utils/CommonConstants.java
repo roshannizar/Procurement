@@ -16,9 +16,6 @@ public class CommonConstants {
     public static final String COLLECTION_SUPPLIERS = "suppliers";
     public static final String COLLECTION_SITES = "sites";
     public static final String COLLECTION_INVENTORIES= "inventories";
-    public static final String COLLECTION_REQUISITION_INVENTORY = "inventory";
-    public static final String COLLECTION_REQUISITION_SUPPLIER = "supplier";
-    public static final String COLLECTION_INVENTORY ="inventories";
 
     public static final String ORDER_STATUS_DECLINED = "Declined";
     public static final String ORDER_STATUS_PENDING = "Pending";
@@ -41,24 +38,5 @@ public class CommonConstants {
 
     public static String ORDER_ID = "PO-0";
     public static String REQUISITION_ID = "REQ-00";
-
-//    public static final int ORDER_STATUS_DECLINED = -1;
-//    public static final int ORDER_STATUS_PENDING = 0;
-//    public static final int ORDER_STATUS_APPROVED = 1;
-//    public static final int ORDER_STATUS_PLACED = 2;
-//    public static final int ORDER_STATUS_HOLD = 3;
-
-//    public static final String STATUS_DECLINED_STRING = "Declined";
-//    public static final String STATUS_PENDING_STRING = "Pending";
-//    public static final String STATUS_APPROVED_STRING = "Approved";
-//    public static final String STATUS_PLACED_STRING = "Placed";
-//    public static final String STATUS_HOLD_STRING = "Hold";
-//
-//    public static final int ORDER_STATUS_DECLINED = -1;
-//    public static final int ORDER_STATUS_PENDING = 0;
-//    public static final int ORDER_STATUS_APPROVED = 1;
-//    public static final int ORDER_STATUS_PLACED = 2;
-//    public static final int ORDER_STATUS_HOLD = 3;
-
 
 }
