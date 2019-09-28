@@ -46,7 +46,7 @@ public class RequisitionActivityFragment extends Fragment {
     private Button btnQuotation;
     private EditText txtRequisitionNo,txtPurpose,txtComments;
     private TextView txtDeliveryDate,txtTotalAmount,btnGenerate,btnAddItems,txtStatus;
-    static String REQUISITION_NO= REQUISITION_ID,PURPOSE,COMMENTS="",DELIVERY_DATE="",TOTAL_AMOUNT="",RADIO="";
+    static String REQUISITION_NO= REQUISITION_ID,PURPOSE,COMMENTS="",DELIVERY_DATE="",TOTAL_AMOUNT="",RADIO="",REQUISITION_STATUS="";
 
     public RequisitionActivityFragment() {
 
@@ -269,6 +269,7 @@ public class RequisitionActivityFragment extends Fragment {
                             COMMENTS = txtComments.getText().toString();
                             DELIVERY_DATE = txtDeliveryDate.getText().toString();
                             TOTAL_AMOUNT = txtTotalAmount.getText().toString();
+                            REQUISITION_STATUS = txtStatus.getText().toString();
 
                             RequisitionActivity.fm2.beginTransaction().replace(R.id.fragment_container_requisition, new QuotationFragment(), null).commit();
                         } else {
