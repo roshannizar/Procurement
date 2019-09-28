@@ -51,7 +51,11 @@ public class SupplierDialogAdapter extends RecyclerView.Adapter<SupplierDialogAd
         final Supplier supplier = iSupp.get(position);
 
         holder.checkBox.setText(supplier.getSupplierName());
-        holder.txtExpectedDate.setText(supplier.getExpectedDate());
+        final Calendar c = Calendar.getInstance();
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        int month = c.get(Calendar.MONTH);
+        int year = c.get(Calendar.YEAR);
+        holder.txtExpectedDate.setText(day+"/"+(month+1)+"/"+year);
 
         holder.txtExpectedDate.setOnClickListener(
                 new View.OnClickListener() {
@@ -95,7 +99,6 @@ public class SupplierDialogAdapter extends RecyclerView.Adapter<SupplierDialogAd
                         }
                     }
             );
-
         }
     }
 
@@ -122,6 +125,7 @@ public class SupplierDialogAdapter extends RecyclerView.Adapter<SupplierDialogAd
             txtStatus = view.findViewById(R.id.txtSupplierStatus);
             checkBox = view.findViewById(R.id.cbItemSupplier);
 
+            checkBox.setEnabled(false);
             checkBox.setClickable(false);
         }
     }
