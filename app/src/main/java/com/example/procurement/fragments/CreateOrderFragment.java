@@ -126,7 +126,7 @@ public class CreateOrderFragment extends Fragment {
         productItem = rootView.findViewById(R.id.rvItemView);
         btnGenerate = rootView.findViewById(R.id.btnGenerate);
 
-        adapter = new InventoryAdapter(mContext, inventoryList, "Order");
+        adapter = new InventoryAdapter(inventoryList, "Order");
         productItem.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         productItem.setItemAnimator(new DefaultItemAnimator());
 
@@ -299,7 +299,7 @@ public class CreateOrderFragment extends Fragment {
 
 
                     if (inventoryList != null) {
-                        adapter = new InventoryAdapter(mContext, inventoryList, "Order");
+                        adapter = new InventoryAdapter(inventoryList, "Order");
                         productItem.setAdapter(adapter);
                     }
 

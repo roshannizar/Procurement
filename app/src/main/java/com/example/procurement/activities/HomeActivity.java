@@ -15,7 +15,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.procurement.R;
 import com.example.procurement.fragments.DashboardFragment;
-import com.example.procurement.fragments.InventoryDialog;
 import com.example.procurement.fragments.OrderStatusFragment;
 import com.example.procurement.fragments.ProfileFragment;
 import com.example.procurement.fragments.RequisitionViewFragment;
@@ -56,7 +55,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         if (item.getItemId() == R.id.signout) {
             SignOutUser();

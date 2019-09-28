@@ -114,7 +114,7 @@ public class EditOrderFragment extends Fragment {
         txtTotal = rootView.findViewById(R.id.txtTotal);
         productItem = rootView.findViewById(R.id.rvItemView);
 
-        adapter = new InventoryAdapter(getActivity(), inventoryList, "Order");
+        adapter = new InventoryAdapter(inventoryList, "Order");
         productItem.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         productItem.setItemAnimator(new DefaultItemAnimator());
 
@@ -202,7 +202,7 @@ public class EditOrderFragment extends Fragment {
                 }
 
                 if (inventoryList != null) {
-                    adapter = new InventoryAdapter(mContext, inventoryList, "Order");
+                    adapter = new InventoryAdapter(inventoryList, "Order");
                     productItem.setAdapter(adapter);
                 }
             }

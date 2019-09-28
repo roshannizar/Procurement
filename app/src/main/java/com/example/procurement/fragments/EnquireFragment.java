@@ -81,7 +81,7 @@ public class EnquireFragment extends Fragment {
                 .collection(CommonConstants.COLLECTION_ENQUIRIES);
 
         enquireList = new ArrayList<>();
-        mAdapter = new EnquireAdapter(mContext, enquireList);
+        mAdapter = new EnquireAdapter(enquireList);
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(mContext);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -199,7 +199,7 @@ public class EnquireFragment extends Fragment {
 
 
                 if (enquireList != null) {
-                    mAdapter = new EnquireAdapter(mContext, enquireList);
+                    mAdapter = new EnquireAdapter(enquireList);
                     imgLoader.setVisibility(View.INVISIBLE);
                     txtLoader.setVisibility(View.INVISIBLE);
                     txtWait.setVisibility(View.INVISIBLE);

@@ -123,7 +123,7 @@ public class RequisitionViewFragment extends Fragment {
                         Collections.reverse(iRequisition);
 
                         if (iRequisition != null) {
-                            requisitionAdapter = new RequisitionAdapter(c, iRequisition);
+                            requisitionAdapter = new RequisitionAdapter(iRequisition);
                             progressBar.setVisibility(View.GONE);
                             imgLoader.setVisibility(View.INVISIBLE);
                             txtLoader.setVisibility(View.INVISIBLE);
@@ -208,19 +208,19 @@ public class RequisitionViewFragment extends Fragment {
                 public void onClick(DialogInterface dialog, int which) {
                     switch (which) {
                         case 0:
-                            requisitionAdapter = new RequisitionAdapter(c, approvedStatus.meetRequisitionStatus(iRequisition));
+                            requisitionAdapter = new RequisitionAdapter(approvedStatus.meetRequisitionStatus(iRequisition));
                             break;
                         case 1:
-                            requisitionAdapter = new RequisitionAdapter(c, declinedStatus.meetRequisitionStatus(iRequisition));
+                            requisitionAdapter = new RequisitionAdapter(declinedStatus.meetRequisitionStatus(iRequisition));
                             break;
                         case 2:
-                            requisitionAdapter = new RequisitionAdapter(c, holdStatus.meetRequisitionStatus(iRequisition));
+                            requisitionAdapter = new RequisitionAdapter(holdStatus.meetRequisitionStatus(iRequisition));
                             break;
                         case 3:
-                            requisitionAdapter = new RequisitionAdapter(c, pendingStatus.meetRequisitionStatus(iRequisition));
+                            requisitionAdapter = new RequisitionAdapter(pendingStatus.meetRequisitionStatus(iRequisition));
                             break;
                         default:
-                            requisitionAdapter = new RequisitionAdapter(c, iRequisition);
+                            requisitionAdapter = new RequisitionAdapter(iRequisition);
                             break;
                     }
                     setCheckedItem(which);

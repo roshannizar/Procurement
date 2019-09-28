@@ -6,8 +6,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
+
 import androidx.core.content.FileProvider;
+
 import com.example.procurement.R;
+
 import java.io.File;
 import java.util.List;
 
@@ -19,9 +22,6 @@ public class FileUtils {
         String urlString = url.toString().toLowerCase();
         Intent intent = new Intent(Intent.ACTION_VIEW);
 
-        /**
-         * Security
-         */
         List<ResolveInfo> resInfoList = context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
         for (ResolveInfo resolveInfo : resInfoList) {
             String packageName = resolveInfo.activityInfo.packageName;
@@ -39,6 +39,7 @@ public class FileUtils {
             // PDF file
             intent.setDataAndType(uri, "application/pdf");
         } else {
+            //any application
             intent.setDataAndType(uri, "*/*");
         }
 
@@ -56,9 +57,6 @@ public class FileUtils {
                 + File.separator
                 + context.getResources().getString(R.string.app_name)
                 + File.separator);
-        if (!dir.exists()) {
-            dir.mkdir();
-        }
         return dir.getPath() + File.separator;
     }
 

@@ -154,7 +154,7 @@ public class DashboardFragment extends Fragment {
 
                 if (notificationList != null) {
                     Collections.reverse(notificationList);
-                    adapter = new NotificationAdapter(mContext, notificationList);
+                    adapter = new NotificationAdapter(notificationList);
                     progressBar.setVisibility(View.GONE);
                     txtNoti.setVisibility(View.INVISIBLE);
                     imgNoti.setVisibility(View.INVISIBLE);

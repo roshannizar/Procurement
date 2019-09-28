@@ -1,7 +1,6 @@
 package com.example.procurement.adapters;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -10,19 +9,13 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.procurement.R;
-import com.example.procurement.fragments.RequisitionActivityFragment;
 import com.example.procurement.models.Inventory;
-import com.example.procurement.models.InventoryData;
-import com.example.procurement.models.Supplier;
 import com.example.procurement.utils.CommonConstants;
 
 import java.util.ArrayList;
@@ -30,16 +23,14 @@ import java.util.ArrayList;
 public class InventoryDialogAdapter extends RecyclerView.Adapter<InventoryDialogAdapter.ViewHolder> {
 
     private ArrayList<Inventory> listData;
-    private Context c;
 
-    public InventoryDialogAdapter(Context c, ArrayList<Inventory> listData) {
-        this.c = c;
+    public InventoryDialogAdapter(ArrayList<Inventory> listData) {
         this.listData = listData;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_supplier_item_list, parent, false);
 
         return new ViewHolder(itemView);
@@ -47,9 +38,9 @@ public class InventoryDialogAdapter extends RecyclerView.Adapter<InventoryDialog
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         final Inventory inventoryData = listData.get(position);
-        final double sum = inventoryData.getUnitprice() * inventoryData.getQuantity();
+        //final double sum = inventoryData.getUnitprice() * inventoryData.getQuantity();
         holder.checkBox.setText(inventoryData.getItemName());
         holder.txtQty.setText("0");
         holder.txtunitprice.setText(String.valueOf(inventoryData.getUnitprice()));
@@ -62,7 +53,7 @@ public class InventoryDialogAdapter extends RecyclerView.Adapter<InventoryDialog
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(holder.txtQty.getText().toString() != "0" || holder.txtQty.getText().toString() != null) {
+                if(!holder.txtQty.getText().toString().equals("0")) {
                     holder.checkBox.setClickable(true);
                     holder.checkBox.setEnabled(true);
                     holder.checkBox.setOnCheckedChangeListener(
