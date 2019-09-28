@@ -45,8 +45,6 @@ public class InventoryDialog extends Fragment implements AdapterView.OnItemSelec
     private RecyclerView recyclerView;
     private ArrayList<Inventory> listData;
     private TextView btnSave,txtLoader;
-    private SeekBar skCount;
-    private InventoryData d,d1,d2,d3,d4;
     private InventoryDialogAdapter inventoryDialogAdapter;
     private Context c;
     private ImageView imgLoader;
@@ -63,7 +61,6 @@ public class InventoryDialog extends Fragment implements AdapterView.OnItemSelec
         View v = inflater.inflate(R.layout.layout_inventory_dialog, container, false);
 
         recyclerView = v.findViewById(R.id.checkBoxRecycle);
-        skCount = v.findViewById(R.id.seekBar);
         c = v.getContext();
         listData = new ArrayList<>();
         inventoryDialogAdapter = new InventoryDialogAdapter(c,listData);
@@ -107,7 +104,6 @@ public class InventoryDialog extends Fragment implements AdapterView.OnItemSelec
                             Inventory inventory = document.toObject(Inventory.class);
                             listData.add(inventory);
                         }
-                        Collections.reverse(listData);
 
                         if (listData != null) {
                             inventoryDialogAdapter = new InventoryDialogAdapter(c, listData);

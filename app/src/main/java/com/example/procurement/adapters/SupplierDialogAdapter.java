@@ -78,7 +78,7 @@ public class SupplierDialogAdapter extends RecyclerView.Adapter<SupplierDialogAd
         holder.txtStatus.setText(supplier.getSupplierStatus());
 
         if(holder.txtOffer.getText().toString() != "" || holder.txtOffer.getText().toString()!= null){
-            holder.checkBox.setEnabled(true);
+            holder.checkBox.setClickable(true);
             holder.checkBox.setOnCheckedChangeListener(
                     new CheckBox.OnCheckedChangeListener() {
                         @Override
@@ -122,7 +122,7 @@ public class SupplierDialogAdapter extends RecyclerView.Adapter<SupplierDialogAd
             txtStatus = view.findViewById(R.id.txtSupplierStatus);
             checkBox = view.findViewById(R.id.cbItemSupplier);
 
-            checkBox.setEnabled(false);
+            checkBox.setClickable(false);
         }
     }
 }
