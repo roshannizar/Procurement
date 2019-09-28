@@ -70,7 +70,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView60" />
 
             <Spinner
-                android:id="@+id/spinner2"
+                android:id="@+id/spRecommendedSupplier"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -152,7 +152,7 @@
                 android:text="Reason:"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spinner2" />
+                app:layout_constraintTop_toBottomOf="@+id/spRecommendedSupplier" />
 
             <TextView
                 android:id="@+id/textView59"

@@ -15,18 +15,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.procurement.R;
 import com.example.procurement.activities.RequisitionActivity;
-import com.example.procurement.adapters.InventoryAdapter;
 import com.example.procurement.adapters.SupplierAdapter;
 import com.example.procurement.models.Inventory;
-import com.example.procurement.models.Order;
 import com.example.procurement.models.Requisition;
 import com.example.procurement.models.Supplier;
 import com.example.procurement.utils.CommonConstants;
@@ -35,34 +35,32 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Objects;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 import static com.example.procurement.activities.SignInActivity.siteManagerDBRef;
 import static com.example.procurement.utils.CommonConstants.COLLECTION_REQUISITION;
 import static com.example.procurement.utils.CommonConstants.COLLECTION_REQUISITION_INVENTORY;
 import static com.example.procurement.utils.CommonConstants.COLLECTION_REQUISITION_SUPPLIER;
-import static com.example.procurement.utils.CommonConstants.COLLECTION_SITE_MANGER;
 import static com.example.procurement.utils.CommonConstants.iInventory;
 import static com.example.procurement.utils.CommonConstants.iSupplier;
 
 public class QuotationFragment extends Fragment {
 
     private RecyclerView recyclerView;
-    private Supplier s;
     private SupplierAdapter supplierAdapter;
     private Context context;
     private Button btnPlacedRequisition,btnBackRequisition;
     private EditText txtReason;
     private TextView txtProposalDate,txtProposedBy,btnAddSupplier;
-    private CollectionReference requisitionRef,inventoryRef,supplierRef;
+    private CollectionReference requisitionRef;
     private final Calendar c = Calendar.getInstance();
     private ProgressBar createProgressBar;
     private FirebaseAuth mAuth;
+    private Spinner spRecommendedSupplier;
 
     public QuotationFragment() {
 
@@ -81,6 +79,7 @@ public class QuotationFragment extends Fragment {
         createProgressBar = v.findViewById(R.id.createProgressBar);
         createProgressBar.setVisibility(View.INVISIBLE);
         btnAddSupplier = v.findViewById(R.id.btnAddSupplier);
+        spRecommendedSupplier = v.findViewById(R.id.spRecommendedSupplier);
         mAuth = FirebaseAuth.getInstance();
         requisitionRef = siteManagerDBRef.collection(COLLECTION_REQUISITION);
 
@@ -95,6 +94,7 @@ public class QuotationFragment extends Fragment {
         setProposalDate();
         WriteDataValues();
         AddSupplier();
+        RecommendedSupplier();
 
         return v;
     }
@@ -124,6 +124,24 @@ public class QuotationFragment extends Fragment {
         );
     }
 
+    private void RecommendedSupplier() {
+
+        if(CommonConstants.iSupplier != null) {
+            ArrayList<String> arraylist = new ArrayList<>();
+
+            for (int i = 0; i < CommonConstants.iSupplier.size(); i++) {
+
+                Supplier supplier = CommonConstants.iSupplier.get(i);
+
+                arraylist.add(supplier.getSupplierName());
+            }
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(getContext()), android.R.layout.simple_spinner_item, arraylist);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spRecommendedSupplier.setAdapter(adapter);
+        }
+    }
+
     private void WriteDataValues() {
         supplierAdapter = new SupplierAdapter(context, CommonConstants.iSupplier);
         recyclerView.setAdapter(supplierAdapter);
@@ -145,7 +163,6 @@ public class QuotationFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        //Toast.makeText(getContext(),"Requisition placed successfully!",Toast.LENGTH_LONG).show();
                         Log.d(TAG, "Requisition placed successfully!");
                     }
                 })
@@ -158,8 +175,8 @@ public class QuotationFragment extends Fragment {
                 });
 
         //Add Inventory Bulk Insert
-        inventoryRef = siteManagerDBRef.collection(COLLECTION_REQUISITION).document(key).collection(COLLECTION_REQUISITION_INVENTORY);
-        supplierRef = siteManagerDBRef.collection(COLLECTION_REQUISITION).document(key).collection(COLLECTION_REQUISITION_SUPPLIER);
+        CollectionReference inventoryRef = siteManagerDBRef.collection(COLLECTION_REQUISITION).document(key).collection(COLLECTION_REQUISITION_INVENTORY);
+        CollectionReference supplierRef = siteManagerDBRef.collection(COLLECTION_REQUISITION).document(key).collection(COLLECTION_REQUISITION_SUPPLIER);
 
         for(int i=0;i<iInventory.size();i++) {
 
@@ -172,7 +189,6 @@ public class QuotationFragment extends Fragment {
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            //Toast.makeText(getContext(),"Inventory placed successfully!",Toast.LENGTH_LONG).show();
                             Log.d(TAG, "Inventory placed successfully!");
                         }
                     })
