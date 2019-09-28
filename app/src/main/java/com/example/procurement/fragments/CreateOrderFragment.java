@@ -125,7 +125,7 @@ public class CreateOrderFragment extends Fragment {
         productItem = rootView.findViewById(R.id.rvItemView);
         btnGenerate = rootView.findViewById(R.id.btnGenerate);
 
-        adapter = new InventoryAdapter(mContext, CommonConstants.iInventory, "Order");
+        adapter = new InventoryAdapter(mContext, inventoryList, "Order");
         productItem.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         productItem.setItemAnimator(new DefaultItemAnimator());
 
@@ -504,15 +504,12 @@ public class CreateOrderFragment extends Fragment {
             spVendor.setBackgroundResource(R.drawable.text_box);
             spCompany.setBackgroundResource(R.drawable.text_box_empty);
             value = false;
-        } else  if (txtDescription.getText().toString().equals("")) {
+        } else if (txtDescription.getText().toString().equals("")) {
             spCompany.setBackgroundResource(R.drawable.text_box);
             txtDescription.setBackgroundResource(R.drawable.text_box_empty);
             value = false;
-        }else if (txtDescription.getText().toString().equals("")) {
-            txtDescription.setBackgroundResource(R.drawable.text_box);
-            txtDeliveryDate.setBackgroundResource(R.drawable.text_box_empty);
-            value = false;
         } else {
+            txtDescription.setBackgroundResource(R.drawable.text_box);
             value = true;
         }
 
