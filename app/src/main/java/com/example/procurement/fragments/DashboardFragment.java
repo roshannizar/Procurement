@@ -73,11 +73,7 @@ public class DashboardFragment extends Fragment {
 
         mAuth = FirebaseAuth.getInstance();
 
-        requisitionRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_REQUISITION);
-        orderDBRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_ORDER);
 
-        iRequisition = new ArrayList<>();
-        orders = new ArrayList<>();
 
         txtUserName = view.findViewById(R.id.txtUserName);
         txtMonthDate = view.findViewById(R.id.txtMonthData);
@@ -98,8 +94,13 @@ public class DashboardFragment extends Fragment {
         setDate();
 
         notificationDbRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_NOTIFICATION);
+        requisitionRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_REQUISITION);
+        orderDBRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_ORDER);
 
+        iRequisition = new ArrayList<>();
+        orders = new ArrayList<>();
         notifications = new ArrayList<>();
+
         recyclerView = view.findViewById(R.id.rvNotification);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -277,8 +278,7 @@ public class DashboardFragment extends Fragment {
                                 case CommonConstants.REQUISITION_STATUS_HOLD:
                                     reqHold++;
                                     break;
-                                    default:
-                                        System.out.println("Nothing");
+                                    default: System.out.println("Nothing");
                             }
                         }
                     }
