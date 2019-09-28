@@ -63,8 +63,8 @@ public class InventoryDialogAdapter extends RecyclerView.Adapter<InventoryDialog
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if(holder.txtQty.getText().toString() != "0" || holder.txtQty.getText().toString() != null) {
-
                     holder.checkBox.setClickable(true);
+                    holder.checkBox.setEnabled(true);
                     holder.checkBox.setOnCheckedChangeListener(
                             new CheckBox.OnCheckedChangeListener() {
                                 @Override
@@ -145,6 +145,7 @@ public class InventoryDialogAdapter extends RecyclerView.Adapter<InventoryDialog
             txtIncrease = view.findViewById(R.id.increase);
             checkBox = view.findViewById(R.id.cbItem);
 
+            checkBox.setEnabled(false);
             checkBox.setClickable(false);
         }
     }
