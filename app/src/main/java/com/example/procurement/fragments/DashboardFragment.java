@@ -43,8 +43,8 @@ import static com.example.procurement.activities.SignInActivity.siteManagerDBRef
 
 public class DashboardFragment extends Fragment {
 
-    private int reqApproved,reqHold,reqPending,reqDeclined,orderApproved,orderDraft,orderPending,orderDeclined,orderPlaced,reqTotalAmount;
-    private CollectionReference requisitionRef,orderDBRef;
+    private int reqApproved, reqHold, reqPending, reqDeclined, orderApproved, orderDraft, orderPending, orderDeclined, orderPlaced, reqTotalAmount;
+    private CollectionReference requisitionRef, orderDBRef;
     private ArrayList<Requisition> iRequisition;
     private ArrayList<Order> orders;
 
@@ -55,7 +55,7 @@ public class DashboardFragment extends Fragment {
     private CollectionReference notificationDbRef;
     private Context mContext;
     private ProgressBar progressBar;
-    private TextView txtUserName,txtNoti,txtMonthDate,txtApprovedCount,txtHoldCount,txtDeclinedCount,txtPendingCount,txtPending,txtDecline,txtDraft,txtTotalOrder,txtPlacedCount;
+    private TextView txtUserName, txtNoti, txtMonthDate, txtApprovedCount, txtHoldCount, txtDeclinedCount, txtPendingCount, txtPending, txtDecline, txtDraft, txtTotalOrder, txtPlacedCount;
     private FirebaseAuth mAuth;
     private ImageView imgNoti;
 
@@ -72,7 +72,6 @@ public class DashboardFragment extends Fragment {
         mContext = view.getContext();
 
         mAuth = FirebaseAuth.getInstance();
-
 
 
         txtUserName = view.findViewById(R.id.txtUserName);
@@ -109,7 +108,6 @@ public class DashboardFragment extends Fragment {
         ReadRequisitionStatusCount();
         ReadOrderStatusCount();
 
-        SetCount();
         return view;
     }
 
@@ -127,11 +125,11 @@ public class DashboardFragment extends Fragment {
         txtHoldCount.setText(String.valueOf(reqHold));
         txtDeclinedCount.setText(String.valueOf(reqDeclined));
         //progressBar.setProgress(StatusCountUtil.reqTotalAmount);
-        txtPlacedCount.setText(orderPlaced+ " Order(s) Placed");
-        txtTotalOrder.setText(orderPending+" Order(s) Pending");
-        txtPending.setText(orderApproved+" Order(s) Approved");
-        txtDecline.setText(orderDeclined+" Order(s) Declined");
-        txtDraft.setText(orderDraft+" Orders(s) Drafted");
+        txtPlacedCount.setText(orderApproved + " Order(s) Approved");
+        txtTotalOrder.setText(orderPlaced + " Order(s) Placed");
+        txtPending.setText(orderPending + " Order(s) Pending");
+        txtDecline.setText(orderDeclined + " Order(s) Declined");
+        txtDraft.setText(orderDraft + " Orders(s) Drafted");
     }
 
     private void ReadData() {
@@ -163,7 +161,7 @@ public class DashboardFragment extends Fragment {
                 }
 
                 assert notifications != null;
-                if(notifications.size() == 0) {
+                if (notifications.size() == 0) {
                     imgNoti.setImageResource(R.drawable.ic_email);
                     imgNoti.setVisibility(View.VISIBLE);
                     txtNoti.setVisibility(View.VISIBLE);
@@ -266,11 +264,11 @@ public class DashboardFragment extends Fragment {
                             switch (requisition.getRequisitionStatus()) {
                                 case CommonConstants.REQUISITION_STATUS_APPROVED:
                                     reqApproved++;
-                                    System.out.println("Approved: "+reqApproved);
+                                    System.out.println("Approved: " + reqApproved);
                                     break;
                                 case CommonConstants.REQUISITION_STATUS_PENDING:
                                     reqPending++;
-                                    System.out.println("Pending: "+reqPending);
+                                    System.out.println("Pending: " + reqPending);
                                     break;
                                 case CommonConstants.REQUISITION_STATUS_DECLINED:
                                     reqDeclined++;
@@ -278,9 +276,13 @@ public class DashboardFragment extends Fragment {
                                 case CommonConstants.REQUISITION_STATUS_HOLD:
                                     reqHold++;
                                     break;
-                                    default: System.out.println("Nothing");
+                                default:
+                                    System.out.println("Nothing");
                             }
                         }
+
+                        SetCount();
+
                     }
                 }
         );
@@ -318,9 +320,13 @@ public class DashboardFragment extends Fragment {
                                 case CommonConstants.ORDER_STATUS_PLACED:
                                     orderPlaced++;
                                     break;
-                                    default: System.out.println("Nothing");
+                                default:
+                                    System.out.println("Nothing");
                             }
                         }
+
+                        SetCount();
+
                     }
                 }
         );
