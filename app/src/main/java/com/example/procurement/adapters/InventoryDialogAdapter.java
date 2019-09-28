@@ -81,7 +81,7 @@ public class InventoryDialogAdapter extends RecyclerView.Adapter<InventoryDialog
                 }
         );
 
-        if(holder.txtQty.getText().toString() != "" || holder.txtQty.getText().toString() != null) {
+        if(holder.txtQty.getText().toString() != "0" || holder.txtQty.getText().toString() != null) {
 
             holder.checkBox.setEnabled(true);
             holder.checkBox.setOnCheckedChangeListener(
