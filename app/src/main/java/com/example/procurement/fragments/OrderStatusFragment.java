@@ -58,7 +58,6 @@ public class OrderStatusFragment extends Fragment {
     private Context mContext;
     private ImageView imgLoader;
     private TextView txtLoader, txtWait;
-    static int pendingStatus = 0, approvedStatus = 0, placedStatus = 0, declinedStatus = 0, draftStatus = 0;
 
     public OrderStatusFragment() {
     }
@@ -67,11 +66,6 @@ public class OrderStatusFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        pendingStatus = 0;
-        approvedStatus = 0;
-        placedStatus = 0;
-        declinedStatus = 0;
-        draftStatus = 0;
     }
 
     @Override
@@ -126,7 +120,6 @@ public class OrderStatusFragment extends Fragment {
                 if (queryDocumentSnapshots != null) {
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                         Order order = document.toObject(Order.class);
-                        countStatus(order.getOrderStatus());
                         orders.add(order);
                     }
 
@@ -244,26 +237,4 @@ public class OrderStatusFragment extends Fragment {
 
         return super.onOptionsItemSelected(item);
     }
-
-    private void countStatus(String status) {
-
-        switch (status) {
-            case CommonConstants.ORDER_STATUS_PENDING:
-                pendingStatus++;
-                break;
-            case CommonConstants.ORDER_STATUS_APPROVED:
-                approvedStatus++;
-                break;
-            case CommonConstants.ORDER_STATUS_PLACED:
-                placedStatus++;
-                break;
-            case CommonConstants.ORDER_STATUS_DECLINED:
-                declinedStatus++;
-                break;
-            case CommonConstants.ORDER_STATUS_DRAFT:
-                draftStatus++;
-                break;
-        }
-    }
-
 }

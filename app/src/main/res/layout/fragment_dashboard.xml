@@ -89,13 +89,13 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginBottom="16dp"
-                        android:background="@drawable/badge"
+                        android:background="@drawable/badge_placed"
                         android:paddingLeft="10dp"
                         android:paddingTop="5dp"
                         android:paddingRight="10dp"
                         android:paddingBottom="5dp"
-                        android:text="18 Order(s) Totally"
-                        android:textColor="@color/colorDarkGreen"
+                        android:text="18 Orders(s) Approved"
+                        android:textColor="@color/colorWhiteSmoke"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/txtPlacedCounts"
                         app:layout_constraintStart_toStartOf="parent"
@@ -108,7 +108,7 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginBottom="16dp"
-                        android:background="@drawable/badge_two"
+                        android:background="@drawable/badge_approved"
                         android:paddingLeft="10dp"
                         android:paddingTop="5dp"
                         android:paddingRight="10dp"
@@ -120,7 +120,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/textView16"
+                        android:id="@+id/txtDraftCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
@@ -136,6 +136,43 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/txtPlacedCounts"
                         app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/txtPending"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/badge_pending"
+                        android:paddingLeft="10dp"
+                        android:paddingTop="5dp"
+                        android:paddingRight="10dp"
+                        android:paddingBottom="5dp"
+                        android:text="2 Order(s) Pending"
+                        android:textColor="@color/colorWhiteSmoke"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/txtDraftCount"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/txtDecline"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/badge_denied"
+                        android:paddingLeft="10dp"
+                        android:paddingTop="5dp"
+                        android:paddingRight="10dp"
+                        android:paddingBottom="5dp"
+                        android:text="2 Order(s) Declined"
+                        android:textColor="@color/colorWhiteSmoke"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/txtPending"
+                        app:layout_constraintTop_toTopOf="parent" />
+
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </HorizontalScrollView>
