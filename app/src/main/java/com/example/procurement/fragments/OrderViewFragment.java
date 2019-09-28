@@ -1,6 +1,5 @@
 package com.example.procurement.fragments;
 
-
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -35,8 +34,12 @@ import com.example.procurement.utils.CommonConstants;
 import com.example.procurement.utils.FileUtils;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
@@ -52,25 +55,24 @@ import com.itextpdf.text.pdf.draw.LineSeparator;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+import static androidx.constraintlayout.widget.Constraints.TAG;
 import static com.example.procurement.activities.SignInActivity.siteManagerDBRef;
 
 public class OrderViewFragment extends Fragment {
-    private static final String TAG = "OrderViewFragment";
-
     private String orderKey;
     private Order order;
-    private CollectionReference orderDBRef;
+    private DocumentReference orderDBRef;
     private ImageView btnBack;
     private RecyclerView productItemView;
     private EditText etCompany, etVendor;
     private TextView txtOrderId, txtRequisitionId, txtDeliveryDate,
             txtDescription, txtStatusView, txtSubTotal, txtTax, txtTotal, txtOrderedDate;
     private Button btnUpdate;
-    private ArrayList<Inventory> iInventory;
-    private InventoryAdapter inventoryAdapter;
-    private Inventory i;
+    private ArrayList<Inventory> inventoryList;
+    private InventoryAdapter adapter;
     private Font titleFont, blackFont;
     private Document document;
     private Context mContext;
@@ -92,7 +94,7 @@ public class OrderViewFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_purchase_order_view, container, false);
 
-        orderDBRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_ORDER);
+        orderDBRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_ORDER).document(orderKey);
         mContext = getActivity();
 
         btnBack = rootView.findViewById(R.id.btnBack);
@@ -109,11 +111,11 @@ public class OrderViewFragment extends Fragment {
         etVendor = rootView.findViewById(R.id.etVendor);
         btnUpdate = rootView.findViewById(R.id.btnUpdate);
 
-        iInventory = new ArrayList<>();
-        inventoryAdapter = new InventoryAdapter(getActivity(), iInventory,"Order");
+        inventoryList = new ArrayList<>();
+        adapter = new InventoryAdapter(getActivity(), inventoryList, "Order");
 
         productItemView = rootView.findViewById(R.id.rvItemView);
-        productItemView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        productItemView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         productItemView.setItemAnimator(new DefaultItemAnimator());
 
         btnUpdate.setText("Delete");
@@ -121,22 +123,9 @@ public class OrderViewFragment extends Fragment {
 
         DeleteOrder();
         readData();
-        //WriteDataValues();
         getBack();
 
         return rootView;
-    }
-
-    private void WriteDataValues() {
-
-        for (int j = 1; j <= 5; j++) {
-            i = new Inventory(String.valueOf(j), "Sand Heap", "", 7, 2);
-            iInventory.add(i);
-        }
-
-
-        inventoryAdapter = new InventoryAdapter(getActivity(), iInventory,"Order");
-        productItemView.setAdapter(inventoryAdapter);
     }
 
     @Override
@@ -173,7 +162,7 @@ public class OrderViewFragment extends Fragment {
     }
 
     private void readData() {
-        orderDBRef.document(orderKey).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        orderDBRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 order = new Order();
@@ -215,15 +204,56 @@ public class OrderViewFragment extends Fragment {
                             txtStatusView.setBackgroundResource(R.drawable.badge_denied);
                     }
 
+                    DecimalFormat df = new DecimalFormat("#.##");
                     double subTotal = order.getSubTotal();
-                    double tax = subTotal * 0.10;
+                    double tax = subTotal * 0.10d;
                     double total = subTotal + tax;
                     txtSubTotal.setText(String.valueOf(subTotal));
-                    txtTax.setText(String.valueOf(tax));
+                    txtTax.setText((df.format(tax)));
                     txtTotal.setText(String.valueOf(total));
+
                 }
             }
         });
+
+        orderDBRef.collection(CommonConstants.COLLECTION_INVENTORIES).addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e);
+                }
+
+                if (queryDocumentSnapshots != null) {
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        Inventory inventory = document.toObject(Inventory.class);
+                        inventoryList.add(inventory);
+                        System.out.println(inventory.getItemName());
+                    }
+
+
+                    if (inventoryList != null) {
+                        adapter = new InventoryAdapter(mContext, inventoryList, "Order");
+//                        progressBar.setVisibility(View.GONE);
+//                        imgLoader.setVisibility(View.INVISIBLE);
+//                        txtLoader.setVisibility(View.INVISIBLE);
+//                        txtWait.setVisibility(View.INVISIBLE);
+                        productItemView.setAdapter(adapter);
+
+//                        if (orders.size() == 0) {
+//                            imgLoader.refreshDrawableState();
+//                            imgLoader.setImageResource(R.drawable.ic_safebox);
+//                            imgLoader.setVisibility(View.VISIBLE);
+//                            txtLoader.setVisibility(View.VISIBLE);
+//                            txtWait.setVisibility(View.VISIBLE);
+//                            txtLoader.setText("Purchase Order is empty!");
+//                            txtWait.setText("No point in waiting!");
+//                        }
+                    }
+
+                }
+            }
+        });
+
     }
 
     private void changeStatusOrder() {
@@ -233,8 +263,7 @@ public class OrderViewFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 order.setOrderStatus(getString(R.string.placed));
-                orderDBRef.document(order.getOrderKey())
-                        .set(order)
+                orderDBRef.set(order)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
@@ -275,8 +304,7 @@ public class OrderViewFragment extends Fragment {
                             .setCancelable(false)
                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
-                                    orderDBRef.document(orderKey)
-                                            .delete()
+                                    orderDBRef.delete()
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
                                                 public void onSuccess(Void aVoid) {
