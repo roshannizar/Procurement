@@ -120,7 +120,7 @@ public class OrderViewFragment extends Fragment {
         btnUpdate = rootView.findViewById(R.id.btnUpdate);
 
         inventoryList = new ArrayList<>();
-        adapter = new InventoryAdapter(getActivity(), inventoryList, "Order");
+        adapter = new InventoryAdapter(inventoryList, "Order");
 
         productItemView = rootView.findViewById(R.id.rvItemView);
         productItemView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
@@ -240,7 +240,7 @@ public class OrderViewFragment extends Fragment {
 
 
                     if (inventoryList != null) {
-                        adapter = new InventoryAdapter(mContext, inventoryList, "Order");
+                        adapter = new InventoryAdapter(inventoryList, "Order");
                         productItemView.setAdapter(adapter);
                     }
 

@@ -1,6 +1,6 @@
 package com.example.procurement.adapters;
 
-import android.content.Context;
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,25 +19,23 @@ import java.util.ArrayList;
 public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.ViewHolder> {
 
     private ArrayList<Inventory> iList;
-    private Context c;
     private String classType;
 
-    public InventoryAdapter(Context c, ArrayList<Inventory> iList,String classType) {
-        this.c = c;
+    public InventoryAdapter(ArrayList<Inventory> iList,String classType) {
         this.iList = iList;
         this.classType = classType;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_requisition_inventory_list,parent,false);
-
         return new ViewHolder(v);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
 
         if(iList!=null) {
 
@@ -45,9 +43,9 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
 
             holder.txtNo.setText(i.getItemNo());
             holder.txtItemName.setText(i.getItemName());
-            holder.txtQuantity.setText("Quantity: " + String.valueOf(i.getQuantity()));
-            holder.txtUnitPrice.setText("Unit Price: " + String.valueOf(i.getUnitprice()));
-            holder.txtTotalAmount.setText("Total Amount: " + String.valueOf(i.getQuantity() * i.getUnitprice()));
+            holder.txtQuantity.setText("Quantity: " + i.getQuantity());
+            holder.txtUnitPrice.setText("Unit Price: " + i.getUnitprice());
+            holder.txtTotalAmount.setText("Total Amount: " + (i.getQuantity() * i.getUnitprice()));
 
             if(classType.equals("Order")) {
                 holder.btnClose.setVisibility(View.INVISIBLE);

@@ -3,17 +3,12 @@ package com.example.procurement.activities;
 import android.os.Bundle;
 
 import com.example.procurement.R;
-import com.example.procurement.fragments.DashboardFragment;
 import com.example.procurement.fragments.RequisitionActivityFragment;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
-import android.view.View;
 
 import java.util.Objects;
 

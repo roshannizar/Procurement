@@ -23,6 +23,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Objects;
+
 import static com.example.procurement.utils.CommonConstants.COLLECTION_SITE_MANGER;
 
 public class SignInActivity extends AppCompatActivity {
@@ -39,7 +41,7 @@ public class SignInActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_signin);
 
         btnSignIn = findViewById(R.id.btnSignIn);
@@ -130,7 +132,6 @@ public class SignInActivity extends AppCompatActivity {
             name = user.getDisplayName();
             email = user.getEmail();
             uid = user.getUid();
-            boolean emailVerified = user.isEmailVerified();
             siteManagerDBRef = FirebaseFirestore.getInstance().collection(COLLECTION_SITE_MANGER).document(uid);
         }
     }

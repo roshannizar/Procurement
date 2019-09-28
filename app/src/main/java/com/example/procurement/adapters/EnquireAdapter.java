@@ -1,6 +1,5 @@
 package com.example.procurement.adapters;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +16,9 @@ import java.util.List;
 
 public class EnquireAdapter extends RecyclerView.Adapter<EnquireAdapter.MyViewHolder> {
 
-    private Context context;
     private List<Enquire> enquireList;
 
-    public EnquireAdapter(Context context, List<Enquire> enquireList) {
-        this.context = context;
+    public EnquireAdapter(List<Enquire> enquireList) {
         this.enquireList = enquireList;
     }
 
@@ -52,10 +49,10 @@ public class EnquireAdapter extends RecyclerView.Adapter<EnquireAdapter.MyViewHo
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Enquire enquire = enquireList.get(position);
 
-        String eid = "Enquiry " + String.valueOf(position + 1) + " :";
+        String eid = "Enquiry " + (position + 1) + " : ";
         holder.enquiryID.setText(eid);
         holder.noteOut.setText(enquire.getEnquiry());
         holder.timestampOut.setText(enquire.getTimestamp());

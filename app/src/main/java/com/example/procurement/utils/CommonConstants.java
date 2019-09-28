@@ -7,6 +7,8 @@ import java.util.ArrayList;
 
 public class CommonConstants {
 
+    public static final int WELCOME_TIMEOUT = 1000;
+
     public static final String COLLECTION_SITE_MANGER = "siteManagers";
     public static final String COLLECTION_ORDER = "orders";
     public static final String COLLECTION_NOTES = "notes";
