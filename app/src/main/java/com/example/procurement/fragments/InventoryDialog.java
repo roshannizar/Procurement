@@ -106,7 +106,6 @@ public class InventoryDialog extends Fragment implements AdapterView.OnItemSelec
                         for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                             Inventory inventory = document.toObject(Inventory.class);
                             listData.add(inventory);
-                            //CommonConstants.REQUISITION_ID = inventory.getRequisitionNo();
                         }
                         Collections.reverse(listData);
 

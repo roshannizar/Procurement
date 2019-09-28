@@ -5,11 +5,14 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
+
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,13 +25,23 @@ import com.example.procurement.activities.RequisitionActivity;
 import com.example.procurement.adapters.InventoryDialogAdapter;
 import com.example.procurement.adapters.SupplierAdapter;
 import com.example.procurement.adapters.SupplierDialogAdapter;
+import com.example.procurement.models.Inventory;
 import com.example.procurement.models.InventoryData;
 import com.example.procurement.models.Supplier;
 import com.example.procurement.utils.CommonConstants;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Objects;
+
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 
 public class SupplierDialogFragment extends Fragment {
@@ -39,6 +52,7 @@ public class SupplierDialogFragment extends Fragment {
     private Supplier d,d1,d2,d3,d4;
     private SupplierDialogAdapter supplierDialogAdapter;
     private Context c;
+    private CollectionReference supplierRef;
 
     public SupplierDialogFragment() {
 
@@ -57,6 +71,7 @@ public class SupplierDialogFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         btnSave = v.findViewById(R.id.btnSave2);
+        supplierRef = FirebaseFirestore.getInstance().collection(CommonConstants.COLLECTION_SUPPLIERS);
 
         BackToQuotation();
         WriteDataStatus();
@@ -66,20 +81,41 @@ public class SupplierDialogFragment extends Fragment {
 
     private void WriteDataStatus() {
 
-        d = new Supplier("HuHu","12/12/2019","","Active");
-        d1 = new Supplier("Pee","12/12/2019","","Active");
-        d2 = new Supplier("Vola","12/12/2019","","Active");
-        d3 = new Supplier("Santa","12/12/2019","","Active");
-        d4 = new Supplier("Amigo","12/12/2019","","Active");
+        supplierRef.addSnapshotListener(
+                new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
 
-        iSupplier.add(d);
-        iSupplier.add(d1);
-        iSupplier.add(d2);
-        iSupplier.add(d3);
-        iSupplier.add(d4);
+                        if (e != null) {
+                            Log.v(TAG, "Listen Failed", e);
+                        }
 
-        supplierDialogAdapter = new SupplierDialogAdapter(c, iSupplier);
-        recyclerView.setAdapter(supplierDialogAdapter);
+                        iSupplier.clear();
+
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            Supplier supplier = document.toObject(Supplier.class);
+                            iSupplier.add(supplier);
+                        }
+
+                        if (iSupplier != null) {
+                            supplierDialogAdapter = new SupplierDialogAdapter(c, iSupplier);
+//                            progressBar.setVisibility(View.GONE);
+//                            imgLoader.setVisibility(View.INVISIBLE);
+//                            txtLoader.setVisibility(View.INVISIBLE);
+                            recyclerView.setAdapter(supplierDialogAdapter);
+
+//                            if (listData.size() == 0) {
+//                                progressBar.setVisibility(View.GONE);
+//                                imgLoader.refreshDrawableState();
+//                                imgLoader.setImageResource(R.drawable.ic_white_box);
+//                                imgLoader.setVisibility(View.VISIBLE);
+//                                txtLoader.setVisibility(View.VISIBLE);
+//                                txtLoader.setText("Inventory is empty!");
+//                            }
+                        }
+                    }
+                }
+        );
     }
 
     private void BackToQuotation() {
