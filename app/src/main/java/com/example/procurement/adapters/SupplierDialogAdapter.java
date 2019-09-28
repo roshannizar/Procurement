@@ -30,10 +30,12 @@ public class SupplierDialogAdapter extends RecyclerView.Adapter<SupplierDialogAd
     private DatePickerDialog picker;
     private ArrayList<Supplier> iSupp;
     private Context c;
+    private static Context test;
 
     public SupplierDialogAdapter(Context c, ArrayList<Supplier> iSupp) {
         this.c = c;
         this.iSupp = iSupp;
+        test = c;
     }
 
     @NonNull
@@ -50,24 +52,51 @@ public class SupplierDialogAdapter extends RecyclerView.Adapter<SupplierDialogAd
 
         holder.checkBox.setText(supplier.getSupplierName());
         holder.txtExpectedDate.setText(supplier.getExpectedDate());
-        holder.txtStatus.setText(supplier.getSupplierStatus());
 
-        holder.checkBox.setOnCheckedChangeListener(
-                new CheckBox.OnCheckedChangeListener() {
+        holder.txtExpectedDate.setOnClickListener(
+                new View.OnClickListener() {
                     @Override
-                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    public void onClick(View view) {
 
-                        if(compoundButton.isChecked()) {
-                            String offer = holder.txtOffer.getText().toString();
-
-                            CommonConstants.iSupplier.add(new Supplier(supplier.getSupplierName(),supplier.getExpectedDate(),offer,supplier.getSupplierStatus()));
-                        } else {
-                            CommonConstants.iSupplier.remove(position);
-                            notifyDataSetChanged();
-                        }
+                        final Calendar c = Calendar.getInstance();
+                        int day = c.get(Calendar.DAY_OF_MONTH);
+                        int month = c.get(Calendar.MONTH);
+                        int year = c.get(Calendar.YEAR);
+                        DatePickerDialog picker = new DatePickerDialog(test,
+                                new DatePickerDialog.OnDateSetListener() {
+                                    @SuppressLint("SetTextI18n")
+                                    @Override
+                                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                        holder.txtExpectedDate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                                    }
+                                }, year, month, day);
+                        picker.show();
                     }
                 }
         );
+
+        holder.txtStatus.setText(supplier.getSupplierStatus());
+
+        if(holder.txtOffer.getText().toString() != "" || holder.txtOffer.getText().toString()!= null){
+            holder.checkBox.setEnabled(true);
+            holder.checkBox.setOnCheckedChangeListener(
+                    new CheckBox.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                            if (compoundButton.isChecked()) {
+                                String offer = holder.txtOffer.getText().toString();
+
+                                CommonConstants.iSupplier.add(new Supplier(supplier.getSupplierName(), holder.txtExpectedDate.getText().toString(), offer, supplier.getSupplierStatus()));
+                            } else {
+                                CommonConstants.iSupplier.remove(position);
+                                notifyDataSetChanged();
+                            }
+                        }
+                    }
+            );
+
+        }
     }
 
     public int getItemCount() {
@@ -92,6 +121,8 @@ public class SupplierDialogAdapter extends RecyclerView.Adapter<SupplierDialogAd
             txtExpectedDate = view.findViewById(R.id.dtpExpectedDate);
             txtStatus = view.findViewById(R.id.txtSupplierStatus);
             checkBox = view.findViewById(R.id.cbItemSupplier);
+
+            checkBox.setEnabled(false);
         }
     }
 }
