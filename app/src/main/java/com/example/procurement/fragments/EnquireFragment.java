@@ -44,8 +44,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static androidx.constraintlayout.widget.Constraints.TAG;
 import static com.example.procurement.activities.SignInActivity.siteManagerDBRef;
-import static com.example.procurement.utils.CommonConstants.ENQUIRE_FRAGMENT_TAG;
 
 public class EnquireFragment extends Fragment {
 
@@ -144,13 +144,13 @@ public class EnquireFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d(ENQUIRE_FRAGMENT_TAG, "DocumentSnapshot successfully written!");
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w(ENQUIRE_FRAGMENT_TAG, "Error writing document", e);
+                        Log.w(TAG, "Error writing document", e);
                     }
                 });
     }
@@ -169,13 +169,13 @@ public class EnquireFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d(ENQUIRE_FRAGMENT_TAG, "DocumentSnapshot successfully deleted!");
+                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w(ENQUIRE_FRAGMENT_TAG, "Error deleting document", e);
+                        Log.w(TAG, "Error deleting document", e);
                     }
                 });
     }
@@ -187,7 +187,7 @@ public class EnquireFragment extends Fragment {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
-                    Log.w(ENQUIRE_FRAGMENT_TAG, "Listen failed.", e);
+                    Log.w(TAG, "Listen failed.", e);
                 }
 
                 enquireList.clear();
