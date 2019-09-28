@@ -26,10 +26,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.procurement.R;
 import com.example.procurement.activities.HomeActivity;
+import com.example.procurement.adapters.InventoryAdapter;
+import com.example.procurement.adapters.OrderStatusAdapter;
 import com.example.procurement.models.Inventory;
 import com.example.procurement.models.Order;
 import com.example.procurement.models.Requisition;
@@ -47,13 +51,17 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.DecimalFormat;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static android.content.ContentValues.TAG;
+import static com.example.procurement.activities.SignInActivity.SignOutUserFirebase;
 import static com.example.procurement.activities.SignInActivity.siteManagerDBRef;
 import static com.example.procurement.utils.CommonConstants.GENERATE_ORDER_FRAGMENT_TAG;
 import static com.example.procurement.utils.CommonConstants.ORDER_ID;
@@ -62,16 +70,18 @@ public class CreateOrderFragment extends Fragment {
 
     private Spinner spCompany, spVendor;
     private TextView txtOrderId, txtRequisitionId, txtDeliveryDate,
-            txtDescription, txtStatusView, txtSubTotal, txtTax, txtTotal, txtCurrentDate, btnAddItems;
+            txtDescription, txtStatusView, txtSubTotal, txtTax, txtTotal, txtCurrentDate;
     private CardView cvTotal;
     private RecyclerView productItem;
     private Button btnGenerate;
     private ImageView btnBack;
     private String requisitionKey;
     private DocumentReference requisitionRef;
-    private CollectionReference orderDBRef, supplierDBRef, sitesDBRef;
+    private CollectionReference orderDBRef, supplierDBRef, sitesDBRef,inventoryRef;
     private Requisition requisition;
+    private Inventory inventory;
     private DatePickerDialog picker;
+    private InventoryAdapter adapter;
     private ArrayList<String> companyList, vendorList;
     private Context mContext;
     private final String selectCompany = "Select Company";
@@ -100,8 +110,9 @@ public class CreateOrderFragment extends Fragment {
 
         requisitionRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_REQUISITION).document(requisitionKey);
         orderDBRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_ORDER);
-        supplierDBRef = FirebaseFirestore.getInstance().collection(CommonConstants.COLLECTION_SUPPLIERS);
+        supplierDBRef = requisitionRef.collection(CommonConstants.COLLECTION_REQUISITION_SUPPLIER);
         sitesDBRef = FirebaseFirestore.getInstance().collection(CommonConstants.COLLECTION_SITES);
+        inventoryRef = requisitionRef.collection(CommonConstants.COLLECTION_REQUISITION_INVENTORY);
 
         mContext = getContext();
 
@@ -121,13 +132,16 @@ public class CreateOrderFragment extends Fragment {
 
 
         cvTotal = rootView.findViewById(R.id.cvTotal);
-        cvTotal.setVisibility(View.GONE);
 
         productItem = rootView.findViewById(R.id.rvItemView);
-        btnAddItems = rootView.findViewById(R.id.btnAddItems);
         btnGenerate = rootView.findViewById(R.id.btnGenerate);
+
+        adapter = new InventoryAdapter(mContext,CommonConstants.iInventory,"Order");
+        productItem.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
+        productItem.setItemAnimator(new DefaultItemAnimator());
+
+
         getBack();
-        PopUpItems();
         getGenerateID();
         ShowDialog();
         generateOrder();
@@ -254,12 +268,51 @@ public class CreateOrderFragment extends Fragment {
                     txtRequisitionId.setText(requisition.getRequisitionNo());
                     txtDeliveryDate.setText(requisition.getDeliveryDate());
 
-//                    double subTotal = order.getSubTotal();
-//                    double tax = subTotal * 0.10;
-//                    double total = subTotal + tax;
-//                    txtSubTotal.setText(String.valueOf(subTotal));
-//                    txtTax.setText(String.valueOf(tax));
-//                    txtTotal.setText(String.valueOf(total));
+                    DecimalFormat df = new DecimalFormat("#.##");
+                    double subTotal = Double.parseDouble(requisition.getTotalAmount());
+                    double tax = subTotal * 0.10d;
+                    double total = subTotal + tax;
+                    txtSubTotal.setText(String.valueOf(subTotal));
+                    txtTax.setText((df.format(tax)));
+                    txtTotal.setText(String.valueOf(total));
+                }
+            }
+        });
+
+        inventoryRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e);
+                }
+
+                if (queryDocumentSnapshots != null) {
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        Inventory inventory = document.toObject(Inventory.class);
+                        inventoryList.add(inventory);
+                        System.out.println(inventory.getItemName());
+                    }
+
+
+                    if (inventoryList != null) {
+                        adapter= new InventoryAdapter(mContext, inventoryList,"Order");
+//                        progressBar.setVisibility(View.GONE);
+//                        imgLoader.setVisibility(View.INVISIBLE);
+//                        txtLoader.setVisibility(View.INVISIBLE);
+//                        txtWait.setVisibility(View.INVISIBLE);
+                        productItem.setAdapter(adapter);
+
+//                        if (orders.size() == 0) {
+//                            imgLoader.refreshDrawableState();
+//                            imgLoader.setImageResource(R.drawable.ic_safebox);
+//                            imgLoader.setVisibility(View.VISIBLE);
+//                            txtLoader.setVisibility(View.VISIBLE);
+//                            txtWait.setVisibility(View.VISIBLE);
+//                            txtLoader.setText("Purchase Order is empty!");
+//                            txtWait.setText("No point in waiting!");
+//                        }
+                    }
+
                 }
             }
         });
@@ -294,15 +347,6 @@ public class CreateOrderFragment extends Fragment {
                         ORDER_ID = "";
                     }
                 }
-            }
-        });
-    }
-
-    private void PopUpItems() {
-        btnAddItems.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-               // HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new InventoryDialog(), null).commit();
             }
         });
     }
