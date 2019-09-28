@@ -81,7 +81,7 @@ public class SupplierDialogFragment extends Fragment {
 
     private void WriteDataStatus() {
 
-        supplierRef.orderBy("supplierId").addSnapshotListener(
+        supplierRef.addSnapshotListener(
                 new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
@@ -96,7 +96,6 @@ public class SupplierDialogFragment extends Fragment {
                             Supplier supplier = document.toObject(Supplier.class);
                             iSupplier.add(supplier);
                         }
-                        Collections.reverse(iSupplier);
 
                         if (iSupplier != null) {
                             supplierDialogAdapter = new SupplierDialogAdapter(c, iSupplier);
