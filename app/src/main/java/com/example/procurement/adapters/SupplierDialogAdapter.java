@@ -125,7 +125,7 @@ public class SupplierDialogAdapter extends RecyclerView.Adapter<SupplierDialogAd
             txtStatus = view.findViewById(R.id.txtSupplierStatus);
             checkBox = view.findViewById(R.id.cbItemSupplier);
 
-            checkBox.setEnabled(false);
+            //checkBox.setEnabled(false);
             checkBox.setClickable(false);
         }
     }
