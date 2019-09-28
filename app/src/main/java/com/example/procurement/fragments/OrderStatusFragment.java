@@ -26,12 +26,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.procurement.R;
 import com.example.procurement.adapters.OrderStatusAdapter;
-import com.example.procurement.filterPattern.purchaseOrder.ApprovedOrderStatus;
-import com.example.procurement.filterPattern.purchaseOrder.DeclinedOrderStatus;
-import com.example.procurement.filterPattern.purchaseOrder.DraftOrderStatus;
-import com.example.procurement.filterPattern.purchaseOrder.OrderStatus;
-import com.example.procurement.filterPattern.purchaseOrder.PendingOrderStatus;
-import com.example.procurement.filterPattern.purchaseOrder.PlacedOrderStatus;
+import com.example.procurement.filters.purchaseOrder.ApprovedOrderStatus;
+import com.example.procurement.filters.purchaseOrder.DeclinedOrderStatus;
+import com.example.procurement.filters.purchaseOrder.DraftOrderStatus;
+import com.example.procurement.filters.purchaseOrder.OrderStatus;
+import com.example.procurement.filters.purchaseOrder.PendingOrderStatus;
+import com.example.procurement.filters.purchaseOrder.PlacedOrderStatus;
 import com.example.procurement.models.Order;
 import com.example.procurement.utils.CommonConstants;
 import com.google.firebase.firestore.CollectionReference;

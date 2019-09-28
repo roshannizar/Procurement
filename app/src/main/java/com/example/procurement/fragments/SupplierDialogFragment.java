@@ -49,7 +49,6 @@ public class SupplierDialogFragment extends Fragment {
     private TextView btnSave;
     private RecyclerView recyclerView;
     private ArrayList<Supplier> iSupplier;
-    private Supplier d,d1,d2,d3,d4;
     private SupplierDialogAdapter supplierDialogAdapter;
     private Context c;
     private CollectionReference supplierRef;
@@ -64,6 +63,7 @@ public class SupplierDialogFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_supplier_dialog, container, false);
 
+        supplierRef = FirebaseFirestore.getInstance().collection(CommonConstants.COLLECTION_SUPPLIERS);
         recyclerView = v.findViewById(R.id.checkBoxRecycleSupplier);
         iSupplier = new ArrayList<>();
         c = v.getContext();
@@ -71,15 +71,14 @@ public class SupplierDialogFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         btnSave = v.findViewById(R.id.btnSave2);
-        supplierRef = FirebaseFirestore.getInstance().collection(CommonConstants.COLLECTION_SUPPLIERS);
 
         BackToQuotation();
-        WriteDataStatus();
+        ReadDataStatus();
 
         return v;
     }
 
-    private void WriteDataStatus() {
+    private void ReadDataStatus() {
 
         supplierRef.addSnapshotListener(
                 new EventListener<QuerySnapshot>() {
@@ -94,6 +93,7 @@ public class SupplierDialogFragment extends Fragment {
 
                         for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                             Supplier supplier = document.toObject(Supplier.class);
+                            System.out.println("Value"+supplier.getSupplierName());
                             iSupplier.add(supplier);
                         }
 

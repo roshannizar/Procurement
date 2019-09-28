@@ -1,4 +1,4 @@
-package com.example.procurement.filterPattern.requisition;
+package com.example.procurement.filters.requisition;
 
 import com.example.procurement.models.Requisition;
 import com.example.procurement.utils.CommonConstants;

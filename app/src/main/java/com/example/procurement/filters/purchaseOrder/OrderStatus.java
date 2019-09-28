@@ -1,4 +1,4 @@
-package com.example.procurement.filterPattern.purchaseOrder;
+package com.example.procurement.filters.purchaseOrder;
 
 import com.example.procurement.models.Order;
 
