@@ -81,21 +81,25 @@ public class InventoryDialogAdapter extends RecyclerView.Adapter<InventoryDialog
                 }
         );
 
-        holder.checkBox.setOnCheckedChangeListener(
-                new CheckBox.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        if(holder.txtQty.getText().toString() != "" || holder.txtQty.getText().toString() != null) {
 
-                        if(compoundButton.isChecked()) {
-                            int quantity = Integer.parseInt(holder.txtQty.getText().toString());
-                            CommonConstants.iInventory.add(new Inventory(String.valueOf(position),inventoryData.getItemName(),"",quantity,inventoryData.getUnitprice()));
-                        } else {
-                            CommonConstants.iInventory.remove(position);
-                            notifyDataSetChanged();
+            holder.checkBox.setEnabled(true);
+            holder.checkBox.setOnCheckedChangeListener(
+                    new CheckBox.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                            if (compoundButton.isChecked()) {
+                                int quantity = Integer.parseInt(holder.txtQty.getText().toString());
+                                CommonConstants.iInventory.add(new Inventory(String.valueOf(position), inventoryData.getItemName(), "", quantity, inventoryData.getUnitprice()));
+                            } else {
+                                CommonConstants.iInventory.remove(position);
+                                notifyDataSetChanged();
+                            }
                         }
                     }
-                }
-        );
+            );
+        }
     }
 
     public int getItemCount() {
@@ -122,6 +126,8 @@ public class InventoryDialogAdapter extends RecyclerView.Adapter<InventoryDialog
             txtReduce = view.findViewById(R.id.reduce);
             txtIncrease = view.findViewById(R.id.increase);
             checkBox = view.findViewById(R.id.cbItem);
+
+            checkBox.setEnabled(false);
         }
     }
 }
