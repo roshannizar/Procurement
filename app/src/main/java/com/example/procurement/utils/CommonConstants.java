@@ -7,8 +7,10 @@ import java.util.ArrayList;
 
 public class CommonConstants {
 
+    //welcome splash screen timeout
     public static final int WELCOME_TIMEOUT = 1000;
 
+    //firestore db collection references
     public static final String COLLECTION_SITE_MANGER = "siteManagers";
     public static final String COLLECTION_ORDER = "orders";
     public static final String COLLECTION_NOTES = "notes";
@@ -19,26 +21,35 @@ public class CommonConstants {
     public static final String COLLECTION_SITES = "sites";
     public static final String COLLECTION_INVENTORIES= "inventories";
 
+    //order status strings
     public static final String ORDER_STATUS_DECLINED = "Declined";
     public static final String ORDER_STATUS_PENDING = "Pending";
     public static final String ORDER_STATUS_APPROVED = "Approved";
-    public static final String ORDER_STATUS_PLACED = "Placed";
     public static final String ORDER_STATUS_HOLD = "Hold";
+    public static final String ORDER_STATUS_PLACED = "Placed";
     public static final String ORDER_STATUS_DRAFT = "Draft";
 
+    //requisition status strings
     public static final String REQUISITION_STATUS_DECLINED = "Declined";
     public static final String REQUISITION_STATUS_PENDING = "Pending";
     public static final String REQUISITION_STATUS_APPROVED = "Approved";
     public static final String REQUISITION_STATUS_HOLD = "Hold";
 
+    //common strings
     public static final String SAVE_STRING = "Save";
     public static final String UPDATE_STRING = "Update";
     public static final String CANCEL_STRING = "Cancel";
 
+    //initialized lists
     public static ArrayList<Inventory> iInventory = new ArrayList<>();
     public static ArrayList<Supplier> iSupplier = new ArrayList<>();
 
+    //initialized ids
     public static String ORDER_ID = "PO-0";
     public static String REQUISITION_ID = "REQ-00";
+
+    //message list
+    public static final String ERROR_MSG = "Error";
+    public static final String SUCCESS_MSG = "Success";
 
 }
