@@ -114,6 +114,7 @@ public class QuotationFragment extends Fragment {
     }
 
     private void AddSupplier() {
+        CommonConstants.CLASS_TYPE = "REQUISITION";
         btnAddSupplier.setOnClickListener(
                 new View.OnClickListener() {
                     @Override

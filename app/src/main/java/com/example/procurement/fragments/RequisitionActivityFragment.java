@@ -67,7 +67,7 @@ public class RequisitionActivityFragment extends Fragment {
         btnAddItems = v.findViewById(R.id.btnAddItems);
         txtStatus = v.findViewById(R.id.txtStatus);
         recyclerView = v.findViewById(R.id.recyclerItems);
-
+        CommonConstants.CLASS_TYPE = "REQUISITION";
         c= v.getContext();
         inventoryAdapter = new InventoryAdapter(CommonConstants.iInventory,"Requisition");
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
