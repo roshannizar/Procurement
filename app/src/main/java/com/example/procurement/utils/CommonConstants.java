@@ -52,4 +52,8 @@ public class CommonConstants {
     public static final String ERROR_MSG = "Error";
     public static final String SUCCESS_MSG = "Success";
 
+    //Identify Class Type
+    public static String CLASS_TYPE="REQUISITION";
+    public static String REQUISITION_KEY_VALUE="";
+
 }
