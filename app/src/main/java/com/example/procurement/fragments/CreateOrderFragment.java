@@ -294,7 +294,6 @@ public class CreateOrderFragment extends Fragment {
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                         Inventory inventory = document.toObject(Inventory.class);
                         inventoryList.add(inventory);
-                        System.out.println(inventory.getItemName());
                     }
 
 
