@@ -50,8 +50,8 @@ public class PMS extends Application {
                         if (inventory.getQuantity() < 10) {
                             String key = notificationDbRef.document().getId();
                             Notification notification = new Notification();
-                            notification.setID("Inventory Low");
-                            notification.setStatus("Replenish Inventory");
+                            notification.setID("Inventory Low: "+inventory.getQuantity());
+                            notification.setStatus("Replenish Inventory: "+inventory.getItemName());
                             notification.setNotificationKey(key);
                             notificationDbRef.document(key).set(notification);
                         }
