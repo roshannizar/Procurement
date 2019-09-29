@@ -96,6 +96,9 @@ public class RequisitionEditFragment extends Fragment {
         supplierDBRef = requisitionRef.collection(CommonConstants.COLLECTION_SUPPLIERS);
         requisitionUpdateRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_REQUISITION);
 
+        CommonConstants.CLASS_TYPE="EDIT";
+        CommonConstants.REQUISITION_KEY_VALUE = requisitionKey;
+
         txtRequisitionNo = v.findViewById(R.id.txtRequisitionIdEdit);
         txtPurpose = v.findViewById(R.id.txtPurposeEdit);
         txtComments = v.findViewById(R.id.txtCommentsEdit);

@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.procurement.R;
+import com.example.procurement.activities.HomeActivity;
 import com.example.procurement.activities.RequisitionActivity;
 import com.example.procurement.adapters.InventoryAdapter;
 import com.example.procurement.adapters.InventoryDialogAdapter;
@@ -78,14 +79,27 @@ public class InventoryDialog extends Fragment implements AdapterView.OnItemSelec
     }
 
     private void DialogChooser() {
-        btnSave.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        RequisitionActivity.fm2.beginTransaction().replace(R.id.fragment_container_requisition,new RequisitionActivityFragment(),null).commit();
+
+        if(CommonConstants.CLASS_TYPE.equals("REQUISITION")) {
+
+            btnSave.setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            RequisitionActivity.fm2.beginTransaction().replace(R.id.fragment_container_requisition, new RequisitionActivityFragment(), null).commit();
+                        }
                     }
-                }
-        );
+            );
+        } else {
+            btnSave.setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            HomeActivity.fm.beginTransaction().replace(R.id.fragment_container,new RequisitionEditFragment(CommonConstants.REQUISITION_KEY_VALUE),null).commit();
+                        }
+                    }
+            );
+        }
     }
 
     private void readInventoryData() {

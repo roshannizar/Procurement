@@ -30,32 +30,35 @@ public class PMS extends Application {
         super.onCreate();
         SignInActivity.getCurrentUser();
 
-        notificationDbRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_NOTIFICATION);
-        inventoryDBRef = FirebaseFirestore.getInstance().collection(CommonConstants.COLLECTION_INVENTORIES);
+        if(siteManagerDBRef!= null) {
 
-        inventoryDBRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @SuppressLint("SetTextI18n")
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.w(TAG, "Listen failed.", e);
-                }
+            notificationDbRef = siteManagerDBRef.collection(CommonConstants.COLLECTION_NOTIFICATION);
+            inventoryDBRef = FirebaseFirestore.getInstance().collection(CommonConstants.COLLECTION_INVENTORIES);
 
-                assert queryDocumentSnapshots != null;
-                for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                    Inventory inventory = document.toObject(Inventory.class);
-
-                    if (inventory.getQuantity() < 10) {
-                        String key = notificationDbRef.document().getId();
-                        Notification notification = new Notification();
-                        notification.setID("Inventory Low");
-                        notification.setStatus("Replenish Inventory");
-                        notification.setNotificationKey(key);
-                        notificationDbRef.document(key).set(notification);
+            inventoryDBRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+                @SuppressLint("SetTextI18n")
+                @Override
+                public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                    if (e != null) {
+                        Log.w(TAG, "Listen failed.", e);
                     }
-                }
 
-            }
-        });
+                    assert queryDocumentSnapshots != null;
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        Inventory inventory = document.toObject(Inventory.class);
+
+                        if (inventory.getQuantity() < 10) {
+                            String key = notificationDbRef.document().getId();
+                            Notification notification = new Notification();
+                            notification.setID("Inventory Low: "+inventory.getQuantity());
+                            notification.setStatus("Replenish Inventory: "+inventory.getItemName());
+                            notification.setNotificationKey(key);
+                            notificationDbRef.document(key).set(notification);
+                        }
+                    }
+
+                }
+            });
+        }
     }
 }
