@@ -115,7 +115,7 @@ public class RequisitionActivityFragment extends Fragment {
                 }
             }
 
-            txtTotalAmount.setText("Rs: " + value);
+            txtTotalAmount.setText(String.valueOf((int) value));
 
             if (value > 100000.0 || checkEmptyUnitPrice) {
                 txtStatus.setText(R.string.hold);
