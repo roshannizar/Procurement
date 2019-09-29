@@ -182,13 +182,13 @@ public class CreateOrderFragment extends Fragment {
                         @Override
                         public void onSuccess(Void aVoid) {
                             HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new OrderStatusFragment(), null).commit();
-                            Log.d(TAG, "Purchase order successfully drafted!");
+                            Log.d(TAG, CommonConstants.SUCCESS_MSG);
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Log.w(TAG, "Error writing document", e);
+                            Log.w(TAG, CommonConstants.ERROR_MSG, e);
                         }
                     });
 
@@ -204,7 +204,7 @@ public class CreateOrderFragment extends Fragment {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
-                    Log.w(TAG, "Listen failed.", e);
+                    Log.w(TAG, CommonConstants.ERROR_MSG, e);
                 }
 
                 companyList.clear();
@@ -226,7 +226,7 @@ public class CreateOrderFragment extends Fragment {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
-                    Log.w(TAG, "Listen failed.", e);
+                    Log.w(TAG, CommonConstants.ERROR_MSG, e);
                 }
 
                 vendorList.clear();
@@ -287,7 +287,7 @@ public class CreateOrderFragment extends Fragment {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
-                    Log.w(TAG, "Listen failed.", e);
+                    Log.w(TAG, CommonConstants.ERROR_MSG, e);
                 }
 
                 if (queryDocumentSnapshots != null) {
@@ -313,7 +313,7 @@ public class CreateOrderFragment extends Fragment {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
-                    Log.w(TAG, "Listen failed.", e);
+                    Log.w(TAG, CommonConstants.ERROR_MSG, e);
                 }
 
                 if (queryDocumentSnapshots != null) {
@@ -342,7 +342,7 @@ public class CreateOrderFragment extends Fragment {
                             }
                         }
                     } catch (NumberFormatException e1) {
-                        Log.w(TAG, "Error writing document", e1);
+                        Log.w(TAG, CommonConstants.ERROR_MSG, e1);
                     }
                 }
             }
@@ -478,13 +478,13 @@ public class CreateOrderFragment extends Fragment {
                                 public void onSuccess(Void aVoid) {
                                     alert.show();
                                     HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new OrderViewFragment(key), null).commit();
-                                    Log.d(TAG, "DocumentSnapshot successfully written!");
+                                    Log.d(TAG, CommonConstants.SUCCESS_MSG);
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    Log.w(TAG, "Error writing document", e);
+                                    Log.w(TAG, CommonConstants.ERROR_MSG, e);
                                 }
                             });
                 } else {

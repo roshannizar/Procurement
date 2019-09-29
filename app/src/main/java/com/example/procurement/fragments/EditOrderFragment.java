@@ -88,7 +88,7 @@ public class EditOrderFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_edit_purchase_order, container, false);
 
@@ -143,7 +143,7 @@ public class EditOrderFragment extends Fragment {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
-                    Log.w(TAG, "Listen failed.", e);
+                    Log.w(TAG, CommonConstants.ERROR_MSG, e);
                 }
 
                 companyList.clear();
@@ -165,7 +165,7 @@ public class EditOrderFragment extends Fragment {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
-                    Log.w(ContentValues.TAG, "Listen failed.", e);
+                    Log.w(TAG, CommonConstants.ERROR_MSG, e);
                 }
 
                 vendorList.clear();
@@ -190,7 +190,7 @@ public class EditOrderFragment extends Fragment {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
-                    Log.w(ContentValues.TAG, "Listen failed.", e);
+                    Log.w(TAG, CommonConstants.ERROR_MSG, e);
                 }
 
                 inventoryList.clear();
@@ -361,13 +361,13 @@ public class EditOrderFragment extends Fragment {
                                                 }
                                             }).show();
                                     HomeActivity.fm.beginTransaction().replace(R.id.fragment_container, new OrderViewFragment(order.getOrderKey()), null).commit();
-                                    Log.d(TAG, "DocumentSnapshot successfully updated!");
+                                    Log.d(TAG, CommonConstants.SUCCESS_MSG);
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    Log.w(TAG, "Error writing document", e);
+                                    Log.w(TAG, CommonConstants.ERROR_MSG, e);
                                 }
                             });
 

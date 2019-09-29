@@ -43,11 +43,11 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import static androidx.constraintlayout.widget.Constraints.TAG;
 import static com.example.procurement.activities.SignInActivity.siteManagerDBRef;
 
 public class OrderStatusFragment extends Fragment {
 
-    private static final String TAG = "OrderStatusFragment";
     private ArrayList<Order> orders;
     private OrderStatusAdapter adapter;
     private OrderStatus approvedOrderStatus, declinedOrderStatus, placedOrderStatus, pendingOrderStatus, draftOrderStatus;

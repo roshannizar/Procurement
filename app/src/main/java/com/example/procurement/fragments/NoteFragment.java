@@ -41,10 +41,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static androidx.constraintlayout.widget.Constraints.TAG;
 import static com.example.procurement.activities.SignInActivity.siteManagerDBRef;
 
 public class NoteFragment extends Fragment {
-    private static final String TAG = "NoteFragment";
 
     private NoteAdapter mAdapter;
     private List<Note> notesList;
@@ -134,7 +134,7 @@ public class NoteFragment extends Fragment {
      * Inserting new note in db
      * and refreshing the list
      */
-    private void createNote(String invoiceNo, String note) {
+    public void createNote(String invoiceNo, String note) {
         String key = notesDBRef.document().getId();
         Note noteItem = new Note(key, invoiceNo, note, DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date()));
 
@@ -158,7 +158,7 @@ public class NoteFragment extends Fragment {
      * Updating note in db and updating
      * item in the list by its position
      */
-    private void updateNote(String invoiceNo, String noteText, int position) {
+    public void updateNote(String invoiceNo, String noteText, int position) {
         String key = notesList.get(position).getKey();
         Note noteItem = new Note(key, invoiceNo, noteText, DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date()));
 
@@ -182,7 +182,7 @@ public class NoteFragment extends Fragment {
      * Deleting note from SQLite and removing the
      * item from the list by its position
      */
-    private void deleteNote(int position) {
+    public void deleteNote(int position) {
         // deleting the note from db
         String key = notesList.get(position).getKey();
 
